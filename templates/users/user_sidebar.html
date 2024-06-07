@@ -1,0 +1,106 @@
+
+<!-- offcanvas --> 
+         
+
+ <div class="offcanvas offcanvas-start shadow text-white" style="width: 250px; background-color: rgb(196, 186, 162);" id="demo">
+     <div class="offcanvas-header">
+         <button class="btn-close text-reset ms-auto" data-bs-dismiss="offcanvas" type="button" aria-label="Close" id="close"></button>
+     </div>
+     <div class="offcanvas-body p-0">
+         <nav class="navbar-dark">
+             <ul class="navbar-nav text-success">
+                 <li>
+                     <div class="text-muted fw-bold text-uppercase px-3 small">core</div>
+                 </li>
+                 <li>
+                     <a href="{% url 'Production:dashboard' %}" class="nav-link px-3 active">
+                         <span class="me-2">
+                             <i class="bi bi-speedometer2 text-muted"></i>
+                         </span>
+                         <span class="small text-muted">Dashboard</span>
+                     </a>
+                 </li>
+                 <li>
+                     <hr class="nav-divider text-success">
+                 </li>
+                 <li>
+                     <div class=" text-muted fw-bold text-uppercase px-3 small">apps</div>
+                 </li>
+                 <li>
+                     <a href="#dem" class="nav-link px-3 sidebar-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="dem">
+                         <span class="me-2">
+                             <i class="bi bi-people text-muted"></i>
+                         </span>
+                         <span class="small text-muted">Users</span>
+                         <span class="ms-auto right-icon">
+                             <i class="bi bi-chevron-down text-muted"></i>
+                         </span>
+                     </a>
+
+                         <div id="dem" class="collapse">
+                             <div>
+                                 <ul class="navbar-nav ps-3">
+                                     <a href="{% url 'Production:all-farmers' %}" class="nav-link px-3 active">
+                                         <span class="me-2">
+                                             <i class="bi bi-people text-muted"></i>
+                                         </span>
+                                         <span class="small text-muted">Farmers</span>
+                                     </a>
+                                     <a href="" class="nav-link px-3 active">
+                                         <span class="me-2">
+                                             <i class="bi bi-people text-muted"></i>
+                                         </span>
+                                         <span class="small text-muted">Staffs</span>
+                                     </a>
+                                     
+                                 </ul>
+                             </div>
+                         </div>
+                 </li>
+                 <li>
+                     <a href="" class="nav-link px-3 active">
+                         <span class="me-2">
+                             <i class="bi bi-file-earmark text-muted"></i>
+                         </span>
+                         <span class="small text-muted">Crops</span>
+                     </a>
+                     <a href="{% url 'Production:all-farms' %}" class="nav-link px-3 active">
+                         <span class="me-2">
+                             <i class="bi bi-file-earmark text-muted"></i>
+                         </span>
+                         <span class="small text-muted">Farms</span>
+                     </a>
+                 </li>
+                 <li>
+                     <a href="#de" class="nav-link sidebar-link px-3 active" data-bs-toggle="collapse" aria-expanded="false">
+                         <span class="me-2 text-success">
+                             <i class="bi bi-grid"></i>
+                         </span>
+                         <span class="small text-muted">Categories</span>
+                         <span class="ms-auto right-icon">
+                             <i class="bi bi-chevron-down text-muted"></i>
+                         </span>
+                     </a>
+
+                     
+
+                 </li>
+                 <li>
+                     <hr class="nav-divider text-white">
+                 </li>
+
+                 <li>
+                     <div class=" text-white fw-bold text-uppercase px-3 small">Addons</div>
+                 </li>
+                 
+                 
+
+
+
+             </ul>
+         </nav>
+     
+     </div>
+ </div>
+ 
+ <!-- Offcanvas Sidebar -->

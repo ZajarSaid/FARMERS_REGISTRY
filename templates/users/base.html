@@ -1,0 +1,161 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Index | {% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/datatables.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    </head>
+    <body>
+ 
+   
+       {% if messages %}
+
+    
+       <div class="alert alert-danger alert-dismissible fade show">
+           {% for message in messages %}
+           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
+           
+           <p class="card-title"><strong> {{ message }}</strong></p> 
+           {% endfor %}
+       </div>
+   
+   
+   {% endif %}
+   
+
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="width: 250px; background-color: rgb(196, 186, 162);" >
+    <div class="container-fluid">
+        <!--offcanvas-trigger-->
+        <button class="navbar-toggler me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#demo">
+            <span class="navbar-toggler-icon" data-bs-target="#demo"></span>
+            </button>
+        <!--offcanvas-trigger-->
+    <a class="navbar-brand fw-bold me-auto text-uppercase" href="#">4SITE</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+        <div class="d-flex ms-auto">
+
+        </div>
+        <div class="d-flex">
+
+        </div>
+        
+        
+        <ul class="navbar-nav  mb-2 mb-lg-0">
+            <li>
+                {% if user.is_authenticated %}
+                <div>
+                    <p class=" card-text text-light mt-2">{{user.username}}</p>
+                    
+                </div>
+                {% endif %}
+            </li>
+        
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-person-fill"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="#">Profile</a></li>
+                    <li><a class="dropdown-item" href="#">Settings</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'User:logout'%}">Logout</a></li>
+                </ul>
+            </li>
+            
+        </ul>
+    </div>
+    </div>
+</nav>
+
+<!-- navs -->     
+
+<div class="container-fluid">
+    <div class="row mt-2 mb-3">
+        <div class="col-3">{% include 'users/user_sidebar.html '%}</div>
+        <div class="col-8">
+            {% block content %}
+
+            <div class="row my-3 mx-3 px-4 bg-light py-2">
+                <div class="col-3"></div>
+                <div class="col-6">
+                    
+                    <div class="row ">
+                        <div>
+                           
+                            <center>
+                                <img src="{% static 'Photos/tz_gov_logo.png' %}" alt="" class="px-2 rounded-pill" style="width: 80px; background-color: rgb(190, 231, 185);">
+                            </center>
+                        </div>
+                        <div class="row">
+                            <h5 class="text-success ms-5 mt-2">Farmers Registration System</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3"></div>
+            </div>
+
+            <!-- User information -->
+
+            <div class="row mt-2 mb-3">
+        
+                    <div class="row my-3 mx-3 px-4 bg-light">
+                        <div class="col-4">
+                            <div class="card shadow">
+                                <div class="card-header">
+
+                                    <h4 class="card-title text-center">Profile</h4>
+                                </div>
+                                    <div class="py-2">
+                                        <img src="" alt="">
+                                    </div>
+                                
+                            </div>
+                        </div>
+
+                        <div class="col-7">
+                            <h3 class="card-title text-muted"></h3>
+                            <div class="container=fluid">
+                                <div class="card">
+                                    <div class="card-header">
+
+                                        <h4 class="card-title text-center">Farmers Information</h4>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            
+                        </div>
+                        
+                    </div>
+            
+            {% endblock content %}</div>
+       </div>
+</div>
+
+{% include 'partials/footer.html' %}
+
+    
+
+        
+        
+    </main>
+    <!--main-section-->
+    
+    
+ <script src="{% static '/js/bootstrap.bundles.js' %}"></script>
+ <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+ <script src="{% static 'js/datatables.min.js' %}"></script>
+ <script src="{% static 'js/script.js' %} "></script>
+ <script src="{% static 'js/datatable.js' %} "></script>
+    </body>
+</html>

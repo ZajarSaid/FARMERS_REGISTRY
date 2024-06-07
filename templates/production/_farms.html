@@ -1,0 +1,71 @@
+{% extends 'production/base.html'%}
+
+{% block title%}All Farms{% endblock %}
+
+{% block cumb%}List-Farms{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="container">
+        <table class="table table-striped table-bordered table-hover" id="example">
+            <thead class="bg-dark text-light">
+        
+                    <tr>
+                        <th>S/N</th>
+                        <th>Name</th>
+                        <th>Size</th>
+                        <th>Crops</th>
+                        <th>Region</th>
+                        <th>District</th>
+                        <th>Owner</th>
+                            
+                        </tr>
+            </thead>
+    
+                    <tbody>
+                    {% if farms %}
+                       
+                           
+                            {% for farm in farms%}
+                            <tr>
+                                <td>{{ farm.id }}</td>
+                                <td>{{ farm.name}}</td>
+                                <td>{{ farm.size }}</td>
+                                <td>{{ farm.crop_type }}</td>
+                                <td>{{ farm.region }}</td>
+                                
+                                <td>{{ farm.district }}</td>
+                                
+                                <td><a href="" class="text-decoration-none text-success">{{ farm.owner }}</a></td>
+                                
+    
+                            </tr>
+                                
+                                
+                            {% endfor %}
+                                
+                           
+                          
+                    </tbody>
+                        
+        
+                {% endif %}
+    
+                <tfoot>
+                    <tr>
+                        <th>S/N</th>
+                        <th>Name</th>
+                        <th>Size</th>
+                        <th>Crops</th>
+                        <th>Region</th>
+                        <th>District</th>
+                        <th>Owner</th>
+                    </tr>
+                </tfoot>
+        </table>
+           
+    </div>
+</div>
+
+{% endblock %}

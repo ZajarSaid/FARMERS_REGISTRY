@@ -1,0 +1,30 @@
+{
+
+    "Arusha": ["Arusha", "Arumeru", "Karatu", "Longido", "Meru", "Monduli", "Ngorongoro"],
+    "Dar es Salaam": ["Ilala", "Kinondoni", "Temeke", "Kigamboni", "Ubungo"],
+    "Dodoma": ["Bahi", "Chamwino", "Chemba", "Dodoma", "Kondoa", "Kongwa", "Mpwapwa"],
+    "Geita": ["Bukombe", "Chato", "Geita", "Mbogwe", "Nyang'hwale"],
+    "Iringa": ["Iringa", "Kilolo", "Mafinga", "Mufindi"],
+    "Kagera": ["Biharamulo", "Bukoba", "Bukoba Rural", "Kyerwa", "Missenyi", "Muleba", "Ngara"],
+    "Katavi": ["Mlele", "Mpanda", "Mpanda Rural"],
+    "Kigoma": ["Buhigwe", "Kasulu", "Kasulu Town", "Kibondo", "Kigoma", "Kigoma-Ujiji", "Uvinza"],
+    "Kilimanjaro": ["Hai", "Moshi", "Moshi Rural", "Mwanga", "Rombo", "Same", "Siha"],
+    "Lindi": ["Kilwa", "Lindi", "Liwale", "Nachingwea", "Ruangwa"],
+    "Manyara": ["Babati", "Babati Rural", "Hanang", "Kiteto", "Mbulu", "Simanjiro"],
+    "Mara": ["Bunda", "Butiama", "Musoma", "Musoma Rural", "Rorya", "Serengeti", "Tarime"],
+    "Mbeya": ["Busokelo", "Chunya", "Kyela", "Mbarali", "Mbeya", "Mbozi", "Rungwe"],
+    "Morogoro": ["Gairo", "Kilombero", "Kilosa", "Morogoro", "Morogoro Urban", "Mvomero", "Ulanga"],
+    "Mtwara": ["Masasi", "Mtwara", "Mtwara Rural", "Nanyumbu", "Newala", "Tandahimba"],
+    "Mwanza": ["Ilemela", "Kwimba", "Magu", "Misungwi", "Nyamagana", "Sengerema", "Ukerewe"],
+    "Njombe": ["Ludewa", "Makambako", "Makete", "Njombe", "Wanging'ombe"],
+    "Pwani": ["Bagamoyo", "Kibaha", "Kibiti", "Kisarawe", "Mafia", "Mkuranga", "Rufiji"],
+    "Rukwa": ["Kalambo", "Nkasi", "Sumbawanga", "Sumbawanga Rural"],
+    "Ruvuma": ["Mbinga", "Nyasa", "Songea", "Songea Rural", "Tunduru"],
+    "Shinyanga": ["Kahama", "Kishapu", "Shinyanga", "Shinyanga Urban"],
+    "Simiyu": ["Bariadi", "Busega", "Itilima", "Maswa", "Meatu"],
+    "Singida": ["Iramba", "Manyoni", "Singida", "Singida Urban"],
+    "Tabora": ["Igunga", "Kaliua", "Nzega", "Sikonge", "Tabora", "Tabora Urban", "Uyui"],
+    "Tanga": ["Handeni", "Kilindi", "Korogwe", "Korogwe Urban", "Lushoto", "Muheza", "Pangani"]
+   
+
+}

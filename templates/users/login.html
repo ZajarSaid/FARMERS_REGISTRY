@@ -1,0 +1,98 @@
+{% load static %}
+<html lang="en">
+    <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title></title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'fontawesome/css/all.min.css' %}" />
+
+    <link rel="stylesheet" href="{% static 'css/datatables.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    </head>
+    <body>
+    <!--navbars-->
+    {% if messages %}
+
+    
+    <div class="alert alert-danger alert-dismissible fade show">
+        {% for message in messages %}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
+        
+        <p class="card-title"><strong> {{ message }}</strong></p> 
+        {% endfor %}
+    </div>
+
+
+{% endif %}
+  
+<main>
+           
+    <div class="container-fluid ">
+        <div class="row mt-3">
+
+            <div class="col-2"></div>
+            
+            <div class="col-5 mt-3">
+                <div class="card shadow">
+                    
+                    <div class="card-body">
+                        <form action="" method="POST" autocomplete="off"><br>
+                            {% csrf_token %}
+                            <div class="mt-2 mb-2"><center><img src="{% static 'Photos/tz_gov_logo.png' %}" alt="" style="width: 40px;">
+                            </center>
+                            </div>
+                            <div class="card-title">
+                                <h4 class="text-muted card-text text-center">Login</h4>
+                            </div>
+ 
+                            <label for="password">Enter Email</label>
+                            <div class="input-group mb-3">
+                                
+                                <input type="email" class="form-control" id="emailField" placeholder="Enter email" name="email">
+                                <div class="input-group-append">
+                                    <div class="input-group-text text-success">
+                                       <span class="fas fa-user py-2"></span>
+                                    </div>
+                                 </div>
+                            </div>
+
+                            <label for="password">Enter Password</label>
+                            <div class="input-group mb-3">
+                                <input type="password" class="form-control" id="pwdField" placeholder="Enter password" name="password">
+                                <div class="input-group-append">
+                                    <div class="input-group-text text-success">
+                                       <span class="fas fa-lock py-2"></span>
+                                    </div>
+                                 </div>
+                            </div>
+
+                                <div class=" showPasswordToogle mt-2 float-right">
+                                    <small class=" showPasswordToogle  py-3">SHOW</small>
+                                </div>
+                       
+                                <button type="submit" class="btn btn-block btn-secondary ">Login</button>
+                            </form>
+                    </div>
+                </div>
+               
+            </div>
+            <div class="col-5"></div>
+            
+        </div>
+    </div>
+
+
+  
+    </main>
+    <!--main-section-->
+    
+    <script src="{% static 'js/bootstrap.bundle.js' %}"></script>
+    <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+    <script src="{% static 'js/datatables.min.js' %}"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+
+    </body>
+</html>

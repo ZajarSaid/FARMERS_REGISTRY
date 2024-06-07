@@ -1,0 +1,67 @@
+{% extends 'production/base.html'%}
+
+{% block title%}Register{% endblock %}
+
+{% block cumb%}Register-Farmer{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="container">
+        <form action="" method="post">
+
+            {% csrf_token %}
+
+            <div class="row mt-1">
+                
+                <div class="col-6 mb-1">
+                    <label for="" class="mb-1">Username</label>
+                    {{form.username}}
+                </div>
+               
+                <div class="col-6 mb-1">
+                     <label for="" class="mb-1">First Name</label>
+                     {{form.first_name}}
+                </div>
+            </div>
+            <div class="row mt-1">
+                <div class="col-6 mb-1">
+                    <label for="" class="mb-1">Last Name</label>
+                    {{form.last_name}}
+                </div>
+                <div class="col-6 mb-1">
+                    <label for="" class="mb-1">Email</label>
+                    {{form.email}}
+                </div>
+            </div>
+            <div class="row mt-1">
+                <div class="col-6 mb-1">
+                    <label for="" class="mb-1">Address</label>
+                    {{form.address}}
+                </div>
+                <div class="col-6 mb-1">
+                    <label for="" class="mb-1">Phone</label>
+                    {{form.phone}}
+                </div>
+            </div>
+            <div class="row mt-1">
+                <div class="col-6 mb-1">
+                    <label for="" class="mb-1">Image</label>
+                    {{form.image}}
+                </div>
+                <div class="col-6 mb-1">
+                    <label for="" class="mb-1">Password</label>
+                    {{form.password}}
+                </div>
+            </div>
+
+            <div class="row mt-2">
+                <input type="submit" value="Register" class="btn btn-success">
+            </div>
+
+         
+        </form>
+    </div>
+</div>
+
+{% endblock %}

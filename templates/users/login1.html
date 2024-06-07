@@ -1,0 +1,105 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard Home Page</title>
+    <!-- Link to Bootstrap CSS -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/datatables.min.css' %}" rel="stylesheet">
+    <style>
+         body{
+              background-color: rgba(0, 0, 0, 0.5); /* Adjust opacity as needed */;
+              position: relative;
+         }
+         form{
+            background-color: rgb(226, 225, 220);
+            padding: 3px 2px 3px 2px;
+         }
+
+         nav {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      gap: 10px;
+      z-index: 1000;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      padding: 5px 10px;
+      background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background for contrast */
+      border-radius: 5px;
+    }
+    </style>
+  </head>
+  <body>
+
+
+
+        <nav>
+          <a href="{% url 'User:user-register' %}">Register</a>
+          <a href="{% url 'User:index' %}">Go to Website</a>
+        </nav>
+
+        {% include 'partials/messages.html' %}
+
+<div class="row mt-4 my-4">
+
+    <div class="container  mt-5">
+        <div class="row mt-5 ">
+            <div class=" col-3"></div>
+            <div class="card-body col-4 shadow bg-pass p-2">
+
+                <h1 class="text-muted card-text text-center bg-light">Login</h1>
+
+
+                <form action="" method="POST" autocomplete="off"><br><br>
+                  {% csrf_token %}
+                  
+                      <div class="mb-3 m-1 px-3">
+                        <label for="">Email:</label>
+                      <input type="email" class="form-control mt-2 px-3" id="emailField" placeholder="Enter email" name="username">
+                      </div>
+                      <div class="invalidEmailfeedback text-danger" style="display:none"></div>
+                      <p class="text-success EmailSuccessOutput text-sm"></p>
+                      <div class="mb-3 px-3">
+                        <label for="">Password:</label>
+                      <input type="password" class="form-control  mt-2 px-3" id="pwdField" placeholder="Enter password" name="password">
+                      <div class=" showPasswordToogle mt-2">
+                          <small class=" showPasswordToogle float-right py-3">SHOW</small>
+                      </div>
+                      
+                      </div>
+                      
+                      <button type="submit" class="btn btn-block btn-secondary ">Login</button>
+                  </form>
+
+                <!-- <form action="" method="POST" enctype="multipart/form-data"><br>
+                    
+                    {% csrf_token %}
+                   
+            {{ form.as_p}}
+          
+<button type="submit" class="btn btn-secondary mt-3">Submit</button>
+
+                </form> -->
+
+            </div>
+            <div class="col-3"></div>
+        
+        </div>
+    </div>
+
+</div>
+   
+
+    <!-- Link to Bootstrap JS and Optional Popper.js -->
+    <script src=" {% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src=" {% static 'js/jquery-3.7.1.min.js' %}"></script>
+    <script src=" {% static 'js/datatables.min.js' %}"></script>
+    <script src=" {% static 'js/script.js' %}"></script>
+  </body>
+</html>
