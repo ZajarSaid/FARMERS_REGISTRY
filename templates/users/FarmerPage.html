@@ -4,31 +4,16 @@
     <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Index | {% block title %}Farmer-Account{% endblock %}</title>
+    <title>Farmer-Account | {% block title %} Dashboard{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
     <link rel="stylesheet" href="{% static 'css/datatables.min.css' %}" />
+    <!-- <link rel="stylesheet" href="{% static 'css/registration.css' %}"> -->
     <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     
     </head>
     <body>
  
-   
-       {% if messages %}
-
-    
-       <div class="alert alert-danger alert-dismissible fade show">
-           {% for message in messages %}
-           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
-           
-           <p class="card-title"><strong> {{ message }}</strong></p> 
-           {% endfor %}
-       </div>
-   
-   
-   {% endif %}
-   
-
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="width: 250px; background-color: rgb(92, 155, 112);" >
     <div class="container-fluid">
         <!--offcanvas-trigger-->
@@ -65,14 +50,20 @@
     </div>
     </div>
 </nav>
+<!-- navs -->    
 
-<!-- navs -->     
+<div class="row mt-2 mb-2">
+    <div class="col-3"></div>
+    <div class="col-8">{% include 'partials/messages.html' %}</div>
+    <div class="col-1"></div>
+</div>
 
+ 
 <div class="container-fluid">
     <div class="row mt-2 mb-3">
         <div class="col-3">{% include 'users/user_sidebar.html '%}</div>
         <div class="col-8">
-            {% block content %}
+           
 
             <div class="row my-1 mx-3 px-4 bg-light">
                 <div class="col-3"></div>
@@ -99,6 +90,16 @@
                 
             <div class="row ">
                 <div class="col-2"></div>
+
+                <div class="col-md-3 mt-1">
+                    {%block btn%}
+                    <a href="{% url 'User:register-Farm' %}" class="btn " style="background-color: aquamarine;">
+                        <span class="me-2">
+                        <i class="bi bi-pencil-square text-dark"></i>
+                    </span>Register Farm</a>
+                    {% endblock %}
+
+                </div>
                
                                     
                 <div class="col-3 mt-1">
@@ -110,15 +111,7 @@
                     {% endblock %}
                 </div>
 
-                <div class="col-md-3 mt-1">
-                    {%block btn%}
-                    <a href="" class="btn " style="background-color: aquamarine;">
-                        <span class="me-2">
-                        <i class="bi bi-pencil-square text-dark"></i>
-                    </span>Register Farm</a>
-                    {% endblock %}
-
-                </div>
+                
                 <div class="col-2 mt-1">
                     {%block index%}
                     <a href="" class="btn " style="background-color: rgb(172, 175, 175);">
@@ -127,6 +120,8 @@
                     </span>Home</a>
                     {% endblock %}
                 </div>
+
+               
                
                 <div class="col-md-2 mt-1">
                     <a href="{% url 'User:logout' %}" class="btn " style="background-color: beige;">    <span class="me-1">
@@ -139,50 +134,95 @@
         </div>
 
            <!-- top navs -->
-
+           <div class="row my-1 mx-1  my-2 ms-3  py-1">
+            <div class="col-4"></div>
+            <div class="col-6">
+                <h4 class="card-text mt-2 fw-bold text-muted">{% block header %}Farmer Personal Account{% endblock %}</h4>
+            </div>
+            <div class="col-2"></div>
+        </div>
+        <hr class="bg-success">
+        {% block content %}
             <!-- User information -->
 
+            
             <div class="row mt-2 mb-3">
-        
-                    <div class="row my-3 mx-3 px-4 bg-light">
-                        <div class="col-2">
-                            <div class="card shadow">
+                <form action="{% url 'User:farmer-account' %}" method="POST" class="row" style="width: 100%;" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                <div class="row my-3 mx-3 px-4 py-2 bg-light">
+
+                    <div class="col-md-3">
+                        <div class="card shadow">
+                            
+                            <div class="card-header">
+                              <div class="text-center">Profile Image</div>
+                               
+                            </div>
+                           
+                            <div class=" py-2 px-2 text-center mt-2">
+                                
+                                {% if user.image %}
+                                            <img id="profile-image" class="rounded-pill mb-2" src="{{ user.image.url }}" alt="Profile Image" height="100%" width="100%" />
+                                        {% else %}
+                                            <img id="profile-image" class="rounded-pill mb-2" src="{% static 'profiles/avatar.svg' %}" alt="Default Profile Image" height="100%" width="100%" />
+                                 {% endif %}
+                                
+                            </div>
+                            <div class="px-1 "><label for="" class="btn text-primary mb-1">Change Image:</label>{{form.image}}</div>
+                           
+                        </div>
+                    </div>
+
+                    <div class="col-md-9 mt-2 px-2">
+                        
+                    
+                            <div class="card">
                                 <div class="card-header">
 
-                                    <h4 class="card-title text-center">Profile</h4>
+                                    <div class="text-center">Account Details</div>
                                 </div>
-                                    <div class="py-2 px-2">
-                                        <img src="{% static 'Profiles/avatar.svg' %}" alt="" class="py-2 rounded-circle" style="height: auto; width: 100%;">
-                                    </div>
-                                
-                            </div>
-                        </div>
-
-                        <div class="col-7">
-                            <h3 class="card-title text-muted"></h3>
-                            <div class="container=fluid">
-                                <div class="card">
-                                    <div class="card-header">
-
-                                        <h4 class="card-title text-center">Farmers Information</h4>
-                                    </div>
+                                <div class=" px-3 py-2">
+                                        <div class="row mb-2 ">
+                                            <div class="col-6"><label for="">Username:</label>{{form.username}}</div>
+                                            <div class="col-6"><label for="">First Name:</label>{{form.first_name}}</div>
+                                        </div>
+                                        <div class="row mb-2 ">
+                                            <div class="col-6"><label for="">Last Name:</label>{{form.last_name}}</div>
+                                            <div class="col-6"><label for="" class="mb-1">Status:</label><br>
+                                            <span class="mt-2 text-success">{{request.user.status}}</span></div>
+                                        </div>
+                                   
+                                        <div class="row mb-2 ">
+                                            <div class="col-6"><label for="">Email:</label>{{form.email}}</div>
+                                            <div class="col-6"><label for="">Phone:</label>{{form.phone}}</div>
+                                        </div>
                                 </div>
-                                
                             </div>
                             
-                        </div>
+                       
+                        <div class="mt-2 mb-2"><input type="submit" value="Update"></div>
                         
                     </div>
+                    
+                    
+                   </form>
+                        
+                </div>
             
-            {% endblock content %}</div>
-       </div>
+            {% endblock content %}
+        </div>
+    </div>
 </div>
 
-{% include 'partials/footer.html' %}
+<div class="row">
+    <div class="col-3"></div>
+    <div class="col-8">{% include 'partials/footer.html' %}</div>
+    <div class="col-2"></div>
+</div>
 
-    
 
-        
+      
         
     </main>
     <!--main-section-->

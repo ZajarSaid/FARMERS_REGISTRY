@@ -12,27 +12,42 @@
 
 </style>
 <body>
+
+  <!--top bar-->
+  <nav class="navbar navbar-expand-lg navbar-light " style="background-color: rgb(143, 177, 147);">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">
+          <span class="me-1"><img src="{% static 'Photos/tz_gov_logo.png' %}" alt="" class="px-2 rounded-pill" style="width: 50px; height: 40px; background-color: rgb(190, 231, 185);"></span>Ministry of Agriculture</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'User:index' %}">Go to Website</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'User:login' %}">Login</a>
+                </li>
+              
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+  <!--top bar -->
+
     <div class="container-fluid bg-light">
         <div class="row ">
             <div class="col-2 mb-3"></div>
-            <div class="container col-8 mt-4 mb-4 bg-light">
+            <div class="container col-md-7 mt-2 bg-light">
                 <h1 class="text-success card-text text-center bg-light">Farmer Registration Form</h1>
-                <div class="card mt-2">
+                <div class="card ">
                     <div class="card-body">
                         <form action="{% url 'User:user-register' %}" method="POST" enctype="multipart/form-data"><br>
                           {% csrf_token %}
-                            {% if messages %}
-                      
-                            {% for message in messages %}
-                          
-                            <div class="">
-                              <div class="alert alert-danger alert-dismissible">
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                                {{message}}
-                              </div>
-                            </div>
-                            {% endfor %}
-                          {% endif %}
+                          {% include 'partials/messages.html' %}
                               
                         
                       <div class="row mb-1">
@@ -63,7 +78,7 @@
                           <div class="col-6 px-4">
                             <label for="">Email</label>
                             <input type="email"  class="form-control" id="emailField" name="email">
-                            <div class="invalidEmailfeedback text-danger" style="display:none"></div>
+                            <div class="invalidEmailfeedback text-danger" style="display:none" id="invalidEmailfeedback"></div>
                               <p class="text-success EmailSuccessOutput text-sm"></p>
                           </div>
                           
@@ -103,16 +118,22 @@
                     </div>
                 </div>
             </div>
-            <div class="col-2 mt-5"></div>
+            <div class="col-2 mt-3"></div>
 
 
         </div>
     </div>
 
-  <script src="{% static '/js/bootstrap.bundles.js' %}"></script>
+    <footer class="footer mt-auto py-3 " style="background-color:  rgb(143, 177, 147);" >
+      <div class="container text-center " style="background-color: rgb(199, 224, 208);">
+          <span class="text-muted rounded-pill" style="background-color: white;">&copy; 2024 <span style="color: rgb(137, 202, 146);">Ministry of Agriculture</span>. All rights reserved.</span>
+      </div>
+  </footer>
+
+  <script src="{% static 'js/bootstrap.bundles.js' %}"></script>
  <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
  <script src="{% static 'js/datatables.min.js' %}"></script>
- <script src="{% static 'js/email.js' %} "></script>
+ <script src="{% static 'js/emails.js' %} "></script>
  <script src="{% static 'js/username.js' %} "></script>
    
 </body>

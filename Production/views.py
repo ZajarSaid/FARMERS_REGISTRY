@@ -8,11 +8,8 @@ from User.forms import UserRegister
 from django.http import JsonResponse
 from User.models import Farmer
 from Production.models import District, Region, Crop
-from validate_email import validate_email
 from django.contrib import messages
 from User.models import Farm
-from django.views import View
-import json
 
 
 def List_farmers(request):

@@ -109,7 +109,7 @@ class Farmer(AbstractUser):
 class Farm(models.Model):
     name = models.CharField(max_length=123)
     size = models.CharField(max_length=123)
-    crop_type = models.ForeignKey(Crop, on_delete=models.CASCADE, null=True)
+    crop_type = models.ForeignKey(Crop, on_delete=models.CASCADE)
     region = models.ForeignKey(Region, on_delete=models.CASCADE)
     district = models.ForeignKey(District, on_delete=models.CASCADE)
     c_s_date = models.DateTimeField()

@@ -7,9 +7,11 @@ from django.urls import reverse
 from django.http import JsonResponse
 from .models import Farmer
 from Production.models import District, Region, Crop
+from .forms import UserRegister
 from validate_email import validate_email
 from django.contrib import messages
 from User.models import Farm
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils import timezone
 from django.views import View
 import json
@@ -89,34 +91,40 @@ class FarmerRegistrationView(View):
                 user.set_password(password)
                 user.save()
                 messages.success(request, 'A user account has been created successfuly..')
-                return redirect('User:user-register')
+                return redirect('User:login')
 
                 return render(request, 'users/registration.html')
 
         return render(request, self.template_name)
 
 #Farm Registration View
-class RegisterFarmView(View):
+class RegisterFarmView(LoginRequiredMixin, View):
     template_name = 'users/registerFarm.html'
+    login_url = 'User/UserLogin/'  # URL to redirect to if the user is not logged in
 
     def get(self, request):
         regions = Region.objects.all()
         districts = District.objects.all()
         crop_types = Crop.objects.all()
+        Farmers = Farmer.objects.all()
+
         context = {
             'regions': regions,
             'crop_types': crop_types,
+            
             'districts': []
         }
         return render(request, self.template_name, context)
 
     def post(self, request):
+        
+
         name = request.POST.get('farmname')
         size = request.POST.get('size')
         crop_type_id = request.POST.get('crop_type')
         region_id = request.POST.get('region')
         district_id = request.POST.get('district')
-        owner = request.user  
+        owner = get_object_or_404(Farmer, id=request.user.id)
 
         print(region_id)
         print(district_id)
@@ -167,15 +175,39 @@ class RegisterFarmView(View):
         farm.save()
 
         messages.success(request, 'Farm registered successfully!')
-        return redirect('User:login')  
+        return redirect('User:farmer-account')  
 
+
+class FarmerAccountView(View):
+    template_name = 'users/FarmerPage.html'
+
+    def get(self, request):
+
+        user_pk = request.user.pk
+        FarmerInfo = get_object_or_404(Farmer, pk=user_pk)
+
+        if FarmerInfo.is_superuser:
+            return redirect('User:home')
+
+        form = UserRegister(instance=FarmerInfo)
+        user = FarmerInfo
+        context = {
+            'form':form,
+            'user':user
+            }    
+
+        return render(request, self.template_name, context)
+
+    def post(self, request):
+
+        return render(request, self.template_name)
 
 def index(request):
     # the index should return index page as a website initial page where,
     # users can  navigate different sections about the system like login and registration
     # currently it returns a farmer registration page for development/testing purposes
 
-    return render(request, 'users/base.html')
+    return render(request, 'users/Home.html')
 
     
 
@@ -189,12 +221,16 @@ def user_login(request):
         if user is not None:
             request.session['pk'] = user.pk
             login(request,user)
-            messages.info(request, 'You have been logged in successfuly')
-            return redirect('Production:dashboard')
+            messages.success(request, 'You have been logged in successfuly')
+            
+            if user.is_superuser:
+                return redirect('Production:dashboard')
+            return redirect('User:farmer-account')
     return render(request, 'users/login.html')
+
 
 
 def user_logout(request):
     logout(request)
-    return HttpResponsePermanentRedirect(reverse('User:login'))
+    return HttpResponsePermanentRedirect(reverse('User:index'))
 

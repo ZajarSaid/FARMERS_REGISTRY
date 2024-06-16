@@ -1,9 +1,20 @@
-{% extends 'users/FarmerPage.html'%}
-
-{% block header %}Register Farm {% endblock %}
-{% block btn %}{% endblock %}
-{% block title %}Register Farm {% endblock %}
-{% block content %}
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <link rel="stylesheet" href="{% static 'css/registration.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+</head>
+<body>
+    <div class="container-fluid">
+    <div class="row bg-light">
+        <div class="col-2"></div>
+            <div class=" col-8 mt-3">
+                <h1 class="text-success card-text text-center bg-light">Farm Registration Form</h1>
+                <div class="card">
+                    <div class="card-body">
 
                         <form action="{% url 'User:register-Farm' %}" method="post">
                             {% csrf_token %}
@@ -37,7 +48,7 @@
                                   <div class="col-4 px-4 mt-0 mb-0" >
                                     <label for="">crop_type</label>
 
-                                    <select name="crop_type" id="" class="form-control">
+                                    <select name="crop_type" id="">
                                         {% for crop_type in crop_types %}
                                         <option value="{{crop_type.id}}" name="crop_type">{{ crop_type.name }}</option>
 
@@ -53,7 +64,7 @@
 
                                 <div class="col-6 px-4">
                                     <label for="">Region</label>
-                                    <select name="region" id="regionSelect" data-url="{% url 'User:load-districts' %}" class="form-control">
+                                    <select name="region" id="regionSelect" data-url="{% url 'User:load-districts' %}">
                                         {% for region in regions %}
                                         <option value="{{region.id}}" >{{ region.name }}</option>
 
@@ -64,7 +75,7 @@
 
                                   <div class="col-6 px-4 mt-0 mb-0" >
                                     <label for="">districts</label>
-                                    <select name="district" id="districtSelect" class="form-control">
+                                    <select name="district" id="districtSelect">
                                         {% for district in districts %}
                                         <option value="{{district.id}}" name="district">{{ district.name }}</option>
 
@@ -81,4 +92,17 @@
 
                         </form>
                         
-                {% endblock %}
+                    </div>
+                </div>
+            </div>
+        <div class="col-2"></div>
+    </div>
+    </div>
+   
+    <script src="{% static 'js/bootstrap.bundles.js' %}"></script>
+    <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+    <script src="{% static 'js/datatables.min.js' %}"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+
+</body>
+</html>
