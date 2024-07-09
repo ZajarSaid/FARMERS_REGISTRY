@@ -1,0 +1,141 @@
+{% extends 'production/base.html'%}
+{% load static %}
+{% block title%}Farmer's Details{% endblock %}
+
+{% block cumb%}Farmer's details{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-3">
+       
+    </div>
+    <div class="col-7">
+  
+    </div>
+    <div class="col-2">
+      
+        <div class="d-sm-flex align-items-center justify-content-between mb-2">
+            <h1 class="h3 mb-0 text-gray-800"></h1>
+            <a href="{% url 'Production:all-farmers' %}" class="d-none d-sm-inline-block btn btn-sm btn-outline-success shadow pe-4">
+                <i class="fas fa-arrow-left fa-sm text-white-50. px-1">
+
+                </i> Back</a>
+        </div>
+       
+    </div>
+</div>
+
+    <!-- User information -->
+
+            
+    <div class="row mb-3">
+       
+        <div class="row my-1 mx-1 px-4 py-2 bg-light">
+
+            <div class="col-md-3">
+                <div class="card shadow">
+                    
+                    <div class="card-header">
+                      <div class="text-center">Profile Image</div>
+                       
+                    </div>
+                   
+                    <div class=" py-2 px-2 text-center mt-2">
+                        
+                        {% if farmer.image %}
+                                    <img id="profile-image" class="rounded-pill mb-2" src="{{ farmer.image.url }}" alt="Profile Image" height="100%" width="100%" />
+                                {% else %}
+                                    <img id="profile-image" class="rounded-pill mb-2" src="{% static 'profiles/avatar.svg' %}" alt="Default Profile Image" height="100%" width="100%" />
+                         {% endif %}
+                        
+                    </div>
+                   
+                   
+                </div>
+            </div>
+
+            <div class="col-md-9 mt-2 px-2">
+                
+            
+                    <div class="card">
+                        <div class="card-header">
+
+                            <div class="text-center">Account Details</div>
+                        </div>
+                        <div class=" px-3 py-2">
+                                <div class="row mb-2 ">
+                                    <div class="col-6"><label for="">Username:</label><br><span class="text-success">{{farmer.username}}</span></div>
+                                    <div class="col-6"><label for="">First Name:</label><br><span class="text-success">{{farmer.first_name}}</span></div>
+                                </div>
+                                <div class="row mb-2 ">
+                                    <div class="col-6"><label for="">Last Name:</label><br><span class="text-success">{{farmer.last_name}}</span></div>
+                                    <div class="col-6"><label for="" class="mb-1">Status:</label><br>
+                                    <span class="mt-2 text-success">{{farmer.status}}</span></div>
+                                </div>
+                           
+                                <div class="row mb-2 ">
+                                    <div class="col-6"><label for="">Email:</label><br><span class="text-success">{{farmer.email}}</span></div>
+                                    <div class="col-6"><label for="">Phone:</label><br><span class="text-success">{{farmer.phone}}</span></div>
+                                </div>
+                        </div>
+                    </div>
+
+                    <!-- Farmer's Farm Info -->
+
+                    <div class="card">
+                        <div class="card-header mb-3">
+
+                            <div class="text-center mt-2">Farm Details</div>
+                        </div>
+                        <div class=" px-3 py-2">
+                            {% if farmer.farms.count >= 1 %}
+                                <div class="row mb-2 ">
+                                  {% for farm in farmer.farms.all %}
+                                     
+                                  <div class="col-4"><label for="name" class="me-2">Name:</label>
+                                    <span class="text-success">{{farm.name}}</span></div>
+                                    <div class="col-4"><label for="name" class="me-2">crop_type:</label>
+                                        <span class="text-success">{{farm.crop_type}}</span></div>
+                                  <div class="col-4"><label for="output" class="me-2">Output:</label>
+                                    <span class="{% if farm.total_output >= 1 %} text-success {% else %} text-danger {% endif %}">{{farm.total_output}}</span></div>
+
+                                  {% endfor %}
+                                  <form action="{% url 'Production:farmer-details' f_username=farmer.username %}" method="POST" class="row" style="width: 100%;" >
+                                    {% csrf_token %}
+                                  <div class=" mt-2">
+                                    <div class="card-header mt-3">
+            
+                                        <div class="text-center">Fill Farm Output</div>
+                                    </div>
+                                    <div class=" px-3 py-2">
+                                      
+                                           <div class="row">
+                                            <input type="hidden" name="farmer_id" value="{{farmer.id}}">
+                                            <div class="col-6"><label for="">Name:</label><input type="text" name="farm_name" class="form-control"></div>
+                                            <div class="col-6"><label for="">Output:</label><input type="float" name="farm_output" class="form-control"></div>
+                                           </div>
+                                            
+                                    </div>
+                                </div>
+                                <div class="mt-2 mb-2"><input type="submit" value="Update"></div>
+                            </form>
+
+
+                             {% else %}
+
+                                       <div class="text-center"><p class="text-danger">A farmer {{ farmer.username }} has no a farm so far</p></div>
+
+                            {% endif %}   
+                                </div>
+                                
+                        </div>
+                    </div>
+                     <!-- Farmer's Farm Info -->
+
+                
+            </div>
+       
+        </div>
+
+{% endblock %}

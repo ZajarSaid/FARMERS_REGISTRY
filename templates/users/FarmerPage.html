@@ -14,7 +14,7 @@
     </head>
     <body>
  
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="width: 250px; background-color: rgb(92, 155, 112);" >
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style=" background-color: rgb(92, 155, 112);" >
     <div class="container-fluid">
         <!--offcanvas-trigger-->
         <button class="navbar-toggler me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#demo">
@@ -36,15 +36,21 @@
         
         
         <ul class="navbar-nav  mb-2 mb-lg-0">
-            <li>
-                {% if user.is_authenticated %}
-                <div>
-                    <p class=" card-text text-light mt-2">{{user.username}}</p>
-                    
-                </div>
-                {% endif %}
+            <li class="text-white me-3">
+                <i class="bi bi-person-fill"></i>
+              {{user.email}}
+              
             </li>
-        
+
+            <li>
+               
+                <a href="{% url 'User:logout' %}" class="text-decoration-none text-white" >
+                    <span class="">
+                        <i class="bi bi-box-arrow-right"></i>
+                </span>Logout</a>
+               
+            </li>
+          
             
         </ul>
     </div>
@@ -52,41 +58,44 @@
 </nav>
 <!-- navs -->    
 
-<div class="row mt-2 mb-2">
-    <div class="col-3"></div>
-    <div class="col-8">{% include 'partials/messages.html' %}</div>
-    <div class="col-1"></div>
-</div>
+
 
  
 <div class="container-fluid">
+ 
     <div class="row mt-2 mb-3">
         <div class="col-3">{% include 'users/user_sidebar.html '%}</div>
         <div class="col-8">
            
-
-            <div class="row my-1 mx-3 px-4 bg-light">
-                <div class="col-3"></div>
+            <div class="row mt-4 mb-1">
+       
+                <div class="col-12">{% include 'partials/messages.html' %}</div>
+           
+            </div>
+            <div class="row mt-5 ">
                 <div class="col-6">
-                    
                     <div class="row ">
                         <div>
-                           
-                            <center>
-                                <img src="{% static 'Photos/tz_gov_logo.png' %}" alt="" class="px-2 rounded-pill" style="width: 80px; background-color: rgb(190, 231, 185);">
-                            </center>
+                                <img src="{% static 'Photos/tz_gov_logo.png' %}" alt="" class="px-2 rounded-pill" style="width: 40px; background-color: rgb(190, 231, 185);">
+                                <p class="text-success">(F R S)</p>
                         </div>
-                        <div class="row">
-                            <h5 class="text-success ms-5 mt-1">Farmers Registration System</h5>
-                        </div>
+                     
                     </div>
                 </div>
-                <div class="col-3"></div>
+
+                <div class="col-3">
+                
+                </div>
+                <div class="col-3">
+                    
+                </div>
             </div>
+            
+           
 
            <!--top navs -->
 
-           <div class="container-fluid mt-3">
+           <!-- <div class="container-fluid mt-3">
                 
             <div class="row ">
                 <div class="col-2"></div>
@@ -104,7 +113,7 @@
                                     
                 <div class="col-3 mt-1">
                     {%block opt%}
-                    <a href="" class="btn " style="background-color: rgb(154, 188, 199);">
+                    <a href="{% url 'User:regional-prices' %}" class="btn " style="background-color: rgb(154, 188, 199);">
                         <span class="me-2 text-muted">
                         <i class="bi bi-currency-exchange text-dark"></i>
                     </span>Market Prices</a>
@@ -114,7 +123,7 @@
                 
                 <div class="col-2 mt-1">
                     {%block index%}
-                    <a href="" class="btn " style="background-color: rgb(172, 175, 175);">
+                    <a href="{% url 'User:index' %}" class="btn " style="background-color: rgb(172, 175, 175);">
                         <span class="">
                         <i class="bi bi-house text-dark"></i>
                     </span>Home</a>
@@ -131,7 +140,7 @@
 
             </div>
             
-        </div>
+        </div> -->
 
            <!-- top navs -->
            <div class="row my-1 mx-1  my-2 ms-3  py-1">
@@ -145,7 +154,6 @@
         {% block content %}
             <!-- User information -->
 
-            
             <div class="row mt-2 mb-3">
                 <form action="{% url 'User:farmer-account' %}" method="POST" class="row" style="width: 100%;" enctype="multipart/form-data">
                     {% csrf_token %}
@@ -228,7 +236,7 @@
     <!--main-section-->
     
     
- <script src="{% static '/js/bootstrap.bundles.js' %}"></script>
+ <script src="{% static 'js/bootstrap.bundles.js' %}"></script>
  <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
  <script src="{% static 'js/datatables.min.js' %}"></script>
  <script src="{% static 'js/script.js' %} "></script>

@@ -2,6 +2,8 @@ from django.db import models
 from Production.models import Crop, Region, District
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.core.validators import FileExtensionValidator as FeV
+from django.utils import timezone
+
 
 # Create your models here.
 
@@ -104,18 +106,16 @@ class Farmer(AbstractUser):
         return self.username
 
 
-    
-    
 class Farm(models.Model):
     name = models.CharField(max_length=123)
     size = models.CharField(max_length=123)
-    crop_type = models.ForeignKey(Crop, on_delete=models.CASCADE)
-    region = models.ForeignKey(Region, on_delete=models.CASCADE)
-    district = models.ForeignKey(District, on_delete=models.CASCADE)
+    crop_type = models.ForeignKey(Crop,related_name='crop_types', on_delete=models.CASCADE)
+    region = models.ForeignKey(Region,related_name='regions', on_delete=models.CASCADE)
+    district = models.ForeignKey(District,related_name='districtss', on_delete=models.CASCADE)
     c_s_date = models.DateTimeField()
     total_output = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True)
-    owner = models.ForeignKey(Farmer, on_delete=models.CASCADE)
+    owner = models.ForeignKey(Farmer, related_name='farms', on_delete=models.CASCADE)
     is_active = models.BooleanField(default=False)
     approved = models.BooleanField(default=False)
 
@@ -127,6 +127,32 @@ class Farm(models.Model):
         verbose_name_plural = 'Farm'
     
 
-    
+class Rank(models.Model):
+    farmer = models.OneToOneField(Farmer, on_delete=models.CASCADE)
+    national_rank = models.IntegerField(null=True, blank=True)
+    regional_rank = models.IntegerField(null=True, blank=True)
+    region = models.ForeignKey(Region, on_delete=models.CASCADE)
 
+    class Meta:
+        verbose_name =  'Ranks'
+
+    def __str__(self):
+        return f"{self.farmer.username} - National Rank: {self.national_rank}, Regional Rank: {self.regional_rank}"
+
+class OutputVerification(models.Model):
+    STATUS = (
+        ('pending', 'pending'),
+        ('verified', 'verified'),
+        ('denied', 'denied')
+       
+    )
+    owner = models.ForeignKey(Farmer, on_delete=models.CASCADE)
+    farm_name = models.CharField(max_length=120)
+    farm_output = models.IntegerField(null=True, blank=True)
+    verification_message = models.CharField(max_length=120)
+    pending_message = models.CharField(max_length=120)
+    status = models.CharField(max_length=200, choices=STATUS, default='pending')
+    
+    def __str__(self):
+        return f"{self.owner}-{self.farm_name}-Status: {self.status}"
 

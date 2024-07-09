@@ -10,6 +10,10 @@ mysql = "*"
 mysql-connector-python = "*"
 django-extensions = "*"
 validate-email = "*"
+matplotlib = "*"
+pandas = "*"
+seaborn = "*"
+djangorestframework = "*"
 
 [dev-packages]
 

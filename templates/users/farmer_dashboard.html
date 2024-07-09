@@ -1,0 +1,71 @@
+{% extends 'users/FarmerPage.html'%}
+{% load static %}
+{% block header %}farmer-history {% endblock %}
+{% block title %}History {% endblock %}
+{% block content %}
+
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card shadow">
+                <div class="card-header">
+                    <h4 class="card-title text-center">Profile</h4>
+                </div>
+                <div class="card-body text-center">
+                    <img src="{% static 'Profiles/avatar.svg' %}" alt="Profile Picture" class="img-fluid rounded-circle mb-3" style="height: 150px; width: 150px;">
+                    <h5>{{ user.username }}</h5>
+                    <p>{{ user.email }}</p>
+                    <p>{{ user.phone }}</p>
+                    <p>Status: {{ user.get_status_display }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card shadow mb-4">
+                <div class="card-header">
+                    <h4 class="card-title text-center">Rank Information</h4>
+                </div>
+                <div class="card-body">
+                    {% if rank %}
+                        <p>National Rank: {{ rank.national_rank }}</p>
+                        <p>Regional Rank ({{ rank.region.name }}): {{ rank.regional_rank }}</p>
+                    {% else %}
+                        <p class="text-danger text-center">No ranking information available.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="card shadow">
+                <div class="card-header">
+                    <h4 class="card-title text-center">Farm Information</h4>
+                </div>
+                {% if farms %}
+                    <div class="card-body">
+                        {% for farm in farms %}
+                            <div class="mb-4">
+                                <h5>{{ farm.name }}</h5>
+                                <p>Size: {{ farm.size }}</p>
+                                <p>Crop Type: {{ farm.crop_type.name }}</p>
+                                <p>Region: {{ farm.region.name }}</p>
+                                <p>District: {{ farm.district.name }}</p>
+                                <p>Start Date: {{ farm.c_s_date }}</p>
+                                <p>Total Output: {{ farm.total_output }}</p>
+                                <p>Created At: {{ farm.created_at }}</p>
+                                <hr>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                <p class="card-text text-danger text-center py-3 px-2">
+                    You haven't yet registered a farm 
+                </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}

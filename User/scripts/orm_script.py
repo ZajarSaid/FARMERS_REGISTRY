@@ -1,16 +1,35 @@
 from Production.models import Region, District
 from django.shortcuts import get_object_or_404
-
+from .models import Farm
 
 
 def run():
 
+ 
+
   # retrieving all regions
 
-  regions = Region.objects.all()
+  # regions = Region.objects.all()
 
-  for region in regions:
-    print(f'{region.name}-{[district.name for district in region.districts.all()]}')
+  # for region in regions:
+  #   print(f'{region.name}-{[district.name for district in region.districts.all()]}')
+
+
+  # regional_ranks = (
+  #       Farm.objects.values('owner', 'region')
+  #       .annotate(total_output=Sum('total_output'))
+  #       .order_by('-total_output')
+  #   )
+
+  # print(regional_ranks)
+
+  
+
+  
+
+
+
+  
 
     
       

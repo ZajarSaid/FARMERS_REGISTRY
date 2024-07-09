@@ -1,0 +1,30 @@
+{% extends 'users/FarmerPage.html'%}
+{% load static %}
+{% block header %}Regional Prices {% endblock %}
+{% block btn %}{% endblock %}
+{% block title %}Regional Prices {% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    {% if regional_prices %}
+        <h2>Regional Prices for Your Crops</h2>
+    
+    <div class="row">
+        {% for price in regional_prices %}
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{{ price.crop.name }}</h5>
+                    <p class="card-text">Region: {{ price.region.name }}</p>
+                    <p class="card-text">Price: ${{ price.price }}</p>
+                    <a href="" class="btn btn-primary">View All Prices for {{ price.crop.name }}</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+
+    {% endif %}
+</div>
+{% endblock %}

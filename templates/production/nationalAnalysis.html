@@ -1,0 +1,32 @@
+{% extends 'production/base.html'%}
+{% load static %}
+{% block title%}National-Total-Production{% endblock %}
+
+{% block cumb%}National Analysis{% endblock %}
+{% block content %}
+<div class="container">
+ 
+    
+    <h2>National Total Output</h2>
+    <p>{{ national_output }}</p>
+
+    <img src="data:image/png;base64,{{ monthly_output_plot }}" alt="Monthly Output Plot" class="img-fluid">
+    
+    <table class="table mt-4" id="example">
+        <thead>
+            <tr>
+                <th>Month</th>
+                <th>Total Output</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in monthly_output %}
+            <tr>
+                <td>{{ row.Month|date:"Y-m" }}</td>
+                <td>{{ row.Total_Output }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

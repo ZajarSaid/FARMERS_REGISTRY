@@ -13,7 +13,7 @@
                      <div class="text-muted fw-bold text-uppercase px-3 small">core</div>
                  </li>
                  <li>
-                     <a href="{% url 'User:farmer-account' %}" class="nav-link px-3 active">
+                     <a href="{% url 'User:home-page' %}" class="nav-link px-3 active">
                          <span class="me-2">
                              <i class="bi bi-speedometer2 text-muted"></i>
                          </span>
@@ -31,7 +31,7 @@
                          <span class="me-2">
                              <i class="bi bi-people text-muted"></i>
                          </span>
-                         <span class="small text-muted">My History</span>
+                         <span class="small text-muted">Activity</span>
                          <span class="ms-auto right-icon">
                              <i class="bi bi-chevron-down text-muted"></i>
                          </span>
@@ -40,18 +40,26 @@
                          <div id="dem" class="collapse">
                              <div>
                                  <ul class="navbar-nav ps-3">
-                                     <a href="{% url 'Production:all-farmers' %}" class="nav-link px-3 active">
+                                     <a href="{% url 'User:farmer-history' %}" class="nav-link px-3 active">
                                          <span class="me-2">
                                              <i class="bi bi-people text-muted"></i>
                                          </span>
-                                         <span class="small text-muted">Regional Level</span>
+                                         <span class="small text-muted">History</span>
                                      </a>
-                                     <a href="" class="nav-link px-3 active">
+                                     <a href="{% url 'User:regional-prices' %}" class="nav-link px-3 active">
                                          <span class="me-2">
                                              <i class="bi bi-people text-muted"></i>
                                          </span>
-                                         <span class="small text-muted">National Level</span>
+                                         <span class="small text-muted">Market prices</span>
                                      </a>
+                                     <a href="{% url 'User:register-Farm' %}" class="nav-link px-3 active">
+                                        <span class="me-2">
+                                            <i class="bi bi-people text-muted"></i>
+                                        </span>
+                                        <span class="small text-muted">Register Farm</span>
+                                    </a>
+                                     
+                                     
                                      
                                  </ul>
                              </div>
@@ -64,20 +72,27 @@
                  </li>
 
                  <li>
-                     <div class=" text-white fw-bold text-uppercase px-3 small">Addons</div>
+                     <div class=" text-muted fw-bold text-uppercase px-3 small">Account</div>
                  </li>
                  
                  
                  <li>
-                    <a href="" class="nav-link px-3 active">
+                    <a href="{% url 'User:farmer-account' %}" class="nav-link px-3 active">
                         <span class="me-2">
                             <i class="bi bi-speedometer2 text-muted"></i>
                         </span>
-                        <span class="small text-muted">My Farms</span>
+                        <span class="small text-muted">Profile</span>
                     </a>
                 </li>
 
-
+                <li>
+                    <a href="{% url 'User:change-password'%}" class="nav-link px-3 active">
+                        <span class="me-2">
+                            <i class="bi bi-speedometer2 text-muted"></i>
+                        </span>
+                        <span class="small text-muted">Change password</span>
+                    </a>
+                </li>
              </ul>
          </nav>
      

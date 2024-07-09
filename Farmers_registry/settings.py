@@ -27,6 +27,13 @@ SECRET_KEY = 'django-insecure-dq258d_!@qj960_0hh*s9gj$*6u05@f&ge#lk$^6sn1_sx4y2%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'zajarjafary@gmail.com'
+EMAIL_HOST_PASSWORD = 'qrvfzthgttubbdtl'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
 ALLOWED_HOSTS = []
 
 
@@ -39,9 +46,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
     'User',
     'Production',
-
+    'rest_framework',
     'django_extensions'
 ]
 
@@ -58,6 +66,8 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'Farmers_registry.urls'
 
 AUTH_USER_MODEL = 'User.Farmer'
+
+LOGIN_URL = '/UserLogin/'
 
 TEMPLATES = [
     {

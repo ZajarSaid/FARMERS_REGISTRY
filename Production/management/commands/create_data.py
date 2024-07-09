@@ -5,7 +5,9 @@ from django.conf import settings
 import os
 from django.utils import timezone
 import random
-
+from User.models import Farm
+from django.db.models import Sum
+from itertools import groupby
 
 
 class Command(BaseCommand):
@@ -14,6 +16,39 @@ class Command(BaseCommand):
     # import crops
 
     def handle(self, *args, **kwargs):
+
+        farms = Farm.objects.all()
+        total_product = 0
+
+        crops = {}
+        total_farms = 0
+        for item in farms:
+            total_farms += 1
+            total_product += item.total_output
+            crops['type']=[item.crop_type]
+
+        print(crops)
+        print(total_farms)
+        
+        for k,v in crops.items():
+            print(k,v)
+
+        
+            
+        print(total_product)
+
+
+        # check regions
+        # regional_ranks = (
+        # Farm.objects.values('owner',  'name')
+        # .annotate(total_output=Sum('total_output'))
+        # .order_by('-total_output')
+        # )
+
+        # print(regional_ranks)
+        # for region, workers in groupby(regional_ranks, key=lambda x: x['owner']):
+            # print(region)
+            # print(workers)
 
         # populate crops
 
@@ -44,13 +79,13 @@ class Command(BaseCommand):
             {'name': 'Peppers', 'crop_type': 'Food', 'created_at': timezone.now() - timezone.timedelta(days=random.randint(1, 365))},
         ]
 
-        for c in List_crops:
-            Crop.objects.create(**c)
+        # for c in List_crops:
+        #     Crop.objects.create(**c)
 
-        crops = Crop.objects.all()
+        # crops = Crop.objects.all()
 
         
-
+    
 
     
     # Populate Region model with data from  JSON file

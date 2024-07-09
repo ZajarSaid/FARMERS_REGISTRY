@@ -1,0 +1,49 @@
+{% extends 'production/base.html'%}
+{% load static %}
+{% block title%}Add-Regional{% endblock %}
+
+{% block cumb%}Add-Regional-Prices{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-3">
+       
+    </div>
+    <div class="col-7">
+  
+    </div>
+    <div class="col-2">
+      
+        <div class="d-sm-flex align-items-center justify-content-between mb-2">
+            <h1 class="h3 mb-0 text-gray-800"></h1>
+            <a href="{% url 'Production:regional-prices' %}" class="d-none d-sm-inline-block btn btn-sm btn-outline-success shadow pe-4">
+                <i class="fas fa-arrow-left fa-sm text-white-50. px-1">
+
+                </i> Back</a>
+        </div>
+       
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="container">
+        <form action="{% url 'Production:add-regional-prices' %}" method="post">
+            {% csrf_token %}
+              <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-4"><label for="">Crop</label><br><br>{{form.crop}}</div>
+                        <div class="col-4"><label for="">Region</label><br> <br>{{form.region}}</div>
+                        <div class="col-4"><label for="">Price</label><br><br>{{form.price}}</div>
+                    </div>
+                </div>
+              </div>
+              <input type="submit" value="Submit" class="btn btn-outline-secondary mt-2">
+        </form>
+
+        
+    </div>
+</div>
+
+{% endblock content %}

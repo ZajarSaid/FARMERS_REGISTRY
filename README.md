@@ -22,7 +22,7 @@ python -m venv venv
 source venv/bin/activate  # On Windows use `venv\Scripts\activate`
 
 ## Steps for making migrations:
-1. Make migrations for the farmer model:
+1. Make migrations for farmer model:
 python manage.py makemigrations farmer
 python manage.py migrate farmer
 
@@ -48,21 +48,4 @@ Ensure you consider the congiguration steps of Custom User model
 
 The project uses the following packages:
 
-```toml
-[[source]]
-url = "https://pypi.org/simple"
-verify_ssl = true
-name = "pypi"
-
-[packages]
-django = "*"
-pillow = "*"
-mysql = "*"
-mysql-connector-python = "*"
-django-extensions = "*"
-validate-email = "*"
-
-[dev-packages]
-
-[requires]
-python_version = "3.10"
+refer Pipfile

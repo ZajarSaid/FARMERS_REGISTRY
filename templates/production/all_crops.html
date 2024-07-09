@@ -1,0 +1,51 @@
+{% extends 'production/base.html'%}
+{% load static %}
+{% block title%}All Crops{% endblock %}
+
+{% block cumb%}Crops{% endblock %}
+
+{% block content %}
+
+<div class="row mb-2 px-3 py-2">
+    <div class="container">
+        <table class="table table-striped table-bordered table-hover" id="example">
+            <thead class="bg-dark text-light">
+        
+                <tr>
+                    <th class="text-success">S/N</th>
+                    <th class="text-success">Name</th>
+                    <th class="text-success">Type</th>
+                    <th class="text-success">Created_at</th>
+                </tr>
+            </thead>
+    
+                    <tbody>
+                    {% if crops %}
+  
+                            {% for crop in crops %}
+                                <tr>
+                                    <td>{{ crop.id }}</td>
+                                    <td>{{ crop.name }}</td>
+                                    <td>{{ crop.crop_type }}</td>
+                                    <td>{{ crop.created_at }}</td>
+                                </tr>
+                            {% endfor %}
+
+                    {% endif %}
+                    </tbody>
+              
+    
+                <tfoot>
+                    <tr>
+                        <th class="text-success">S/N</th>
+                        <th class="text-success">Name</th>
+                        <th class="text-success">Type</th>
+                        <th class="text-success">Created_at</th> 
+                    </tr>
+                </tfoot>
+        </table>
+    </div>
+</div>
+
+
+{% endblock content %}

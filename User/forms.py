@@ -33,22 +33,19 @@ class LoginForm(AuthenticationForm):
             }),
             'password':forms.PasswordInput(attrs={'class':'form-control'})
         }
-    
-
-    
+       
 class FarmRegister(forms.ModelForm):
     class Meta:
         model = Farm
-        fields = ('name','size','crop_type', 'region', 'district')
-
-        # ('username', 'status')
+        fields = ('name','size','crop_type', 'region', 'district','total_output')
         
         widgets = {
-            'name':forms.TextInput(attrs={'class':'form-control', 'placeholder':'username'}),
+            'name':forms.TextInput(attrs={'class':'form-control', 'placeholder':'name'}),
             'size':forms.TextInput(attrs={'class':'form-control', 'placeholder':'first_name'}),
             'crop_type':forms.Select(attrs={'class':'form-control', 'placeholder':'last_name'}),
             'region':forms.Select(attrs={'class':'form-control', 'placeholder':'Enter Email'}),
-            'district':forms.Select(attrs={'class':'form-control', 'placeholder':'Enter Contact'})
+            'district':forms.Select(attrs={'class':'form-control', 'placeholder':'Enter Contact'}),
+            
             
         }
     

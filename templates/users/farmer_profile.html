@@ -12,22 +12,7 @@
     
     </head>
     <body>
- 
-   
-       {% if messages %}
 
-    
-       <div class="alert alert-danger alert-dismissible fade show">
-           {% for message in messages %}
-           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
-           
-           <p class="card-title"><strong> {{ message }}</strong></p> 
-           {% endfor %}
-       </div>
-   
-   
-   {% endif %}
-   
 
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="width: 250px; background-color: rgb(196, 186, 162);" >
     <div class="container-fluid">
@@ -144,9 +129,6 @@
 
 {% include 'partials/footer.html' %}
 
-    
-
-        
         
     </main>
     <!--main-section-->

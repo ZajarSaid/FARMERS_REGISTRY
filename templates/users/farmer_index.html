@@ -1,0 +1,61 @@
+{% extends 'users/FarmerPage.html'%}
+{% load static %}
+{% block header %}Index {% endblock %}
+{% block btn %}{% endblock %}
+{% block title %}Index {% endblock %}
+
+
+{% block content %}
+{% include 'partials/User_cards.html' %}
+
+<div class="row mt-2 mb-3">
+    <div class="col-12">
+        {% if output_verification %}
+      
+            {% for output in output_verification %}
+                {% if output.status == 'pending' %}
+                    <div class="alert alert-warning card-body">
+                        <p class="card-text px-2 py-2 text-warning ">{{ output.verification_message}}</p>
+                    </div>
+                    <a class="btn btn-primary" href="#" data-bs-toggle="modal" data-bs-target="#Mymodal">Accept</a>
+                   <a class="btn btn-danger" href="#">Deny</a>
+                {% else %}
+                {% endif %}
+    
+            {% endfor %}
+        
+        {% else %}
+        {% endif  %}
+    </div>
+
+  
+</div>
+
+
+<!-- modal -->
+
+<div class="modal fade" id="Mymodal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header " style="background-color: rgb(105, 164, 139);">
+                <h5 class="modal-title text-center text-white" id="modalLabel">Confirm Farm Output</h5>
+                
+            </div>
+            <div class="modal-body">
+                <p class="card-text">Are sure you agree with the filled total output in your farm?</p>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-6 me-2"><a href="{% url 'User:verify-output' user.id %}" class="btn btn-success">Confirm</a></div>
+               
+                    <div class="col-4 ms-2"><button type="button" class="btn btn-dark" data-bs-dismiss="modal">No</button></div>
+                </div>
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal -->
+
+{% endblock content %}

@@ -5,16 +5,188 @@ from django.http import HttpResponsePermanentRedirect, HttpResponse
 from django.urls import reverse
 
 from django.http import JsonResponse
-from .models import Farmer
-from Production.models import District, Region, Crop
+from .models import Farmer, Farm, Rank, OutputVerification
+from Production.models import District, Region, Crop, RegionalPrices
 from .forms import UserRegister
 from validate_email import validate_email
 from django.contrib import messages
-from User.models import Farm
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils import timezone
 from django.views import View
 import json
+from django.views.generic import TemplateView
+
+
+
+
+class ChangePasswordView(LoginRequiredMixin, View):
+    template_name = 'users/Change_password.html'
+
+    def get(self, request):
+
+        return render(request, self.template_name)
+
+    def post(self, request):
+        # take form data
+        current_password = request.POST['currentPassword']
+        new_password = request.POST['newPassword']
+        confirm_password = request.POST['confirmPassword']
+        f_pk = request.user.pk
+
+        # take current user password then confirm the algorithm
+        farmer = get_object_or_404(Farmer, pk=f_pk)
+        if farmer:
+            print(c_password)
+            if current_password == farmer.password:
+                if new_password == confirm_password:
+                    newfarmer = farmer.save(commit=False)
+                    newFarmer.password = newFarmer.set_password(confirm_password)
+                    newFarmer.save()
+                    messages.success(request, 'your password has been changed successfuly..!')
+                    return redirect('User:change-password')
+                else:
+                    messages.error(request, "two passwords didn't match")
+            else:
+                messages.error(request, 'wrong password')
+                return redirect('User:change-password')
+
+        return render(request, self.template_name)
+
+
+
+def verify_ouput(request, f_id):
+    # take output_verification related to farmer_id
+    # if present, assign a verified value then return a message to verify the process
+    status = 'verified'
+    output_instance = get_object_or_404(OutputVerification, owner=f_id)
+    output_instance.status = status
+    farmer = Farmer.objects.filter(pk=f_id)
+    print(farmer)
+    output_instance.save()
+
+    # OutputVerification.objects.update_or_create(
+    #             status=status,
+    #             defaults={'owner': farmer},
+    #         )
+    messages.success(request, 'Your farm has been registered and ranked in the database of farmers effectively ')
+
+    return redirect('User:home-page')
+ 
+
+
+class RegionalPriceView(LoginRequiredMixin, TemplateView):
+    template_name = 'users/regional_prices.html'
+
+    def get(self, request):
+        farmer = request.user
+        farms = Farm.objects.filter(owner=farmer)
+        crops = farms.values_list('crop_type', flat=True).distinct()
+        regional_prices = RegionalPrices.objects.filter(crop_id__in=crops)
+
+        context = {
+            'regional_prices': regional_prices,
+        }
+        return render(request, self.template_name, context)
+
+
+@login_required
+def regional_prices_view(request):
+    farmer = request.user
+    farms = Farm.objects.filter(owner=farmer)
+    crops = farms.values_list('crop_type', flat=True).distinct()
+    regional_prices = RegionalPrices.objects.filter(crop_id__in=crops)
+
+    context = {
+        'regional_prices': regional_prices,
+    }
+    return render(request, 'regional_prices.html', context)
+
+
+
+class FarmerHistoryView(LoginRequiredMixin, View):
+    template_name = 'users/farmer_dashboard.html'
+
+    def get(self, request):
+        farmer = request.user
+        farms = Farm.objects.filter(owner=farmer)
+        try:
+            rank = Rank.objects.get(farmer=farmer)
+        except Rank.DoesNotExist:
+            rank = None
+
+        context = {
+            'farmer': farmer,
+            'farms': farms,
+            'rank': rank,
+        }
+        return render(request, self.template_name, context)
+
+
+@login_required
+def farmer_dashboard(request):
+    farmer = request.user
+    farms = Farm.objects.filter(owner=farmer)
+    try:
+        rank = Rank.objects.get(farmer=farmer)
+    except Rank.DoesNotExist:
+        rank = None
+
+    context = {
+        'farmer': farmer,
+        'farms': farms,
+        'rank': rank,
+    }
+    return render(request, 'users/farmer_dashboard.html', context)
+
+
+@login_required
+def farmer_index(request):
+    farmer = request.user
+    farms = Farm.objects.filter(owner=farmer)
+    # user_verification = get_object_or_404(OutputVerification, owner=farmer)
+    # if user_verification:
+        
+    #     print(user_verification)
+    try:
+        user_verification = OutputVerification.objects.filter(owner=farmer)
+        if user_verification:
+            print(user_verification)
+
+        else:
+
+        
+            print('there is no output verification for you...')
+
+    except user_verification.DoesNotExist:
+        user_verification = None
+
+    output = 0
+    crops = []
+    Number_Crops = 0
+
+    if farms:
+        for item in farms:
+            crops.append(item.crop_type)
+            Number_Crops += 1
+            output += item.total_output
+
+    try:
+        rank = Rank.objects.get(farmer=farmer)
+    except Rank.DoesNotExist:
+        rank = None
+
+    context = {
+        'farmer': farmer,
+        'farms': farms,
+        'rank': rank,
+        'output':output,
+        'crops':Number_Crops,
+        'output_verification':user_verification
+    }
+
+    return render(request, 'users/farmer_index.html', context)
+
 
 
 class UsernameValidationView(View):
@@ -187,7 +359,7 @@ class FarmerAccountView(View):
         FarmerInfo = get_object_or_404(Farmer, pk=user_pk)
 
         if FarmerInfo.is_superuser:
-            return redirect('User:home')
+            return redirect('Production:dashboard')
 
         form = UserRegister(instance=FarmerInfo)
         user = FarmerInfo

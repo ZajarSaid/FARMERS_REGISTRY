@@ -7,18 +7,11 @@
 
                         <form action="{% url 'User:register-Farm' %}" method="post">
                             {% csrf_token %}
-                            {% if messages %}
-                      
-                            {% for message in messages %}
-                          
-                            <div class="">
-                                <div class="alert alert-danger alert-dismissible">
-                                  <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                                  {{message}}
-                                </div>
-                            </div>
-                            {% endfor %}
-                          {% endif %}
+                            <div class="row mt-2 mb-2">
+                              <div class="col-3"></div>
+                              <div class="col-8">{% include 'partials/messages.html' %}</div>
+                              <div class="col-1"></div>
+                          </div>
 
                             <div class="row mb-1">
                         

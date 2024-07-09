@@ -1,0 +1,52 @@
+{% extends 'production/base.html'%}
+{% load static %}
+{% block title%}National-Total-Production{% endblock %}
+
+{% block cumb%}National Analysis{% endblock %}
+{% block content %}
+<div class="row mb-2 mt-3">
+
+</div>
+<div class="row">
+
+    <div class="col-4">
+        <canvas id="cropChart" width="400" height="400"></canvas>
+    </div>
+
+    <div class="col-4">
+        <form id="regionFilterForm">
+            <label for="regionSelect">Select Region:</label>
+            <select id="regionSelect" name="region">
+                <option value="">All Regions</option>
+                {% for region in regions %}
+                <option value="{{ region.id }}">{{ region.name }}</option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+    <div class="col-4">
+        <canvas id="cropChart1" width="400" height="400"></canvas>
+       
+
+</div>
+
+<div class="row mt-2 mb-2">
+    <div class="col-6"> <div id="summary">
+        <h3>Summary</h3>
+        <p>Total Farms: <span id="totalFarms">{{farms.count}}</span></p>
+        <p>Total Output: <span id="totalOutput">{{output}}</span></p>
+    </div>
+</div></div>
+    <div class="col-6"></div>
+</div>
+
+
+
+
+<!-- Include Chart.js from a CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+
+<!-- Include your custom JavaScript file -->
+<script src="{% static 'js/farmChart.js' %}"></script>
+<script src="{% static 'js/chart2.js' %}"></script>
+{% endblock %}
