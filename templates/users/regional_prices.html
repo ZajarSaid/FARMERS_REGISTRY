@@ -3,7 +3,7 @@
 {% block header %}Regional Prices {% endblock %}
 {% block btn %}{% endblock %}
 {% block title %}Regional Prices {% endblock %}
-
+{% block cumb %}Regional Prices {% endblock %}
 {% block content %}
 <div class="container mt-4">
     {% if regional_prices %}
@@ -12,12 +12,13 @@
     <div class="row">
         {% for price in regional_prices %}
         <div class="col-md-4">
-            <div class="card mb-4 shadow-sm">
+            <div class="card mb-4 shadow-sm bg-success">
                 <div class="card-body">
                     <h5 class="card-title">{{ price.crop.name }}</h5>
-                    <p class="card-text">Region: {{ price.region.name }}</p>
-                    <p class="card-text">Price: ${{ price.price }}</p>
-                    <a href="" class="btn btn-primary">View All Prices for {{ price.crop.name }}</a>
+                    <p class="card-textt text-light">Region: <span class="text-muted fw-bold">{{ price.region.name }}</span></p>
+                    <p class="card-textt text-light">Price: <span class="text-muted fw-bold"> ${{ price.price }}</span></p>
+                   
+                    
                 </div>
             </div>
         </div>

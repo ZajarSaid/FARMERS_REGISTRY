@@ -241,6 +241,7 @@ class FarmerRegistrationView(View):
         phone = request.POST['phone']
         address = request.POST['address']
         password = request.POST['password']
+        image = request.FILES.get('image')
 
         context = {'FieldValues':request.POST}
 
@@ -258,12 +259,13 @@ class FarmerRegistrationView(View):
                  last_name=lastname,
                  email=email,
                  phone=phone,
-                 address=address
+                 address=address,
+                 image=image
                  )
                 user.set_password(password)
                 user.save()
-                messages.success(request, 'A user account has been created successfuly..')
-                return redirect('User:login')
+                messages.success(request, 'A farmer account has been created successfuly..')
+                return redirect('User:user-register')
 
                 return render(request, 'users/registration.html')
 
@@ -368,7 +370,41 @@ class FarmerAccountView(View):
             'user':user
             }    
 
+
         return render(request, self.template_name, context)
+
+    def post(self, request):
+
+        user_pk = request.user.pk
+        real_farmer = get_object_or_404(Farmer, pk=user_pk)
+        form = UserRegister(request.POST, request.FILES, instance=real_farmer)
+        print(form)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your information has been updated successfuly..')
+            return redirect('User:farmer-account')
+
+        # first_name = request.POST['first_name']
+        # last_name = request.POST['last_name']
+        # email = request.POST['email']
+        # username = request.POST['username']
+        # image = request.FILES.get('image')
+        # phone = request.POST['phone']
+
+        # farmer = Farmer.objects.get(id=user_pk)
+
+        # farmer.username = username
+        # farmer.last_name = last_name
+        # farmer.first_name = first_name
+        # farmer.email = email
+        # farmer.image = image
+        # farmer.phone = phone
+        # farmer.save()
+        messages.error(request, 'Your information has not been updated successfuly..')
+
+        return redirect('User:farmer-account')
+
 
     def post(self, request):
 
@@ -397,7 +433,7 @@ def user_login(request):
             
             if user.is_superuser:
                 return redirect('Production:dashboard')
-            return redirect('User:farmer-account')
+            return redirect('User:home-page')
     return render(request, 'users/login.html')
 
 

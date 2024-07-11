@@ -4,7 +4,7 @@
     <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Farmer-Account | {% block title %} Dashboard{% endblock %}</title>
+    <title>Farmer-Account | {% block title %} Profile{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
     <link rel="stylesheet" href="{% static 'css/datatables.min.css' %}" />
     <!-- <link rel="stylesheet" href="{% static 'css/registration.css' %}"> -->
@@ -21,7 +21,8 @@
             <span class="navbar-toggler-icon" data-bs-target="#demo"></span>
             </button>
         <!--offcanvas-trigger-->
-    <a class="navbar-brand fw-bold me-auto text-uppercase" href="#">Farmer Account</a>
+        <img src="{% static 'Photos/tz_gov_logo.png' %}" alt="" class="px-2 rounded-pill me-2" style="width: 40px; height: 40px; background-color: rgb(190, 231, 185);">
+    <a class="navbar-brand fw-bold me-auto text-uppercase" href="#">My Account</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -72,75 +73,34 @@
                 <div class="col-12">{% include 'partials/messages.html' %}</div>
            
             </div>
-            <div class="row mt-5 ">
-                <div class="col-6">
-                    <div class="row ">
-                        <div>
-                                <img src="{% static 'Photos/tz_gov_logo.png' %}" alt="" class="px-2 rounded-pill" style="width: 40px; background-color: rgb(190, 231, 185);">
-                                <p class="text-success">(F R S)</p>
-                        </div>
-                     
-                    </div>
-                </div>
+            <div class="row mt-3">
 
-                <div class="col-3">
-                
-                </div>
-                <div class="col-3">
+                <div class="container mt-3 ">
+                    <div class="row py-1 mt-2">
+                        <div class="col-10 " >
+                            <nav aria-label="breadcrumb" id="breCumb">
+                                <div class="row">
+                                    <div class="col-5">
+                                        <ol class="breadcrumb py-1">
+                                            <li class="breadcrumb-item active text-decoration-none pt-1"><a href="" class="text-decoration-none text-success pt-2">Farmer-Account</a></li>
+                                            <li class="breadcrumb-item list-unstyled pt-1"><a href="" class="text-decoration-none text-muted">{% block cumb %}Profile{% endblock %}</a></li>
+                                        </ol>
+                                    </div>
+                                    <div class="col-3"></div>
+                                 
+                                </div>
+                               
+                            </nav>
+                        </div>
+                        
+                    </div>
                     
                 </div>
-            </div>
             
            
 
            <!--top navs -->
 
-           <!-- <div class="container-fluid mt-3">
-                
-            <div class="row ">
-                <div class="col-2"></div>
-
-                <div class="col-md-3 mt-1">
-                    {%block btn%}
-                    <a href="{% url 'User:register-Farm' %}" class="btn " style="background-color: aquamarine;">
-                        <span class="me-2">
-                        <i class="bi bi-pencil-square text-dark"></i>
-                    </span>Register Farm</a>
-                    {% endblock %}
-
-                </div>
-               
-                                    
-                <div class="col-3 mt-1">
-                    {%block opt%}
-                    <a href="{% url 'User:regional-prices' %}" class="btn " style="background-color: rgb(154, 188, 199);">
-                        <span class="me-2 text-muted">
-                        <i class="bi bi-currency-exchange text-dark"></i>
-                    </span>Market Prices</a>
-                    {% endblock %}
-                </div>
-
-                
-                <div class="col-2 mt-1">
-                    {%block index%}
-                    <a href="{% url 'User:index' %}" class="btn " style="background-color: rgb(172, 175, 175);">
-                        <span class="">
-                        <i class="bi bi-house text-dark"></i>
-                    </span>Home</a>
-                    {% endblock %}
-                </div>
-
-               
-               
-                <div class="col-md-2 mt-1">
-                    <a href="{% url 'User:logout' %}" class="btn " style="background-color: beige;">    <span class="me-1">
-                        <i class="bi bi-box-arrow-right"></i>
-                    </span>Logout</a>
-                </div>
-
-            </div>
-            
-        </div> -->
 
            <!-- top navs -->
            <div class="row my-1 mx-1  my-2 ms-3  py-1">

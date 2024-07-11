@@ -41,7 +41,7 @@ def RegionalPriceTrends(LoginRequiredMixin,  View):
 
 
 
-class FarmOutputTrendsView(TemplateView):
+class FarmOutputTrendsView(LoginRequiredMixin, TemplateView):
     template_name = 'production/General_analysis.html' 
 
     def get_context_data(self, **kwargs):
@@ -55,7 +55,7 @@ class FarmOutputTrendsView(TemplateView):
     
         
 
-class FarmDataAPIView(APIView):
+class FarmDataAPIView(LoginRequiredMixin, APIView):
     def get(self, request):
         farms = Farm.objects.all()
         region_id = request.GET.get('region')
@@ -291,16 +291,16 @@ class FarmerDetailsView(LoginRequiredMixin, View):
         farm_name = request.POST['farm_name']
         output = request.POST['farm_output']
 
-        
-
         try:
             farm_output = get_object_or_404(Farm, name=farm_name, owner=farmer_id)
             farm_output.total_output = output
             farm_output.save()  
+            farmer = get_object_or_404(Farmer, pk = farmer_id)
+            farmer_name = farmer.username
 
 
-            subject = 'New output is placed'
-            message = 'dear farmer '
+            message = f'{farm_name} has been filled with an output of {output}kg, Login to your account to verify the results'
+            subject = f'dear {farmer_name} '
             # email = 'zajarjafary@gmail.com'
             # recipient_list = [email]
 
