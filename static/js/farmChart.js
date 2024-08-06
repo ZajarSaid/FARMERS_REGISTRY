@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
             labels.push(item.crop_name);
             outputData.push(item.total_output);
         });
-
+        
         // Create the chart
         const ctx = document.getElementById('cropChart').getContext('2d');
         new Chart(ctx, {

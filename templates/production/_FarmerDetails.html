@@ -112,7 +112,17 @@
                                       
                                            <div class="row">
                                             <input type="hidden" name="farmer_id" value="{{farmer.id}}">
-                                            <div class="col-6"><label for="">Name:</label><input type="text" name="farm_name" class="form-control"></div>
+                                            <div class="col-6"><label for="">Name:</label>
+                                                <select name="farm_name" id="" class="form-control">
+                                                    {% if farms %}
+                                                        {% for farm in farms %}
+                                                            <option value="{{farm.name}}">{{farm.name}}</option>
+                                                        {% endfor %}
+                                                    
+                                                    {% endif %}
+                                                </select>
+                                            </div>
+                                            <!-- <div class="col-6"><label for="">Name:</label><input type="text" name="farm_name" class="form-control"></div> -->
                                             <div class="col-6"><label for="">Output:</label><input type="float" name="farm_output" class="form-control"></div>
                                            </div>
                                             

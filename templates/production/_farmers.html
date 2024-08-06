@@ -48,7 +48,12 @@
                            
                             {% for farmer in farmers %}
                             <tr>
-                                <td>{{ farmer.id }}</td>
+                               
+                                <td class="  {% for farm in farmer.farms.all %}
+                                {% if farm%}
+                                bg-success
+                                {% endif %}
+                            {% endfor %}   ">{{ farmer.id }}</td>
                                 <td>{{ farmer.first_name}}</td>
                                 <td>{{ farmer.last_name }}</td>
                                 <td>{{ farmer.email }}</td>

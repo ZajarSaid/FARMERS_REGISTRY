@@ -60,7 +60,7 @@ class FarmDataAPIView(LoginRequiredMixin, APIView):
         farms = Farm.objects.all()
         region_id = request.GET.get('region')
         if region_id:
-            farms = farms.filter(region_id=region_id)
+            farms = farms.filter(region=region_id)
 
         crop_output = farms.values('crop_type__name', 'region__name').annotate(total_output=Sum('total_output')).order_by('crop_type')
         data = [{'crop_name': item['crop_type__name'], 'total_output': item['total_output']} for item in crop_output]
@@ -70,7 +70,7 @@ class FarmDataAPIView(LoginRequiredMixin, APIView):
 
           # Print data for debugging
         print("Filtered Farms:", farms)
-        print("Crop Output:", crop_output)
+        print("Crop Output:", crop_output['regional__name'])
 
         return Response(data)
 
@@ -269,19 +269,21 @@ class FarmerDetailsView(LoginRequiredMixin, View):
     template_name = 'production/_FarmerDetails.html'
 
     def get(self, request, f_username):
+        owner = get_object_or_404(Farmer, username=f_username)
+        farms = Farm.objects.filter(owner=owner)
         form = UpdateFarmForm()
-        s_farmer = get_object_or_404(Farmer, username=f_username)
 
         # check if there are output verification instances of similar farm
-        all_verifications = OutputVerification.objects.filter(owner=s_farmer)
+        all_verifications = OutputVerification.objects.filter(owner=owner)
         
-        if all_verifications:
-            print(all_verifications)
+        # if all_verifications:
+        #     print(all_verifications)
         
 
         context = {
-            'farmer':s_farmer,
-            'form' : form
+            'farmer':owner,
+            'form' : form,
+            'farms':farms
         }
 
         return render(request, self.template_name, context)
@@ -289,6 +291,7 @@ class FarmerDetailsView(LoginRequiredMixin, View):
     def post(self, request, f_username):
         farmer_id = request.POST['farmer_id']
         farm_name = request.POST['farm_name']
+        
         output = request.POST['farm_output']
 
         try:
@@ -315,7 +318,7 @@ class FarmerDetailsView(LoginRequiredMixin, View):
             previous_verification_instance = OutputVerification.objects.filter(owner=farmer)
             if previous_verification_instance:
                 previous_verification_instance.delete()
-            print(previous_verification_instance)
+            print(previous_verification_instance.count())
          # Create the output verification instance
             OutputVerificationUtil.create_output_verification(
                 owner=farmer,
@@ -326,7 +329,7 @@ class FarmerDetailsView(LoginRequiredMixin, View):
             messages.success(request, 'Farm profile has been updated successfully.')
         except Exception as e:
             messages.error(request, f'An error occurred: {str(e)}')
-
+        print(farm_name)
         return redirect('Production:farmer-details', f_username=f_username)
 
 
