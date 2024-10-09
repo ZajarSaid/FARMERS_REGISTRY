@@ -63,6 +63,37 @@
 
                             </tr>
                                 
+
+<!-- modal -->
+
+<div class="modal fade" id="Mymodal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger">
+                <h5 class="modal-title text-center text-white" id="modalLabel">Deletion</h5>
+                
+            </div>
+            <div class="modal-body">
+                <p class="card-text">Are sure you want to delete the Regional Price?</p>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    
+                    <div class="col-4 me-2">
+                        
+                        <a href="{% url 'Production:delete-price'  mp.pk   %}" class="btn btn-danger">Delete</a>
+                    </div>
+                   
+                    <div class="col-4 ms-2"><button type="button" class="btn btn-dark" data-bs-dismiss="modal">No</button></div>
+                </div>
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal -->
+
                                 
                             {% endfor %}
                                 
@@ -88,30 +119,5 @@
 </div>
 
 
-<!-- modal -->
-
-<div class="modal fade" id="Mymodal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-danger">
-                <h5 class="modal-title text-center text-white" id="modalLabel">Deletion</h5>
-                
-            </div>
-            <div class="modal-body">
-                <p class="card-text">Are sure you want to delete the Regional Price?</p>
-            </div>
-            <div class="modal-footer">
-                <div class="row">
-                    <div class="col-4 me-2"><a href="" class="btn btn-danger">Delete</a></div>
-               
-                    <div class="col-4 ms-2"><button type="button" class="btn btn-dark" data-bs-dismiss="modal">No</button></div>
-                </div>
-                
-                
-            </div>
-        </div>
-    </div>
-</div>
-<!-- modal -->
 
 {% endblock content %}

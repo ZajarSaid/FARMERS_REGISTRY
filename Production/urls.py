@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
 from .views import FarmerDetailsView, RegionalPriceView, CropsView , FarmOutputTrendsView
-from.views import NationalAnalysisView, ModifyRegionalPricesView, FarmDataAPIView
+from .views import NationalAnalysisView, ModifyRegionalPricesView, FarmDataAPIView
 
 
 app_name = 'Production'
@@ -20,5 +20,6 @@ urlpatterns=[
     path('NationalAnalysis/', NationalAnalysisView.as_view(), name='national-analysis'),
     path('ModifyRegionalPrices/<int:rp_id>/', ModifyRegionalPricesView.as_view(), name='modify-regional-prices'),
     path('FarmOutputTrends/', FarmDataAPIView.as_view(), name='farm-trends'),
-     path('farm-output-trends/', FarmOutputTrendsView.as_view(), name='farm-output-trends')
+    path('farm-output-trends/', FarmOutputTrendsView.as_view(), name='farm-output-trends'),
+    path('DeleteRegionalPrice/<int:p_id>', views.DeleteREgionalPrice, name='delete-price')
 ]

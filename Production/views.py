@@ -38,8 +38,14 @@ from django.views.generic import TemplateView
 def RegionalPriceTrends(LoginRequiredMixin,  View):
     template_name = 'production/PriceTrends.html'
 
+def DeleteREgionalPrice(request, p_id):
+    d_price = RegionalPrices.objects.get(pk=p_id)
+    if d_price:
+        d_price.delete()
+        messages.error(request, f'regional price of {d_price.crop} has beeen deleted successfuly')
+        return redirect('Production:regional-prices')
 
-
+       
 
 class FarmOutputTrendsView(LoginRequiredMixin, TemplateView):
     template_name = 'production/General_analysis.html' 
@@ -85,7 +91,8 @@ class ModifyRegionalPricesView(LoginRequiredMixin, View):
 
         form = MarketPriceForm(instance=rp)
         context={
-            'form':form
+            'form':form,
+            'rp':rp
         }
 
         def post(self, request, rp_id):
