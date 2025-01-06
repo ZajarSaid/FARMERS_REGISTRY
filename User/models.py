@@ -17,8 +17,8 @@ EX_IMAGE_VALIDATOR = FeV(['jpg','jpeg', 'png'])
 # 2.make migrations for crop and region
 # 3.make migrations for Farm
 # 4.make migrations for regional prices
-# 4.make migrations for Ranks
-# 4.make migrations for OutputVerification
+# 5.make migrations for Ranks
+# 6.make migrations for OutputVerification
     
 
 class CustomUserManager(BaseUserManager):
@@ -40,7 +40,7 @@ class CustomUserManager(BaseUserManager):
         user = self.model(
             email = self.normalize_email(email),
             username = username,
-             last_name=last_name,
+            last_name=last_name,
             first_name=first_name,
             address=address,
             phone=phone,

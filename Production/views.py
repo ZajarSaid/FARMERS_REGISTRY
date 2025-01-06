@@ -280,19 +280,17 @@ class FarmerDetailsView(LoginRequiredMixin, View):
         farms = Farm.objects.filter(owner=owner)
         form = UpdateFarmForm()
 
-        # check if there are output verification instances of similar farm
+        # check if there are output verification instances for similar farm
         all_verifications = OutputVerification.objects.filter(owner=owner)
         
         # if all_verifications:
         #     print(all_verifications)
         
-
         context = {
             'farmer':owner,
             'form' : form,
             'farms':farms
         }
-
         return render(request, self.template_name, context)
 
     def post(self, request, f_username):
@@ -301,13 +299,15 @@ class FarmerDetailsView(LoginRequiredMixin, View):
         
         output = request.POST['farm_output']
 
+        # while(Farmer.objects.filter(pk=farmer_id).exists()):
+        #     print('true')
+
         try:
             farm_output = get_object_or_404(Farm, name=farm_name, owner=farmer_id)
             farm_output.total_output = output
             farm_output.save()  
             farmer = get_object_or_404(Farmer, pk = farmer_id)
             farmer_name = farmer.username
-
 
             message = f'{farm_name} has been filled with an output of {output}kg, Login to your account to verify the results'
             subject = f'dear {farmer_name} '
@@ -326,6 +326,7 @@ class FarmerDetailsView(LoginRequiredMixin, View):
             if previous_verification_instance:
                 previous_verification_instance.delete()
             print(previous_verification_instance.count())
+            
          # Create the output verification instance
             OutputVerificationUtil.create_output_verification(
                 owner=farmer,

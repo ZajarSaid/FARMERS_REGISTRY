@@ -44,16 +44,22 @@
     
                     <tbody>
                     {% if farmers %}
-                       
-                           
+                                   
                             {% for farmer in farmers %}
                             <tr>
                                
-                                <td class="  {% for farm in farmer.farms.all %}
-                                {% if farm%}
-                                bg-success
+                                <td class=" me-2">
+                                {{ farmer.id }}
+                                <span class="ms-2  {% for farm in farmer.farms.all %}
+                                {% if farm %}
+                        
+                                    <i class='bi bi-tree text-success '></i>
+                          
                                 {% endif %}
-                            {% endfor %}   ">{{ farmer.id }}</td>
+                                {% endfor %}">
+
+                                </span>
+                               </td>
                                 <td>{{ farmer.first_name}}</td>
                                 <td>{{ farmer.last_name }}</td>
                                 <td>{{ farmer.email }}</td>
