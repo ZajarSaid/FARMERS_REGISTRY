@@ -60,7 +60,6 @@ class FarmOutputTrendsView(LoginRequiredMixin, TemplateView):
         return context
     
         
-
 class FarmDataAPIView(LoginRequiredMixin, APIView):
     def get(self, request):
         farms = Farm.objects.all()
@@ -68,17 +67,35 @@ class FarmDataAPIView(LoginRequiredMixin, APIView):
         if region_id:
             farms = farms.filter(region=region_id)
 
-        crop_output = farms.values('crop_type__name', 'region__name').annotate(total_output=Sum('total_output')).order_by('crop_type')
+        crop_output = farms.values('crop_type__name').annotate(total_output=Sum('total_output'))
         data = [{'crop_name': item['crop_type__name'], 'total_output': item['total_output']} for item in crop_output]
 
-        total_farms = farms.count()
-        total_output = farms.aggregate(Sum('total_output'))['total_output__sum']
+        # Add summary data
+        summary = {
+            'total_farms': farms.count(),
+            'total_output': farms.aggregate(total_output=Sum('total_output'))['total_output']
+        }
 
-          # Print data for debugging
-        print("Filtered Farms:", farms)
-        print("Crop Output:", crop_output['regional__name'])
+        return Response({'data': data, 'summary': summary})
 
-        return Response(data)
+# class FarmDataAPIView(LoginRequiredMixin, APIView):
+#     def get(self, request):
+#         farms = Farm.objects.all()
+#         region_id = request.GET.get('region')
+#         if region_id:
+#             farms = farms.filter(region=region_id)
+
+#         crop_output = farms.values('crop_type__name', 'region__name').annotate(total_output=Sum('total_output')).order_by('crop_type')
+#         data = [{'crop_name': item['crop_type__name'], 'total_output': item['total_output']} for item in crop_output]
+
+#         total_farms = farms.count()
+#         total_output = farms.aggregate(Sum('total_output'))['total_output__sum']
+
+#           # Print data for debugging
+#         print("Filtered Farms:", farms)
+#         print("Crop Output:", crop_output['region__name'])
+
+#         return Response(data)
 
 
 class ModifyRegionalPricesView(LoginRequiredMixin, View):

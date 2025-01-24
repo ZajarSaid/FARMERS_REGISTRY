@@ -45,9 +45,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             // Create a new chart instance
-            const ctx = document.getElementById('cropChart').getContext('2d');
+            const ctx = document.getElementById('cropChart1').getContext('2d');
             chartInstance = new Chart(ctx, {
-                type: 'doughnut',
+                type: 'bar',
                 data: {
                     labels: labels,
                     datasets: [{

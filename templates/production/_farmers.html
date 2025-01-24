@@ -67,12 +67,49 @@
                                 
                                 <td>{{ farmer.status }}</td>
                                 
-                                <td><a href="{% url 'Production:farmer-details' farmer.username %}" class="text-decoration-none text-success">View</a></td>
+                                <td>
+                                   
+                                    <a href="{% url 'Production:farmer-details' farmer.username %}" class="text-decoration-none text-success">
+                                         <span class="me-2 ">
+                                        <i class="bi bi-pencil-square text-success"></i>
+                                        </span>
+                                    </a>
+                                    <i class="fas fa-trash fa-sm text-danger px-1" data-bs-toggle="modal" data-bs-target="#Mymodal">
+
+                                    </i>
+                                </td>
                                 
     
                             </tr>
                                 
-                                
+                                <!-- modal -->
+
+<div class="modal fade" id="Mymodal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-success">
+                <h5 class="modal-title text-center text-white" id="modalLabel">Deletion</h5>
+                
+            </div>
+            <div class="modal-body">
+                <p class="card-text">Are sure you want to delete the Farmer?</p>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    
+                    <div class="col-4 me-2">
+                        
+                        <a href="" class="btn btn-danger">Delete</a>
+                    </div>
+                   
+                    <div class="col-4 ms-2"><button type="button" class="btn btn-dark" data-bs-dismiss="modal">No</button></div>
+                </div>
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
                             {% endfor %}
                                 
                            
