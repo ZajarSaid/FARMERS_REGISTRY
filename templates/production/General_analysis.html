@@ -16,7 +16,7 @@
         <canvas id="cropChart" width="400" height="400"></canvas>
     </div>
 
-    <div class="col-4">
+    <div class="col-2">
         <form id="regionFilterForm">
             <label for="regionSelect">Select Region:</label>
             <select id="regionSelect" name="region">
@@ -27,7 +27,7 @@
             </select>
         </form>
     </div>
-    <div class="col-4">
+    <div class="col-5">
         <canvas id="cropChart1" width="400" height="400"></canvas>
        
 
@@ -36,8 +36,8 @@
 <div class="row mt-2 mb-2">
     <div class="col-6"> <div id="summary">
         <h3>Summary</h3>
-        <p>Total Farms: <span id="totalFarms">{{farms.count}}</span></p>
-        <p>Total Output: <span id="totalOutput">{{output}}</span></p>
+        <p>Total Farms: <span class="text-success" id="totalFarms">{{farms.count}}</span></p>
+        <p>Total Output: <span class="text-success" id="totalOutput">{{output}}</span></p>
     </div>
 </div></div>
     <div class="col-6"></div>

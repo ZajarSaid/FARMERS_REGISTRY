@@ -424,16 +424,21 @@ def user_login(request):
     if request.method == 'POST':
         username = request.POST.get('email')
         password = request.POST.get('password')
+        #return back the email if only passwords are not matched
+   
         
         user = authenticate(request, username=username, password=password)
         if user is not None:
             request.session['pk'] = user.pk
+
             login(request,user)
             messages.success(request, 'You have been logged in successfuly')
             
             if user.is_superuser:
                 return redirect('Production:dashboard')
             return redirect('User:home-page')
+        messages.error(request, " There's an error logging in")
+        
     return render(request, 'users/login.html')
 
 

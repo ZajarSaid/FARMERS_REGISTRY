@@ -34,6 +34,21 @@ from rest_framework.response import Response
 from django.views.generic import TemplateView
 
 
+class UserProfileView(LoginRequiredMixin, View):
+    template_name = 'production/User_Profile.html'
+
+    def get(self, request, username):
+        Farmer_Profile = get_object_or_404(Farmer, username=username)
+        if Farmer_Profile:
+            print('present')
+
+        Context = {
+            'farmer':Farmer_Profile
+        }
+
+        return render(request, self.template_name, Context)
+
+
 
 def RegionalPriceTrends(LoginRequiredMixin,  View):
     template_name = 'production/PriceTrends.html'
