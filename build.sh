@@ -11,10 +11,5 @@ pip install -r requirements.txt
 
 # 2. Collect static files into STATIC_ROOT (served by WhiteNoise in production)
 python manage.py collectstatic --noinput
-
-# 3. Apply any outstanding database migrations to the PostgreSQL database
-python manage.py migrate --noinput
-
-# 4. Seed base data (crops, regions, districts and market prices).
-#    Uses get_or_create, so it is safe to run on every deploy.
-python manage.py create_data
+# NOTE: migrations and seed data run in render.yaml's preDeployCommand,
+# because the build phase is network-isolated from the Render Postgres.

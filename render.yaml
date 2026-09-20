@@ -16,6 +16,9 @@ services:
     # bash ./build.sh (not ./build.sh) so the script runs even if the
     # executable bit is missing on the committed file.
     buildCommand: bash ./build.sh
+    # Runs AFTER the build, inside Render's network, so the internal
+    # Postgres hostname is resolvable here (it is NOT during build).
+    preDeployCommand: python manage.py migrate --noinput && python manage.py create_data
     startCommand: gunicorn Farmers_registry.wsgi:application --bind 0.0.0.0:$PORT --workers 1 --access-logfile - --error-logfile -
     healthCheckPath: /
     envVars:
