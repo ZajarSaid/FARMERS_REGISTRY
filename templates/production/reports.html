@@ -1,0 +1,141 @@
+{% extends 'production/base.html' %}
+{% load static %}
+
+{% block title %}Reports{% endblock %}
+{% block header %}Reports{% endblock %}
+{% block cumb %}Reports{% endblock %}
+
+{% block content %}
+
+<div class="row g-3 mb-4">
+    <div class="col-6 col-lg-2">
+        <div class="stat-box">
+            <div class="stat-icon"><i class="bi bi-people-fill"></i></div>
+            <div class="stat-count">{{ farmers.count }}</div>
+            <div class="stat-label">Farmers</div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-2">
+        <div class="stat-box">
+            <div class="stat-icon"><i class="bi bi-tree-fill"></i></div>
+            <div class="stat-count">{{ farms.count }}</div>
+            <div class="stat-label">Farms</div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-2">
+        <div class="stat-box">
+            <div class="stat-icon"><i class="bi bi-basket-fill"></i></div>
+            <div class="stat-count">{{ crops.count }}</div>
+            <div class="stat-label">Crops</div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-2">
+        <div class="stat-box">
+            <div class="stat-icon"><i class="bi bi-currency-exchange"></i></div>
+            <div class="stat-count">{{ prices.count }}</div>
+            <div class="stat-label">Prices</div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-2">
+        <div class="stat-box">
+            <div class="stat-icon"><i class="bi bi-geo-alt-fill"></i></div>
+            <div class="stat-count">{{ regions.count }}</div>
+            <div class="stat-label">Regions</div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-2">
+        <div class="stat-box">
+            <div class="stat-icon"><i class="bi bi-graph-up-arrow"></i></div>
+            <div class="stat-count">{{ total_output }}</div>
+            <div class="stat-label">Output (kg)</div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-md-6 col-xl-4">
+        <div class="account-card p-4 h-100 d-flex flex-column">
+            <div class="d-flex gap-3 mb-3">
+                <div class="stat-icon"><i class="bi bi-people-fill"></i></div>
+                <div>
+                    <div class="fw-bold text-success">Farmers Report</div>
+                    <div class="text-muted small">{{ farmers.count }} farmers registered</div>
+                </div>
+            </div>
+            <p class="text-muted small">Full list of registered farmers with contact details and status.</p>
+            <a href="{% url 'Production:report-download' %}?type=farmers" class="btn btn-brand mt-auto"><i class="bi bi-download me-1"></i>Download CSV</a>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-xl-4">
+        <div class="account-card p-4 h-100 d-flex flex-column">
+            <div class="d-flex gap-3 mb-3">
+                <div class="stat-icon"><i class="bi bi-tree-fill"></i></div>
+                <div>
+                    <div class="fw-bold text-success">Farms Report</div>
+                    <div class="text-muted small">{{ farms.count }} farms registered</div>
+                </div>
+            </div>
+            <p class="text-muted small">Full list of registered farms with crop, region, district and owner.</p>
+            <a href="{% url 'Production:report-download' %}?type=farms" class="btn btn-brand mt-auto"><i class="bi bi-download me-1"></i>Download CSV</a>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-xl-4">
+        <div class="account-card p-4 h-100 d-flex flex-column">
+            <div class="d-flex gap-3 mb-3">
+                <div class="stat-icon"><i class="bi bi-basket-fill"></i></div>
+                <div>
+                    <div class="fw-bold text-success">Crops Report</div>
+                    <div class="text-muted small">{{ crops.count }} crops registered</div>
+                </div>
+            </div>
+            <p class="text-muted small">Full list of crops with their type and creation date.</p>
+            <a href="{% url 'Production:report-download' %}?type=crops" class="btn btn-brand mt-auto"><i class="bi bi-download me-1"></i>Download CSV</a>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-xl-4">
+        <div class="account-card p-4 h-100 d-flex flex-column">
+            <div class="d-flex gap-3 mb-3">
+                <div class="stat-icon"><i class="bi bi-currency-exchange"></i></div>
+                <div>
+                    <div class="fw-bold text-success">Market Prices Report</div>
+                    <div class="text-muted small">{{ prices.count }} price records</div>
+                </div>
+            </div>
+            <p class="text-muted small">Regional market prices for crops across all regions.</p>
+            <a href="{% url 'Production:report-download' %}?type=prices" class="btn btn-brand mt-auto"><i class="bi bi-download me-1"></i>Download CSV</a>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-xl-4">
+        <div class="account-card p-4 h-100 d-flex flex-column">
+            <div class="d-flex gap-3 mb-3">
+                <div class="stat-icon"><i class="bi bi-graph-up-arrow"></i></div>
+                <div>
+                    <div class="fw-bold text-success">Production Trends Report</div>
+                    <div class="text-muted small">Crop output by region</div>
+                </div>
+            </div>
+            <p class="text-muted small">Total farm output aggregated by crop and region.</p>
+            <a href="{% url 'Production:report-download' %}?type=production" class="btn btn-brand mt-auto"><i class="bi bi-download me-1"></i>Download CSV</a>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-xl-4">
+        <div class="account-card p-4 h-100 d-flex flex-column">
+            <div class="d-flex gap-3 mb-3">
+                <div class="stat-icon"><i class="bi bi-bell-fill"></i></div>
+                <div>
+                    <div class="fw-bold text-success">Notifications Report</div>
+                    <div class="text-muted small">{{ verifications.count }} records</div>
+                </div>
+            </div>
+            <p class="text-muted small">Log of farm output verification/update notifications.</p>
+            <a href="{% url 'Production:report-download' %}?type=notifications" class="btn btn-brand mt-auto"><i class="bi bi-download me-1"></i>Download CSV</a>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

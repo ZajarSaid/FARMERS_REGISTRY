@@ -25,6 +25,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import io
 import base64
+import csv
 import pandas as pd
 from .utils import OutputVerificationUtil
 
@@ -342,7 +343,11 @@ class RegionalPriceView(LoginRequiredMixin, View):
     def get(self, request):
         all_r_prices = RegionalPrices.objects.all()
 
-        context = {"market_prices": all_r_prices}
+        context = {
+            "market_prices": all_r_prices,
+            "regions": Region.objects.all(),
+            "crops": Crop.objects.all(),
+        }
 
         return render(request, self.template_name, context)
 
@@ -428,6 +433,102 @@ def List_farms(request):
     all_farms = Farm.objects.all()
 
     return render(request, "production/_farms.html", {"farms": all_farms})
+
+
+@login_required
+def delete_farmer(request, f_id):
+    if not request.user.is_superuser:
+        messages.error(request, "Only administrators can delete farmers.")
+        return redirect("Production:all-farmers")
+
+    farmer = get_object_or_404(Farmer, pk=f_id)
+    if farmer.is_superuser:
+        messages.error(request, "An administrator account cannot be deleted.")
+        return redirect("Production:all-farmers")
+
+    username = farmer.username
+    farmer.delete()
+    messages.success(request, f"Farmer {username} has been deleted successfully.")
+    return redirect("Production:all-farmers")
+
+
+@login_required
+def delete_farm(request, f_id):
+    if not request.user.is_superuser:
+        messages.error(request, "Only administrators can delete farms.")
+        return redirect("Production:all-farms")
+
+    farm = get_object_or_404(Farm, pk=f_id)
+    name = farm.name
+    farm.delete()
+    messages.success(request, f"Farm {name} has been deleted successfully.")
+    return redirect("Production:all-farms")
+
+
+@login_required
+def reports(request):
+    total_output = Farm.objects.aggregate(total=Sum("total_output"))["total"] or 0
+
+    context = {
+        "farmers": Farmer.objects.all(),
+        "farms": Farm.objects.all(),
+        "crops": Crop.objects.all(),
+        "prices": RegionalPrices.objects.all(),
+        "regions": Region.objects.all(),
+        "total_output": total_output,
+        "verifications": OutputVerification.objects.all(),
+    }
+    return render(request, "production/reports.html", context)
+
+
+@login_required
+def report_download(request):
+    report_type = request.GET.get("type", "farmers")
+
+    response = HttpResponse(content_type="text/csv")
+    response["Content-Disposition"] = f'attachment; filename="{report_type}_report.csv"'
+
+    writer = csv.writer(response)
+
+    if report_type == "farmers":
+        writer.writerow(
+            ["ID", "Username", "First Name", "Last Name", "Email", "Phone", "Address", "Status", "Date Joined"]
+        )
+        for f in Farmer.objects.all():
+            writer.writerow(
+                [f.id, f.username, f.first_name, f.last_name, f.email, f.phone, f.address, f.status, f.date_joined]
+            )
+    elif report_type == "farms":
+        writer.writerow(["ID", "Name", "Size", "Crop", "Region", "District", "Owner", "Total Output", "Created"])
+        for f in Farm.objects.all():
+            writer.writerow(
+                [f.id, f.name, f.size, f.crop_type.name, f.region.name, f.district.name, f.owner.username, f.total_output, f.created_at]
+            )
+    elif report_type == "crops":
+        writer.writerow(["ID", "Name", "Type", "Created"])
+        for c in Crop.objects.all():
+            writer.writerow([c.id, c.name, c.crop_type, c.created_at])
+    elif report_type == "prices":
+        writer.writerow(["Crop", "Region", "Price (Tsh per kg)"])
+        for p in RegionalPrices.objects.all():
+            writer.writerow([p.crop.name, p.region.name, p.price])
+    elif report_type == "production":
+        writer.writerow(["Crop", "Region", "Total Output"])
+        rows = (
+            Farm.objects.values("crop_type__name", "region__name")
+            .annotate(total=Sum("total_output"))
+            .order_by("crop_type__name", "region__name")
+        )
+        for r in rows:
+            writer.writerow([r["crop_type__name"], r["region__name"], r["total"]])
+    elif report_type == "notifications":
+        writer.writerow(["Farmer", "Farm", "Output (kg)", "Status"])
+        for v in OutputVerification.objects.all():
+            writer.writerow([v.owner.username, v.farm_name, v.farm_output, v.status])
+    else:
+        writer.writerow(["error", "unknown report type"])
+
+    return response
 
 
 def dashboard(request):

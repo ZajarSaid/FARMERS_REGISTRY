@@ -74,6 +74,40 @@ def verify_ouput(request, f_id):
     messages.success(request, 'Your farm has been registered and ranked in the database of farmers effectively ')
 
     return redirect('User:home-page')
+
+
+@login_required
+def respond_to_verification(request, vid, action):
+    verification = get_object_or_404(OutputVerification, pk=vid)
+
+    if request.user != verification.owner and not request.user.is_superuser:
+        messages.error(request, 'You are not allowed to respond to this notification.')
+    elif action == 'accept':
+        verification.status = 'verified'
+        verification.save()
+        messages.success(
+            request,
+            f'Output ({verification.farm_output}kg) for {verification.farm_name} has been accepted successfully.',
+        )
+    elif action == 'deny':
+        verification.status = 'denied'
+        verification.save()
+        messages.error(
+            request,
+            f'Output for {verification.farm_name} has been rejected. Contact your agricultural officer if this is not correct.',
+        )
+
+    return redirect(request.META.get('HTTP_REFERER', 'User:farmer-account'))
+
+
+@login_required
+def accept_notification(request, vid):
+    return respond_to_verification(request, vid, 'accept')
+
+
+@login_required
+def deny_notification(request, vid):
+    return respond_to_verification(request, vid, 'deny')
  
 
 

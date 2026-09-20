@@ -1,51 +1,47 @@
-{% extends 'production/base.html'%}
+{% extends 'production/base.html' %}
 {% load static %}
-{% block title%}All Crops{% endblock %}
 
-{% block cumb%}Crops{% endblock %}
+{% block title %}All Crops{% endblock %}
+{% block header %}All Crops{% endblock %}
+{% block cumb %}Crops{% endblock %}
 
 {% block content %}
 
-<div class="row mb-2 px-3 py-2">
-    <div class="container">
-        <table class="table table-striped table-bordered table-hover" id="example">
-            <thead class="bg-dark text-light">
-        
+<div class="account-card p-4">
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+        <div>
+            <h6 class="text-success fw-semibold mb-0"><i class="bi bi-basket-fill me-2"></i>Registered Crops</h6>
+            <span class="text-muted small">Total: {{ crops.count }}</span>
+        </div>
+        <a href="{% url 'Production:dashboard' %}" class="btn btn-outline-success btn-sm">
+            <i class="bi bi-arrow-left me-1"></i>Back
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0" id="example">
+            <thead>
                 <tr>
-                    <th class="text-success">S/N</th>
-                    <th class="text-success">Name</th>
-                    <th class="text-success">Type</th>
-                    <th class="text-success">Created_at</th>
+                    <th>S/N</th>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Created At</th>
                 </tr>
             </thead>
-    
-                    <tbody>
-                    {% if crops %}
-  
-                            {% for crop in crops %}
-                                <tr>
-                                    <td>{{ crop.id }}</td>
-                                    <td>{{ crop.name }}</td>
-                                    <td>{{ crop.crop_type }}</td>
-                                    <td>{{ crop.created_at }}</td>
-                                </tr>
-                            {% endfor %}
-
-                    {% endif %}
-                    </tbody>
-              
-    
-                <tfoot>
-                    <tr>
-                        <th class="text-success">S/N</th>
-                        <th class="text-success">Name</th>
-                        <th class="text-success">Type</th>
-                        <th class="text-success">Created_at</th> 
-                    </tr>
-                </tfoot>
+            <tbody>
+            {% if crops %}
+                {% for crop in crops %}
+                <tr>
+                    <td>{{ crop.id }}</td>
+                    <td class="fw-semibold">{{ crop.name }}</td>
+                    <td>{{ crop.crop_type }}</td>
+                    <td>{{ crop.created_at }}</td>
+                </tr>
+                {% endfor %}
+            {% endif %}
+            </tbody>
         </table>
     </div>
 </div>
-
 
 {% endblock content %}

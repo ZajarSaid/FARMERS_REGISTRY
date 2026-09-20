@@ -1,61 +1,69 @@
-{% extends 'production/base.html'%}
+{% extends 'production/base.html' %}
+{% load static %}
 
-{% block title%}All Farms{% endblock %}
-
-{% block cumb%}List-Farms{% endblock %}
+{% block title %}All Farms{% endblock %}
+{% block header %}All Farms{% endblock %}
+{% block cumb %}List of Farms{% endblock %}
 
 {% block content %}
 
-<div class="row">
-    <div class="container">
-        <table class="table table-striped table-bordered table-hover" id="example">
-            <thead class="bg-dark text-light">
-        
-                    <tr>
-                        <th>S/N</th>
-                        <th>Name</th>
-                        <th>Size</th>
-                        <th>Crops</th>
-                        <th>Region</th>
-                        <th>District</th>
-                        <th>Owner</th>
-                            
-                        </tr>
+<div class="account-card p-4">
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+        <div>
+            <h6 class="text-success fw-semibold mb-0"><i class="bi bi-tree-fill me-2"></i>Registered Farms</h6>
+            <span class="text-muted small">Total: {{ farms.count }}</span>
+        </div>
+        <a href="{% url 'Production:dashboard' %}" class="btn btn-outline-success btn-sm">
+            <i class="bi bi-arrow-left me-1"></i>Back
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0" id="example">
+            <thead>
+                <tr>
+                    <th>S/N</th>
+                    <th>Name</th>
+                    <th>Size</th>
+                    <th>Crop</th>
+                    <th>Region</th>
+                    <th>District</th>
+                    <th>Owner</th>
+                    <th>Output</th>
+                    <th>Action</th>
+                </tr>
             </thead>
-                    <tbody>
-                    {% if farms %}                                                 
-                            {% for farm in farms%}
-                            <tr>
-                                <td>{{ farm.id }}</td>
-                                <td>{{ farm.name}}</td>
-                                <td>{{ farm.size }}</td>
-                                <td>{{ farm.crop_type }}</td>
-                                <td>{{ farm.region }}</td>
-                                
-                                <td>{{ farm.district }}</td>
-                                
-                                <td><a href="" class="text-decoration-none text-success">{{ farm.owner }}</a></td>
-                                  
-                            </tr>                           
-                            {% endfor %}
-                         
-                    </tbody>       
-                {% endif %}
-    
-                <tfoot>
-                    <tr>
-                        <th>S/N</th>
-                        <th>Name</th>
-                        <th>Size</th>
-                        <th>Crops</th>
-                        <th>Region</th>
-                        <th>District</th>
-                        <th>Owner</th>
-                    </tr>
-                </tfoot>
+            <tbody>
+            {% if farms %}
+                {% for farm in farms %}
+                <tr>
+                    <td>{{ farm.id }}</td>
+                    <td class="fw-semibold">{{ farm.name }}</td>
+                    <td>{{ farm.size }}</td>
+                    <td>{{ farm.crop_type.name }}</td>
+                    <td>{{ farm.region.name }}</td>
+                    <td>{{ farm.district.name }}</td>
+                    <td>
+                        <a href="{% url 'Production:farmer-details' farm.owner.username %}"
+                           class="text-decoration-none text-success">{{ farm.owner.username }}</a>
+                    </td>
+                    <td><span class="badge rounded-pill" style="background: var(--brand-light); color: var(--brand);">{{ farm.total_output }}</span></td>
+                    <td>
+                        <button type="button" class="btn btn-sm btn-outline-danger" title="Delete"
+                                data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                data-url="{% url 'Production:delete-farm' farm.id %}"
+                                data-name="{{ farm.name }}">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            {% endif %}
+            </tbody>
         </table>
-           
     </div>
 </div>
 
-{% endblock %}
+{% include 'partials/delete_modal.html' %}
+
+{% endblock content %}

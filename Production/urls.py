@@ -22,5 +22,9 @@ urlpatterns=[
     path('FarmOutputTrends/', FarmDataAPIView.as_view(), name='farm-trends'),
     path('farm-output-trends/', FarmOutputTrendsView.as_view(), name='farm-output-trends'),
     path('DeleteRegionalPrice/<int:p_id>', views.DeleteREgionalPrice, name='delete-price'),
-    path('UserProfileView/<username>/', UserProfileView.as_view(), name='user-profile')
+    path('UserProfileView/<username>/', UserProfileView.as_view(), name='user-profile'),
+    path('DeleteFarmer/<int:f_id>/', views.delete_farmer, name='delete-farmer'),
+    path('DeleteFarm/<int:f_id>/', views.delete_farm, name='delete-farm'),
+    path('Reports/', views.reports, name='reports'),
+    path('Reports/Download/', views.report_download, name='report-download'),
 ]

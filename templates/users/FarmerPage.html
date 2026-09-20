@@ -7,7 +7,7 @@
   <title>My Account | {% block title %}Profile{% endblock %}</title>
 
   <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
-  <link rel="stylesheet" href="{% static 'css/account.css' %}?v=2" />
+  <link rel="stylesheet" href="{% static 'css/account.css' %}?v=4" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,7 +22,7 @@
 <!-- TOPBAR -->
 <nav class="navbar account-topbar">
   <div class="container-fluid px-3">
-    <div class="d-flex align-items-center gap-2">
+    <div class="brand-zone">
       <button class="navbar-toggler navbar-toggler-soft d-lg-none" type="button"
               data-bs-toggle="offcanvas" data-bs-target="#demo" aria-controls="demo"
               aria-label="Toggle navigation">
@@ -30,11 +30,15 @@
       </button>
       <a class="navbar-brand" href="{% url 'User:home-page' %}">
         <img src="{% static 'Photos/tz_gov_logo.png' %}" alt="Ministry of Agriculture" class="brand-logo">
-        <span class="d-none d-sm-inline">My Account</span>
+        <span class="brand-text d-none d-sm-flex">
+          <span class="brand-title">Farmers Registry</span>
+          <span class="brand-sub">Farmer Portal</span>
+        </span>
       </a>
     </div>
 
     <ul class="navbar-nav">
+      {% include 'partials/notifications_dropdown.html' %}
       <li class="nav-item dropdown auth-user-dropdown">
         <a class="user-chip dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
            aria-expanded="false">
@@ -45,7 +49,7 @@
           {% endif %}
           <div class="d-none d-md-block text-start">
             <div class="user-name">{{ user.username }}</div>
-            <div class="user-role">{{ user.status }}</div>
+            <div class="user-role">Farmer</div>
           </div>
         </a>
         <ul class="dropdown-menu dropdown-menu-end">
@@ -186,6 +190,8 @@
 <script src="{% static 'js/datatables.min.js' %}"></script>
 <script src="{% static 'js/script.js' %}"></script>
 <script src="{% static 'js/datatable.js' %}"></script>
+
+{% include 'partials/verification_modal.html' %}
 
 </body>
 </html>

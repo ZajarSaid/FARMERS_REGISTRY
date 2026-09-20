@@ -1,56 +1,57 @@
-{% extends 'production/base.html'%}
+{% extends 'production/base.html' %}
 {% load static %}
-{% block title%}National-Total-Production{% endblock %}
 
-{% block cumb%}National Analysis{% endblock %}
+{% block title %}Production Trends{% endblock %}
+{% block header %}Production Trends{% endblock %}
+{% block cumb %}Regional Production Trends{% endblock %}
+
 {% block content %}
-<div class="row mb-2 mt-3">
 
-</div>
-<div class="row">
-
-    <div class="col-4">
-        <p class="card-header">
-            chart here
-        </p>
-        <canvas id="cropChart" width="400" height="400"></canvas>
+<div class="row g-3 mb-4">
+    <div class="col-6 col-lg-4">
+        <div class="stat-box">
+            <div class="stat-icon"><i class="bi bi-tree-fill"></i></div>
+            <div class="stat-count" id="totalFarms">{{ farms.count }}</div>
+            <div class="stat-label">Total Farms</div>
+        </div>
     </div>
-
-    <div class="col-2">
-        <form id="regionFilterForm">
-            <label for="regionSelect">Select Region:</label>
-            <select id="regionSelect" name="region">
+    <div class="col-6 col-lg-4">
+        <div class="stat-box">
+            <div class="stat-icon"><i class="bi bi-graph-up-arrow"></i></div>
+            <div class="stat-count" id="totalOutput">{% if output %}{{ output.total_output }}{% else %}0{% endif %}</div>
+            <div class="stat-label">Total Output (kg)</div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-4 d-flex align-items-end">
+        <div class="account-card p-3 w-100">
+            <label class="form-label mb-1">Filter by Region</label>
+            <select id="regionSelect" name="region" class="form-select form-control">
                 <option value="">All Regions</option>
                 {% for region in regions %}
                 <option value="{{ region.id }}">{{ region.name }}</option>
                 {% endfor %}
             </select>
-        </form>
+        </div>
     </div>
-    <div class="col-5">
-        <canvas id="cropChart1" width="400" height="400"></canvas>
-       
-
 </div>
 
-<div class="row mt-2 mb-2">
-    <div class="col-6"> <div id="summary">
-        <h3>Summary</h3>
-        <p>Total Farms: <span class="text-success" id="totalFarms">{{farms.count}}</span></p>
-        <p>Total Output: <span class="text-success" id="totalOutput">{{output}}</span></p>
+<div class="row g-3">
+    <div class="col-lg-6">
+        <div class="account-card p-4">
+            <h6 class="text-success fw-semibold mb-3"><i class="bi bi-pie-chart-fill me-2"></i>Output Share by Crop</h6>
+            <canvas id="cropChart" width="400" height="400"></canvas>
+        </div>
     </div>
-</div></div>
-    <div class="col-6"></div>
+    <div class="col-lg-6">
+        <div class="account-card p-4">
+            <h6 class="text-success fw-semibold mb-3"><i class="bi bi-bar-chart-fill me-2"></i>Total Output per Crop</h6>
+            <canvas id="cropChart1" width="400" height="400"></canvas>
+        </div>
+    </div>
 </div>
 
-
-
-
-<!-- Include Chart.js from a CDN -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{% static 'js/farmChart.js' %}"></script>
+<script src="{% static 'js/Chaart.js' %}"></script>
 
-
-<!-- Include your custom JavaScript file -->
-
-
-{% endblock %}
+{% endblock content %}

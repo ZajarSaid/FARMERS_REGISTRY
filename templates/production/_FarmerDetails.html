@@ -1,151 +1,132 @@
-{% extends 'production/base.html'%}
+{% extends 'production/base.html' %}
 {% load static %}
-{% block title%}Farmer's Details{% endblock %}
 
-{% block cumb%}Farmer's details{% endblock %}
+{% block title %}Farmer's Details{% endblock %}
+{% block header %}Farmer's Details{% endblock %}
+{% block cumb %}Farmer's Details{% endblock %}
 
 {% block content %}
 
-<div class="row">
-    <div class="col-3">
-       
-    </div>
-    <div class="col-7">
-  
-    </div>
-    <div class="col-2">
-      
-        <div class="d-sm-flex align-items-center justify-content-between mb-2">
-            <h1 class="h3 mb-0 text-gray-800"></h1>
-            <a href="{% url 'Production:all-farmers' %}" class="d-none d-sm-inline-block btn btn-sm btn-outline-success shadow pe-4">
-                <i class="fas fa-arrow-left fa-sm text-white-50. px-1">
+<div class="row g-4">
 
-                </i> Back</a>
+    <div class="col-lg-4">
+        <div class="account-card p-4 text-center">
+            {% if farmer.image %}
+            <img src="{{ farmer.image.url }}" alt="Profile Image"
+                 class="rounded-circle mb-3"
+                 style="width: 140px; height: 140px; object-fit: cover; box-shadow: 0 0 0 4px var(--brand-light);">
+            {% else %}
+            <img src="{% static 'Profiles/avatar.svg' %}" alt="Default Profile Image"
+                 class="rounded-circle mb-3"
+                 style="width: 140px; height: 140px; object-fit: cover; box-shadow: 0 0 0 4px var(--brand-light);">
+            {% endif %}
+            <h5 class="mb-1">{{ farmer.username }}</h5>
+            <p class="text-muted small mb-2">{{ farmer.email }}</p>
+            <span class="badge rounded-pill" style="background: var(--brand-light); color: var(--brand);">
+                {% if farmer.is_superuser %}Administrator{% else %}{{ farmer.status }}{% endif %}
+            </span>
         </div>
-       
-    </div>
-</div>
 
-    <!-- User information -->
-
-            
-    <div class="row mb-3">
-       
-        <div class="row my-1 mx-1 px-4 py-2 bg-light">
-
-            <div class="col-md-3">
-                <div class="card shadow">
-                    
-                    <div class="card-header">
-                      <div class="text-center">Profile Image</div>
-                       
-                    </div>
-                   
-                    <div class=" py-2 px-2 text-center mt-2">
-                        
-                        {% if farmer.image %}
-                                    <img id="profile-image" class="rounded-pill mb-2" src="{{ farmer.image.url }}" alt="Profile Image" height="100%" width="100%" />
-                                {% else %}
-                                    <img id="profile-image" class="rounded-pill mb-2" src="{% static 'profiles/avatar.svg' %}" alt="Default Profile Image" height="100%" width="100%" />
-                         {% endif %}
-                        
-                    </div>
-                   
-                   
+        <div class="account-card p-4 mt-4">
+            <h6 class="text-success fw-semibold mb-3"><i class="bi bi-person-vcard-fill me-2"></i>Account Details</h6>
+            <div class="row g-3">
+                <div class="col-6">
+                    <div class="text-muted small fw-semibold">Username</div>
+                    <div>{{ farmer.username }}</div>
+                </div>
+                <div class="col-6">
+                    <div class="text-muted small fw-semibold">First Name</div>
+                    <div>{{ farmer.first_name }}</div>
+                </div>
+                <div class="col-6">
+                    <div class="text-muted small fw-semibold">Last Name</div>
+                    <div>{{ farmer.last_name }}</div>
+                </div>
+                <div class="col-6">
+                    <div class="text-muted small fw-semibold">Status</div>
+                    <div>{{ farmer.status }}</div>
+                </div>
+                <div class="col-6">
+                    <div class="text-muted small fw-semibold">Email</div>
+                    <div>{{ farmer.email }}</div>
+                </div>
+                <div class="col-6">
+                    <div class="text-muted small fw-semibold">Phone</div>
+                    <div>{{ farmer.phone }}</div>
                 </div>
             </div>
-
-            <div class="col-md-9 mt-2 px-2">
-                
-            
-                    <div class="card">
-                        <div class="card-header">
-
-                            <div class="text-center">Account Details</div>
-                        </div>
-                        <div class=" px-3 py-2">
-                                <div class="row mb-2 ">
-                                    <div class="col-6"><label for="">Username:</label><br><span class="text-success">{{farmer.username}}</span></div>
-                                    <div class="col-6"><label for="">First Name:</label><br><span class="text-success">{{farmer.first_name}}</span></div>
-                                </div>
-                                <div class="row mb-2 ">
-                                    <div class="col-6"><label for="">Last Name:</label><br><span class="text-success">{{farmer.last_name}}</span></div>
-                                    <div class="col-6"><label for="" class="mb-1">Status:</label><br>
-                                    <span class="mt-2 text-success">{{farmer.status}}</span></div>
-                                </div>
-                           
-                                <div class="row mb-2 ">
-                                    <div class="col-6"><label for="">Email:</label><br><span class="text-success">{{farmer.email}}</span></div>
-                                    <div class="col-6"><label for="">Phone:</label><br><span class="text-success">{{farmer.phone}}</span></div>
-                                </div>
-                        </div>
-                    </div>
-
-                    <!-- Farmer's Farm Info -->
-
-                    <div class="card">
-                        <div class="card-header mb-3">
-
-                            <div class="text-center mt-2">Farm Details</div>
-                        </div>
-                        <div class=" px-3 py-2">
-                            {% if farmer.farms.count >= 1 %}
-                                <div class="row mb-2 ">
-                                  {% for farm in farmer.farms.all %}
-                                     
-                                  <div class="col-4"><label for="name" class="me-2">Name:</label>
-                                    <span class="text-success">{{farm.name}}</span></div>
-                                    <div class="col-4"><label for="name" class="me-2">crop_type:</label>
-                                        <span class="text-success">{{farm.crop_type}}</span></div>
-                                  <div class="col-4"><label for="output" class="me-2">Output:</label>
-                                    <span class="{% if farm.total_output >= 1 %} text-success {% else %} text-danger {% endif %}">{{farm.total_output}}</span></div>
-
-                                  {% endfor %}
-                                  <form action="{% url 'Production:farmer-details' f_username=farmer.username %}" method="POST" class="row" style="width: 100%;" >
-                                    {% csrf_token %}
-                                  <div class=" mt-2">
-                                    <div class="card-header mt-3">
-            
-                                        <div class="text-center">Fill Farm Output</div>
-                                    </div>
-                                    <div class=" px-3 py-2">
-                                      
-                                           <div class="row">
-                                            <input type="hidden" name="farmer_id" value="{{farmer.id}}">
-                                            <div class="col-6"><label for="">Name:</label>
-                                                <select name="farm_name" id="" class="form-control">
-                                                    {% if farms %}
-                                                        {% for farm in farms %}
-                                                            <option value="{{farm.name}}">{{farm.name}}</option>
-                                                        {% endfor %}
-                                                    
-                                                    {% endif %}
-                                                </select>
-                                            </div>
-                                            <!-- <div class="col-6"><label for="">Name:</label><input type="text" name="farm_name" class="form-control"></div> -->
-                                            <div class="col-6"><label for="">Output:</label><input type="float" name="farm_output" class="form-control"></div>
-                                           </div>
-                                            
-                                    </div>
-                                </div>
-                                <div class="mt-2 mb-2"><input type="submit" value="Update"></div>
-                            </form>
-
-
-                             {% else %}
-
-                                       <div class="text-center"><p class="text-danger">A farmer {{ farmer.username }} has no a farm so far</p></div>
-
-                            {% endif %}   
-                                </div>
-                                
-                        </div>
-                    </div>
-                     <!-- Farmer's Farm Info -->
-
-                
-            </div>
-       
         </div>
+    </div>
+
+    <div class="col-lg-8">
+        <div class="account-card p-4 mb-4">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+                <div>
+                    <h6 class="text-success fw-semibold mb-0"><i class="bi bi-tree-fill me-2"></i>Farm Details</h6>
+                    <span class="text-muted small">{{ farms.count }} farm(s) registered</span>
+                </div>
+                <a href="{% url 'Production:all-farmers' %}" class="btn btn-outline-success btn-sm">
+                    <i class="bi bi-arrow-left me-1"></i>Back
+                </a>
+            </div>
+
+            {% if farms %}
+            <div class="table-responsive mb-4">
+                <table class="table align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>Farm</th>
+                            <th>Crop</th>
+                            <th>Region</th>
+                            <th>Output</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for farm in farms %}
+                        <tr>
+                            <td class="fw-semibold">{{ farm.name }}</td>
+                            <td>{{ farm.crop_type.name }}</td>
+                            <td>{{ farm.region.name }}</td>
+                            <td>
+                                <span class="badge rounded-pill"
+                                      style="{% if farm.total_output >= 1 %}background: var(--brand-light); color: var(--brand);{% else %}background: #e9ecef; color: #6c757d;{% endif %}">{{ farm.total_output }}</span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <form action="{% url 'Production:farmer-details' f_username=farmer.username %}" method="POST">
+                {% csrf_token %}
+                <h6 class="text-success fw-semibold mb-3"><i class="bi bi-pencil-square me-2"></i>Update Farm Output</h6>
+                <input type="hidden" name="farmer_id" value="{{ farmer.id }}">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Farm Name</label>
+                        <select name="farm_name" class="form-select form-control">
+                            {% for farm in farms %}
+                            <option value="{{ farm.name }}">{{ farm.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Output (kg)</label>
+                        <input type="text" name="farm_output" class="form-control" placeholder="Enter total output in kg">
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-brand">
+                            <i class="bi bi-send-fill me-1"></i>Update &amp; Notify Farmer
+                        </button>
+                    </div>
+                </div>
+            </form>
+            {% else %}
+            <p class="text-danger text-center py-4 mb-0">Farmer {{ farmer.username }} has no farm registered so far.</p>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
 
 {% endblock %}

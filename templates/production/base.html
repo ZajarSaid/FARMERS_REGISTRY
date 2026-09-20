@@ -7,7 +7,7 @@
     <title>Production | {% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
     <link rel="stylesheet" href="{% static 'css/datatables.min.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/account.css' %}?v=3" />
+    <link rel="stylesheet" href="{% static 'css/account.css' %}?v=6" />
     <link rel="stylesheet" href="{% static 'fontawesome/css/all.min.css' %}" rel="stylesheet" type="text/css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -51,7 +51,6 @@
     <script src="{% static 'js/datatables.min.js' %}"></script>
     <script src="{% static 'js/script.js' %} "></script>
     <script src="{% static 'js/datatable.js' %} "></script>
-    <script src="{% static 'js/farmChart.js' %}"></script>
-    <script src="{% static 'js/Chaart.js' %}"></script>
+    {% include 'partials/verification_modal.html' %}
     </body>
 </html>

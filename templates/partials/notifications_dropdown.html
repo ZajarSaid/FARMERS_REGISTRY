@@ -1,0 +1,36 @@
+{% if request.user.is_authenticated %}
+<li class="nav-item dropdown auth-user-dropdown">
+    <a class="topbar-bell" href="#" role="button" data-bs-toggle="dropdown"
+       aria-expanded="false" aria-label="Notifications">
+        <i class="bi bi-bell-fill"></i>
+        {% if pending_count %}
+        <span class="bell-count">{{ pending_count }}</span>
+        {% endif %}
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end p-2" style="width: 340px;">
+        <li class="px-2 py-1 fw-semibold small text-muted">Farm Update Notifications</li>
+        <li><hr class="dropdown-divider"></li>
+        {% if pending_verifications %}
+            {% for n in pending_verifications %}
+            <li class="px-2 py-2">
+                <div class="fw-semibold small">{{ n.owner.username }} | {{ n.farm_name }}</div>
+                <div class="text-muted small mb-2">{{ n.verification_message }}</div>
+                <div class="d-flex gap-2">
+                    <form action="{% url 'User:accept-notification' n.id %}" method="post">
+                        {% csrf_token %}
+                        <button class="btn btn-success btn-sm"><i class="bi bi-check-lg me-1"></i>Accept</button>
+                    </form>
+                    <form action="{% url 'User:deny-notification' n.id %}" method="post">
+                        {% csrf_token %}
+                        <button class="btn btn-outline-danger btn-sm"><i class="bi bi-x-lg me-1"></i>Reject</button>
+                    </form>
+                </div>
+            </li>
+            {% if not forloop.last %}<li><hr class="dropdown-divider"></li>{% endif %}
+            {% endfor %}
+        {% else %}
+        <li class="px-2 py-3 text-center text-muted small"><i class="bi bi-bell-slash me-1"></i>No pending notifications</li>
+        {% endif %}
+    </ul>
+</li>
+{% endif %}

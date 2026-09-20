@@ -21,6 +21,8 @@ urlpatterns=[
     path('FarmerHistory/', FarmerHistoryView.as_view(), name='farmer-history'),
     path('RegionalPrices/', RegionalPriceView.as_view(), name='regional-prices'),
     path('Verify-output/<int:f_id>', views.verify_ouput, name='verify-output'),
-    path('ChangePassword/', views.ChangePasswordView.as_view(), name='change-password')
+    path('ChangePassword/', views.ChangePasswordView.as_view(), name='change-password'),
+    path('Notification/<int:vid>/accept', views.accept_notification, name='accept-notification'),
+    path('Notification/<int:vid>/deny', views.deny_notification, name='deny-notification'),
     
 ]
