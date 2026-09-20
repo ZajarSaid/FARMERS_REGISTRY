@@ -1,92 +1,78 @@
-<div id="myCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+{% load static %}
+<div id="myCarousel" class="carousel slide carousel-fade hero-carousel" data-bs-ride="carousel">
 
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+    <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+    <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+  </div>
 
-  <ol class="carousel-indicators ">
-    <li data-bs-target="#myCarousel" data-bs-slide-to="0" class="list-unstyled active"></li>
-    <li data-bs-target="#myCarousel" data-bs-slide-to="1" class="list-unstyled "></li>
-    <li data-bs-target="#myCarousel" data-bs-slide-to="2" class="list-unstyled "></li>
-    <!-- <li data-bs-target="#myCarousel" data-bs-slide-to="3" class="list-unstyled "></li> -->
-  </ol>
+  <div class="carousel-inner">
 
-    <div class="carousel-inner">
-        <div class="carousel-item active" data-bs-interval="5000">
-            <div class="overlay-image" id="Image1" style="height: 100%;">
-
-            </div>
-
-            <div class="container">
-                
-                <p class="text-success fw-bold">The Farmers Registry System (FRS) is an agriculture database 
-                    of farmers created by the Ministry of Agriculture and Livestock.
-                     Farmers Registration System is a mandatory registration system that records farmer information at
-                     a central database that supports inquiries to ensure that agriculture support is traceable, auditable and reportable. 
-                </p>
-                
-                  <a href="#" class="btn btn-lg btn-secondary bg-success">SignUp today </a>
-            </div>
-
+    <!-- Slide 1 -->
+    <div class="carousel-item active" data-bs-interval="5000">
+      <div class="hero-slide" id="Image1"></div>
+      <div class="hero-caption">
+        <div class="container">
+          <h2 class="mb-3">Farmers Registry System</h2>
+          <p>
+            The Farmers Registry System (FRS) is an agriculture database of farmers created
+            by the Ministry of Agriculture and Livestock. It keeps records that are traceable,
+            auditable and reportable.
+          </p>
+          <a href="{% url 'User:user-register' %}" class="btn btn-success btn-lg me-2">
+            <i class="bi bi-person-plus me-1"></i>Sign Up Today
+          </a>
+          <a href="#about" class="btn btn-outline-light btn-lg">Learn More</a>
         </div>
-        <div class="carousel-item " data-bs-interval="5000">
-              <div class="overlay-image" id="Image2" style="height: 100%; width: 100%;">
-
-              </div>
-              
-              <div class="container">
-                <p class="text-white fw-bold">Farmers Registration System is a holistic collection of system that keeps records
-                     of personal information and assets for example land, livestock and inputs
-                      of farmers actively engaged in agricultural activities as well as cropping patterns and average yields.
-                       Agricultural support is implemented,
-                     monitored and audited through Farmers Registration System which also informs the creation of agricultural policies
-                  </p>
-                  <a href="#" class="btn btn-lg btn-secondary bg-success">SignUp today </a>
-              </div>
-
-        </div>
-
-        <div class="carousel-item" data-bs-interval="4000">
-              <div class="overlay-image" id="Image3" style="height: 100%;">
-
-              </div>
-              
-              <div class="px-2">
-                
-                <p class="text-success fw-bold">The Farmers Registry System (FRS) is an agriculture database 
-                    of farmers created by the Ministry of Agriculture and Livestock.
-                     Farmers Registration System is a mandatory registration system that records farmer information at
-                     a central database that supports inquiries to ensure that agriculture support is traceable, auditable and reportable. 
-                </p>
-                  <a href="#" class="btn btn-lg btn-secondary bg-success">SignUp Leo </a>
-              </div>
-
-        </div>
-
-        <!-- <div class="carousel-item" data-bs-interval="4000">
-            <div class="overlay-image" id="Image4">
-
-            </div>
-            
-            <div class="container">
-              <h1>hellow</h1>
-              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Sunt molestiae repellendus, quas neque sint incidunt ea,
-                praesentium deserunt minus esse repudiandae 
-                fugit placeat veniam eveniet! Mollitia praesentium sed accusantium ex.
-                </p>
-                <a href="#" class="btn btn-lg btn-secondary">SignUp LEO </a>
-            </div>
-
-        </div> -->
-
+      </div>
     </div>
 
+    <!-- Slide 2 -->
+    <div class="carousel-item" data-bs-interval="5000">
+      <div class="hero-slide" id="Image2"></div>
+      <div class="hero-caption">
+        <div class="container">
+          <h2 class="mb-3">Farmer Data Management</h2>
+          <p>
+            A holistic system that keeps records of personal information and assets — land,
+            livestock and inputs — as well as cropping patterns and average yields of farmers.
+          </p>
+          <a href="{% url 'User:user-register' %}" class="btn btn-success btn-lg me-2">
+            <i class="bi bi-rocket-takeoff me-1"></i>Get Started
+          </a>
+          <a href="#features" class="btn btn-outline-light btn-lg">Our Services</a>
+        </div>
+      </div>
+    </div>
 
-    <a href="#myCarousel" class="carousel-control-prev" role="button" data-bs-slide-to="prev">
-      <span class="sr-only"></span>
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    </a>
-    <a href="#myCarousel" class="carousel-control-next" role="button" data-bs-slide-to="next">
-      <span class="sr-only"></span>
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    </a>
+    <!-- Slide 3 -->
+    <div class="carousel-item" data-bs-interval="5000">
+      <div class="hero-slide" id="Image3"></div>
+      <div class="hero-caption">
+        <div class="container">
+          <h2 class="mb-3">Support &amp; Monitoring</h2>
+          <p>
+            Agricultural support is implemented, monitored and audited efficiently through the
+            Farmers Registration System, while informing the creation of agricultural policies.
+          </p>
+          <a href="{% url 'User:user-register' %}" class="btn btn-success btn-lg me-2">
+            <i class="bi bi-plant me-1"></i>Register as a Farmer
+          </a>
+          <a href="{% url 'User:login' %}" class="btn btn-outline-light btn-lg">Login</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
 
 </div>

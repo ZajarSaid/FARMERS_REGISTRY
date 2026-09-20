@@ -1,77 +1,25 @@
-  
-        <div class="row mt-2 mb-4">
-                
-            <div class="col-4">
-                <div class="card px-3 bg-light shadow">
-                    
-                        <div class="row">
-                            <div class="card-body col-4 ">
-                                <div class="container">
-                                    <a href="" class="nav-link px-3 active">
-                                        <div class="row">
-                                            <span class="me-2">
-                                                <i class="bi bi-tree icon bi-3x text-success"></i>
-                                            </span>
-                                        </div>
-                                        <div class="row">
-                                            <p><span class="small">My Farms</span></p>
-                                        </div>
-                                        <p class="card-text text-success">{{farms.count}}</p>
-                                    </a> 
-                                </div>
-                                
-                            </div>
-                        </div>
-                </div>
-            </div>
+<div class="row g-4">
+  <div class="col-md-4">
+    <div class="stat-box">
+      <div class="stat-icon"><i class="bi bi-tree-fill"></i></div>
+      <div class="stat-count">{{ farms.count }}</div>
+      <div class="stat-label">My Farms</div>
+    </div>
+  </div>
 
-            <div class="col-4">
-                <div class="card px-3 bg-light shadow">
-                    
-                        <div class="row">
-                            <div class="card-body col-4 border-success">
-                                <div class="container">
-                                    <a href="" class="nav-link px-3 active">
-                                        <div class="row">
-                                            <span class="me-2">
-                                                <i class="bi bi-basket text-success"></i>
-                                            </span>
-                                        </div>
-                                        <div class="row">
-                                            <p><span class="small">My Crops</span></p>
-                                        </div>
-                                        <p class="card-text text-success">{{crops}}</p>
-                                    </a> 
-                                </div>
-                            </div>
-                        </div>
-                </div>
-            </div>
+  <div class="col-md-4">
+    <div class="stat-box">
+      <div class="stat-icon"><i class="bi bi-basket-fill"></i></div>
+      <div class="stat-count">{{ crops }}</div>
+      <div class="stat-label">My Crops</div>
+    </div>
+  </div>
 
-         
-
-            <div class="col-4">
-                <div class="card px-3 bg-light shadow">
-                    
-                        <div class="row">
-                            <div class="card-body col-4 ">
-                                <div class="container">
-                                    <a href="" class="nav-link px-3 active">
-                                        <div class="row">
-                                            <span class="me-2">
-                                                <i class="bi bi-briefcase text-success"></i>
-                                            </span>
-                                        </div>
-                                        <div class="row">
-                                            <p><span class="small">Total Output</span></p>
-                                            <p class="card-text text-success">{{output}}</p>
-                                        </div>
-                                        
-                                    </a> 
-                                </div>
-                                
-                            </div>
-                        </div>
-                </div>
-            </div>
-        </div>
+  <div class="col-md-4">
+    <div class="stat-box">
+      <div class="stat-icon"><i class="bi bi-briefcase-fill"></i></div>
+      <div class="stat-count">{{ output }}</div>
+      <div class="stat-label">Total Output</div>
+    </div>
+  </div>
+</div>

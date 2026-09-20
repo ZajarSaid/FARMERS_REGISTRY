@@ -15,7 +15,7 @@ emailField.addEventListener("keyup", (e)=>{
     
 
 if(emailVal.length > 0){
-    fetch("email-validate/", {
+    fetch("/email-validate/", {
         body:JSON.stringify({email:emailVal}),
         method:"POST",
     })

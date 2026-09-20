@@ -22,46 +22,33 @@ EX_IMAGE_VALIDATOR = FeV(['jpg','jpeg', 'png'])
     
 
 class CustomUserManager(BaseUserManager):
-    def create_user(self, 
-        username,
-        email,
-        first_name,
-        last_name,
-        address,
-        phone,
-        image,
-        password=None
-        ):
-       
+    def create_user(self, email, username, password=None, **extra_fields):
         if not email:
-            raise ValueError("users must have an email")
-        if not username:
-            raise ValueError("users must have a username")
+            raise ValueError("Users must have an email")
+
+        email = self.normalize_email(email)
+
         user = self.model(
-            email = self.normalize_email(email),
-            username = username,
-            last_name=last_name,
-            first_name=first_name,
-            address=address,
-            phone=phone,
-            image=image
+            email=email,
+            username=username,
+            **extra_fields
         )
+
         user.set_password(password)
         user.save(using=self._db)
         return user
-    
-    def create_superuser(self, email, username, password):
-        user = self.create_user(
-            email = self.normalize_email(email),
-            username = username,
-            password = password
-           
+
+    def create_superuser(self, email, username, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_active', True)
+
+        return self.create_user(
+            email=email,
+            username=username,
+            password=password,
+            **extra_fields
         )
-        user.is_admin = True
-        user.is_superuser = True
-        user.is_staff = True
-        user.save(using=self._db)
-        return user
     
 class Farmer(AbstractUser):
     STATUS = (
@@ -78,32 +65,12 @@ class Farmer(AbstractUser):
     phone = models.CharField(max_length=200, default='+255')
     status = models.CharField(max_length=200, choices=STATUS, default='MediumFarmer')
     image = models.ImageField(null=True, blank=True, upload_to='User_profile/', validators=[EX_IMAGE_VALIDATOR])
-    password = models.CharField(max_length=120, unique=True)
-    is_active = models.BooleanField(default=True)
-    is_admin = models.BooleanField(default=False)
-    is_staff = models.BooleanField(default=False)
-    is_superuser = models.BooleanField(default=False)
     address = models.CharField(max_length=125)
     
     objects = CustomUserManager()
     
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
-
-    def __str__(self):
-        return self.username
-    
-    def get_username(self):
-        return self.username
-    
-    def get_short_name(self):
-        return self.first_name
-
-    def has_perm(self, perm, obj=None):
-        return self.is_admin
-    
-    def has_module_perms(self, app_label):
-        return True
 
     def __str__(self):
         return self.username

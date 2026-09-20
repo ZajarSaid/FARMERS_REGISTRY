@@ -1,103 +1,83 @@
 import json
-from django.core.management.base import BaseCommand
-from Production.models import Region, District, Crop
-from django.conf import settings
 import os
-from django.utils import timezone
 import random
-from User.models import Farm
-from django.db.models import Sum
-from itertools import groupby
+
+from django.conf import settings
+from django.core.management.base import BaseCommand
+
+from Production.models import Crop, District, Region, RegionalPrices
+
+
+List_crops = [
+    {'name': 'Maize', 'crop_type': 'Food'},
+    {'name': 'Sorghum', 'crop_type': 'Food'},
+    {'name': 'Rice', 'crop_type': 'Food'},
+    {'name': 'Wheat', 'crop_type': 'Food'},
+    {'name': 'Barley', 'crop_type': 'Food'},
+    {'name': 'Cassava', 'crop_type': 'Food'},
+    {'name': 'Potatoes', 'crop_type': 'Food'},
+    {'name': 'Sweet potatoes', 'crop_type': 'Food'},
+    {'name': 'Beans', 'crop_type': 'Food'},
+    {'name': 'Peas', 'crop_type': 'Food'},
+    {'name': 'Bananas', 'crop_type': 'Food'},
+    {'name': 'Pineapples', 'crop_type': 'Food'},
+    {'name': 'Mangoes', 'crop_type': 'Food'},
+    {'name': 'Oranges', 'crop_type': 'Food'},
+    {'name': 'Grapes', 'crop_type': 'Food'},
+    {'name': 'Tomatoes', 'crop_type': 'Food'},
+    {'name': 'Onions', 'crop_type': 'Food'},
+    {'name': 'Cabbages', 'crop_type': 'Food'},
+    {'name': 'Carrots', 'crop_type': 'Food'},
+    {'name': 'Spinach', 'crop_type': 'Food'},
+    {'name': 'Pumpkins', 'crop_type': 'Food'},
+    {'name': 'Eggplants', 'crop_type': 'Food'},
+    {'name': 'Peppers', 'crop_type': 'Food'},
+]
 
 
 class Command(BaseCommand):
-    help = 'Creating sample region and districts data'
+    help = 'Populates crops, regions, districts and regional market prices into the database.'
 
-    # import crops
+    def handle(self, *args, **options):
 
-    def handle(self, *args, **kwargs):
+        # 1. Populate crops
+        for c in List_crops:
+            obj, created = Crop.objects.get_or_create(
+                name=c['name'], defaults={'crop_type': c['crop_type']}
+            )
+            self.stdout.write(
+                self.style.SUCCESS(
+                    f'Crop "{obj.name}" {"created" if created else "already exists"}.'
+                )
+            )
 
-        farms = Farm.objects.all()
-        total_product = 0
+        # 2. Populate regions and their districts from the JSON file
+        file_path = os.path.join(settings.BASE_DIR, 'Tanzania_regions.json')
+        with open(file_path, 'r', encoding='utf-8') as json_file:
+            data = json.load(json_file)
+            for region_name, district_names in data.items():
+                region, _ = Region.objects.get_or_create(name=region_name)
+                for district_name in district_names:
+                    district, _ = District.objects.get_or_create(name=district_name)
+                    region.districts.add(district)
+                self.stdout.write(
+                    self.style.SUCCESS(
+                        f'Region "{region_name}" populated with {len(district_names)} districts.'
+                    )
+                )
 
-        crops = {}
-        total_farms = 0
-        for item in farms:
-            total_farms += 1
-            total_product += item.total_output
-            crops['type']=[item.crop_type]
+        # 3. Generate regional market prices for every crop in every region
+        crops = Crop.objects.all()
+        regions = Region.objects.all()
+        added = 0
+        for region in regions:
+            for crop in crops:
+                _, created = RegionalPrices.objects.get_or_create(
+                    region=region,
+                    crop=crop,
+                    defaults={'price': float(random.randint(500, 5000))},
+                )
+                added += int(created)
+        self.stdout.write(self.style.SUCCESS(f'Regional prices added: {added}.'))
 
-        print(crops)
-        print(total_farms)
-        
-        for k,v in crops.items():
-            print(k,v)
-
-        
-            
-        print(total_product)
-
-
-        # check regions
-        # regional_ranks = (
-        # Farm.objects.values('owner',  'name')
-        # .annotate(total_output=Sum('total_output'))
-        # .order_by('-total_output')
-        # )
-
-        # print(regional_ranks)
-        # for region, workers in groupby(regional_ranks, key=lambda x: x['owner']):
-            # print(region)
-            # print(workers)
-
-        # populate crops
-
-        List_crops = [
-            
-            {'name': 'Maize', 'crop_type': 'Food', 'created_at': timezone.now() - timezone.timedelta(days=random.randint(1, 365))},
-            {'name': 'Sorghum', 'crop_type': 'Food', 'created_at': timezone.now() - timezone.timedelta(days=random.randint(1, 365))},
-            {'name': 'Rice', 'crop_type': 'Food', 'created_at': timezone.now() - timezone.timedelta(days=random.randint(1, 365))},
-            {'name': 'Wheat', 'crop_type': 'Food', 'created_at': timezone.now() - timezone.timedelta(days=random.randint(1, 365))},
-            {'name': 'Barley', 'crop_type': 'Food', 'created_at': timezone.now() - timezone.timedelta(days=random.randint(1, 365))},
-            {'name': 'Cassava', 'crop_type': 'Food', 'created_at': timezone.now() - timezone.timedelta(days=random.randint(1, 365))},
-            {'name': 'Potatoes', 'crop_type': 'Food', 'created_at': timezone.now() - timezone.timedelta(days=random.randint(1, 365))},
-            {'name': 'Sweet potatoes', 'crop_type': 'Food', 'created_at': timezone.now() - timezone.timedelta(days=random.randint(1, 365))},
-            {'name': 'Beans', 'crop_type': 'Food', 'created_at': timezone.now() - timezone.timedelta(days=random.randint(1, 365))},
-            {'name': 'Peas', 'crop_type': 'Food', 'created_at': timezone.now() - timezone.timedelta(days=random.randint(1, 365))},
-            {'name': 'Bananas', 'crop_type': 'Food', 'created_at': timezone.now() - timezone.timedelta(days=random.randint(1, 365))},
-            {'name': 'Pineapples', 'crop_type': 'Food', 'created_at': timezone.now() - timezone.timedelta(days=random.randint(1, 365))},
-            {'name': 'Mangoes', 'crop_type': 'Food', 'created_at': timezone.now() - timezone.timedelta(days=random.randint(1, 365))},
-            {'name': 'Oranges', 'crop_type': 'Food', 'created_at': timezone.now() - timezone.timedelta(days=random.randint(1, 365))},
-            {'name': 'Grapes', 'crop_type': 'Food', 'created_at': timezone.now() - timezone.timedelta(days=random.randint(1, 365))},
-            {'name': 'Tomatoes', 'crop_type': 'Food', 'created_at': timezone.now() - timezone.timedelta(days=random.randint(1, 365))},
-            {'name': 'Onions', 'crop_type': 'Food', 'created_at': timezone.now() - timezone.timedelta(days=random.randint(1, 365))},
-            {'name': 'Cabbages', 'crop_type': 'Food', 'created_at': timezone.now() - timezone.timedelta(days=random.randint(1, 365))},
-            {'name': 'Carrots', 'crop_type': 'Food', 'created_at': timezone.now() - timezone.timedelta(days=random.randint(1, 365))},
-            {'name': 'Spinach', 'crop_type': 'Food', 'created_at': timezone.now() - timezone.timedelta(days=random.randint(1, 365))},
-            {'name': 'Pumpkins', 'crop_type': 'Food', 'created_at': timezone.now() - timezone.timedelta(days=random.randint(1, 365))},
-            {'name': 'Eggplants', 'crop_type': 'Food', 'created_at': timezone.now() - timezone.timedelta(days=random.randint(1, 365))},
-            {'name': 'Peppers', 'crop_type': 'Food', 'created_at': timezone.now() - timezone.timedelta(days=random.randint(1, 365))},
-        ]
-
-        # for c in List_crops:
-        #     Crop.objects.create(**c)
-
-        # crops = Crop.objects.all()
-
-        
-    
-
-    
-    # Populate Region model with data from  JSON file
-
-    # def handle(self, *args, **kwargs):
-    #     File_path = os.path.join(settings.BASE_DIR, 'Tanzania_regions.json')
-
-    #     with open(File_path, 'r') as json_file:
-    #         data = json.load(json_file)
-    #         for region_name, district_names in data.items():
-    #             region, created = Region.objects.get_or_create(name=region_name)
-    #             for district_name in district_names:
-    #                 district, created = District.objects.get_or_create(name=district_name)
-    #                 region.districts.add(district)
-    #             self.stdout.write(self.style.SUCCESS(f'Region "{region_name}" populated with districts.'))
+        self.stdout.write(self.style.SUCCESS('Data population completed successfully.'))

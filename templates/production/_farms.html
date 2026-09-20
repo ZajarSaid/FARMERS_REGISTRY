@@ -22,11 +22,8 @@
                             
                         </tr>
             </thead>
-    
                     <tbody>
-                    {% if farms %}
-                       
-                           
+                    {% if farms %}                                                 
                             {% for farm in farms%}
                             <tr>
                                 <td>{{ farm.id }}</td>
@@ -38,18 +35,11 @@
                                 <td>{{ farm.district }}</td>
                                 
                                 <td><a href="" class="text-decoration-none text-success">{{ farm.owner }}</a></td>
-                                
-    
-                            </tr>
-                                
-                                
+                                  
+                            </tr>                           
                             {% endfor %}
-                                
-                           
-                          
-                    </tbody>
-                        
-        
+                         
+                    </tbody>       
                 {% endif %}
     
                 <tfoot>

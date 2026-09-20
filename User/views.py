@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.http import JsonResponse
 from .models import Farmer, Farm, Rank, OutputVerification
 from Production.models import District, Region, Crop, RegionalPrices
-from .forms import UserRegister
+from .forms import UserRegister, FarmerProfileForm
 from validate_email import validate_email
 from django.contrib import messages
 
@@ -29,29 +29,31 @@ class ChangePasswordView(LoginRequiredMixin, View):
 
     def post(self, request):
         # take form data
-        current_password = request.POST['currentPassword']
-        new_password = request.POST['newPassword']
-        confirm_password = request.POST['confirmPassword']
-        f_pk = request.user.pk
+        current_password = request.POST.get('currentPassword', '')
+        new_password = request.POST.get('newPassword', '')
+        confirm_password = request.POST.get('confirmPassword', '')
 
-        # take current user password then confirm the algorithm
-        farmer = get_object_or_404(Farmer, pk=f_pk)
-        if farmer:
-            print(c_password)
-            if current_password == farmer.password:
-                if new_password == confirm_password:
-                    newfarmer = farmer.save(commit=False)
-                    newFarmer.password = newFarmer.set_password(confirm_password)
-                    newFarmer.save()
-                    messages.success(request, 'your password has been changed successfuly..!')
-                    return redirect('User:change-password')
-                else:
-                    messages.error(request, "two passwords didn't match")
-            else:
-                messages.error(request, 'wrong password')
-                return redirect('User:change-password')
+        user = request.user
 
-        return render(request, self.template_name)
+        # verify the current password with the stored hash
+        if not user.check_password(current_password):
+            messages.error(request, 'Your current password is incorrect.')
+            return redirect('User:change-password')
+
+        if len(new_password) < 6:
+            messages.error(request, 'Your new password is too short, it must be at least 6 characters.')
+            return redirect('User:change-password')
+
+        if new_password != confirm_password:
+            messages.error(request, "The two passwords didn't match.")
+            return redirect('User:change-password')
+
+        # update the password and invalidate the existing session
+        user.set_password(new_password)
+        user.save()
+        logout(request)
+        messages.success(request, 'Your password has been changed successfully, please login with your new password.')
+        return redirect('User:login')
 
 
 
@@ -264,10 +266,8 @@ class FarmerRegistrationView(View):
                  )
                 user.set_password(password)
                 user.save()
-                messages.success(request, 'A farmer account has been created successfuly..')
-                return redirect('User:user-register')
-
-                return render(request, 'users/registration.html')
+                messages.success(request, 'Your account has been created successfully, please login to continue.')
+                return redirect('User:login')
 
         return render(request, self.template_name)
 
@@ -363,12 +363,12 @@ class FarmerAccountView(View):
         if FarmerInfo.is_superuser:
             return redirect('Production:dashboard')
 
-        form = UserRegister(instance=FarmerInfo)
+        form = FarmerProfileForm(instance=FarmerInfo)
         user = FarmerInfo
         context = {
             'form':form,
             'user':user
-            }    
+            }
 
 
         return render(request, self.template_name, context)
@@ -377,45 +377,28 @@ class FarmerAccountView(View):
 
         user_pk = request.user.pk
         real_farmer = get_object_or_404(Farmer, pk=user_pk)
-        form = UserRegister(request.POST, request.FILES, instance=real_farmer)
-        print(form)
+        form = FarmerProfileForm(request.POST, request.FILES, instance=real_farmer)
 
         if form.is_valid():
             form.save()
-            messages.success(request, 'Your information has been updated successfuly..')
+            messages.success(request, 'Your information has been updated successfully..')
             return redirect('User:farmer-account')
 
-        # first_name = request.POST['first_name']
-        # last_name = request.POST['last_name']
-        # email = request.POST['email']
-        # username = request.POST['username']
-        # image = request.FILES.get('image')
-        # phone = request.POST['phone']
-
-        # farmer = Farmer.objects.get(id=user_pk)
-
-        # farmer.username = username
-        # farmer.last_name = last_name
-        # farmer.first_name = first_name
-        # farmer.email = email
-        # farmer.image = image
-        # farmer.phone = phone
-        # farmer.save()
-        messages.error(request, 'Your information has not been updated successfuly..')
+        messages.error(request, 'Your information has not been updated successfully..')
 
         return redirect('User:farmer-account')
-
-
-    def post(self, request):
-
-        return render(request, self.template_name)
 
 def index(request):
     # the index should return index page as a website initial page where,
     # users can  navigate different sections about the system like login and registration
-    # currently it returns a farmer registration page for development/testing purposes
 
-    return render(request, 'users/Home.html')
+    context = {
+        'total_farmers': Farmer.objects.filter(is_superuser=False).count(),
+        'total_farms': Farm.objects.count(),
+        'total_crops': Crop.objects.count(),
+        'total_regions': Region.objects.count(),
+    }
+    return render(request, 'users/Home1.html', context)
 
     
 

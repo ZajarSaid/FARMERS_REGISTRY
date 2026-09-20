@@ -3,6 +3,22 @@ from .models import Farmer, Farm
 from django import forms
 
 
+class FarmerProfileForm(forms.ModelForm):
+    class Meta:
+        model = Farmer
+        fields = ('username', 'first_name', 'last_name', 'email', 'phone', 'address', 'image')
+
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'username'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'first name'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'last name'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Enter Email'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Contact'}),
+            'address': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter address'}),
+            'image': forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/*'}),
+        }
+
+
 class UserRegister(forms.ModelForm):
     class Meta:
         model = Farmer

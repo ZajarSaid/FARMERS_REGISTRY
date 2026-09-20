@@ -1,109 +1,38 @@
-  
-        <div class="row mt-2 mb-4">
-           
-            <div class="col-3">
-                <div class="card  px-3 bg-light shadow">
-                    <span class="border border-success">
-                    </span>
-                    
-                        <div class="row">
-                            <div class="card-body col-4 ">
-                               
-                                <div class="container">
-                                    <a href="" class="nav-link px-3 active">
-                                        <div class="row">
-                                            <span class="me-2">
-                                                <i class="bi bi-people icon bi-3x text-success"></i>
-                                            </span>
-                                        </div>
-                                        <div class="row">
-                                            <p><span class="small">Farmers</span></p>
-                                        </div>
-                                        <p class="card-text text-success">{{farmers.count}}</p>
-                                    </a> 
-                                </div>
-                                
-                            </div>
-                        </div>
-                        
-                </div>
+<div class="row g-3 mb-4">
+    <div class="col-6 col-lg-3">
+        <a href="{% url 'Production:all-farmers' %}" class="text-decoration-none">
+            <div class="stat-box">
+                <div class="stat-icon"><i class="bi bi-people-fill"></i></div>
+                <div class="stat-count">{{ farmers.count }}</div>
+                <div class="stat-label">Farmers</div>
             </div>
-
-            <div class="col-3">
-                <div class="card px-3 bg-light shadow">
-                    <span class="border border-success">
-                    </span>
-                        <div class="row">
-                            <div class="card-body col-4 ">
-                                <div class="container">
-                                    <a href="" class="nav-link px-3 active">
-                                        <div class="row">
-                                            <span class="me-2">
-                                                <i class="bi bi-tree text-success"></i>
-                                            </span>
-                                        </div>
-                                        <div class="row">
-                                            <p><span class="small">Farms</span></p>
-                                        </div>
-                                        <p class="card-text text-success">{{farms.count}}</p>
-                                    </a> 
-                                </div>
-                            </div>
-                        </div>
-                </div>
+        </a>
+    </div>
+    <div class="col-6 col-lg-3">
+        <a href="{% url 'Production:all-farms' %}" class="text-decoration-none">
+            <div class="stat-box">
+                <div class="stat-icon"><i class="bi bi-tree-fill"></i></div>
+                <div class="stat-count">{{ farms.count }}</div>
+                <div class="stat-label">Farms</div>
             </div>
-
-            <div class="col-3">
-                <div class="card px-3 bg-light shadow">
-                    <span class="border border-success">
-                    </span>
-                    
-                    
-                        <div class="row">
-                            <div class="card-body col-4 ">
-                                <div class="container">
-                                    <a href="" class="nav-link px-3 active">
-                                        <div class="row">
-                                            <span class="me-2">
-                                                <i class="bi bi-basket text-success"></i>
-                                            </span>
-                                        </div>
-                                        <div class="row">
-                                            <p><span class="small">Crops</span></p>
-                                        </div>
-                                        <p class="card-text {% if crops.count <= 100 %} text-success{% else %} text-danger {% endif %}">{{crops.count}}</p>
-                                    </a> 
-                                </div>
-                            </div>
-                        </div>
-                </div>
+        </a>
+    </div>
+    <div class="col-6 col-lg-3">
+        <a href="{% url 'Production:all-crops' %}" class="text-decoration-none">
+            <div class="stat-box">
+                <div class="stat-icon"><i class="bi bi-basket-fill"></i></div>
+                <div class="stat-count {% if crops.count > 100 %}text-danger{% endif %}">{{ crops.count }}</div>
+                <div class="stat-label">Crops</div>
             </div>
-
-            <div class="col-3">
-                <div class="card px-3 bg-light shadow">
-                    <span class="border border-success">
-                    </span>
-                    
-                    
-                        <div class="row">
-                            <div class="card-body col-4 ">
-                                <div class="container">
-                                    <a href="" class="nav-link px-3 active">
-                                        <div class="row">
-                                            <span class="me-2">
-                                                <i class="bi bi-briefcase text-success"></i>
-                                            </span>
-                                        </div>
-                                        <div class="row">
-                                            <p><span class="small">Regions</span></p>
-                                            <p class="card-text text-success">{{regions.count}}</p>
-                                        </div>
-                                        
-                                    </a> 
-                                </div>
-                                
-                            </div>
-                        </div>
-                </div>
+        </a>
+    </div>
+    <div class="col-6 col-lg-3">
+        <a href="{% url 'Production:regional-prices' %}" class="text-decoration-none">
+            <div class="stat-box">
+                <div class="stat-icon"><i class="bi bi-geo-alt-fill"></i></div>
+                <div class="stat-count">{{ regions.count }}</div>
+                <div class="stat-label">Regions</div>
             </div>
-        </div>
+        </a>
+    </div>
+</div>

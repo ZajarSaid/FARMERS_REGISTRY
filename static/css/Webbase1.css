@@ -1,0 +1,396 @@
+/* ============================================
+   FARMERS REGISTRY - MODERN HOME PAGE STYLES
+   ============================================ */
+
+:root {
+  --brand: #1e7e34;
+  --brand-dark: #145a25;
+  --brand-light: #eaf6ee;
+  --accent: #f9a825;
+  --accent-dark: #dd8c00;
+  --ink: #233033;
+  --muted: #6c757d;
+  --bg-soft: #f6faf7;
+  --shadow-sm: 0 2px 10px rgba(20, 90, 37, 0.08);
+  --shadow-md: 0 8px 28px rgba(20, 90, 37, 0.14);
+  --radius: 16px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Poppins", "Segoe UI", system-ui, -apple-system, sans-serif;
+  color: var(--ink);
+  background: #ffffff;
+}
+
+/* ---------------- TOP NAVBAR ---------------- */
+.site-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1040;
+  background: #ffffff;
+  border-bottom: 1px solid rgba(20, 90, 37, 0.12);
+  box-shadow: 0 4px 18px rgba(20, 90, 37, 0.16);
+  padding: 0.55rem 0;
+}
+.site-navbar .navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 700;
+  color: var(--brand-dark);
+  letter-spacing: 0.2px;
+}
+.site-navbar .brand-logo {
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  border-radius: 50%;
+  background: var(--brand-light);
+  padding: 3px;
+  box-shadow: 0 0 0 2px rgba(30, 126, 52, 0.15);
+}
+.nav-link-soft {
+  font-weight: 500;
+  color: var(--ink) !important;
+  border-radius: 10px;
+  margin: 0 0.1rem;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+.nav-link-soft:hover {
+  color: var(--brand) !important;
+  background: var(--brand-light);
+}
+.nav-link-soft.active {
+  color: var(--brand) !important;
+}
+.btn-soft {
+  background: var(--brand-light);
+  color: var(--brand);
+  border: 1px solid rgba(30, 126, 52, 0.25);
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 0.45rem 1.15rem;
+  transition: all 0.2s ease;
+}
+.btn-soft:hover {
+  background: var(--brand);
+  color: #fff;
+  transform: translateY(-1px);
+}
+.btn-solid {
+  background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  border-radius: 999px;
+  padding: 0.45rem 1.25rem;
+  box-shadow: 0 4px 14px rgba(30, 126, 52, 0.3);
+  transition: all 0.2s ease;
+}
+.btn-solid:hover {
+  box-shadow: 0 6px 20px rgba(30, 126, 52, 0.42);
+  transform: translateY(-1px);
+  color: #fff;
+}
+.navbar-toggler-soft {
+  border: 1px solid rgba(30, 126, 52, 0.2);
+  color: var(--brand);
+}
+.navbar-toggler-soft:focus {
+  box-shadow: 0 0 0 0.2rem rgba(30, 126, 52, 0.15);
+}
+
+/* ---------------- HERO CAROUSEL ---------------- */
+.hero-carousel {
+  position: relative;
+  overflow: hidden;
+  background: var(--brand);
+}
+.hero-carousel .carousel-item {
+  height: 68vh;
+  min-height: 400px;
+  max-height: 620px;
+}
+@media (max-width: 767.98px) {
+  .hero-carousel .carousel-item {
+    height: 56vh;
+    min-height: 340px;
+    max-height: none;
+  }
+}
+.hero-carousel .carousel-item {
+  position: relative;
+}
+.hero-slide {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+}
+.hero-slide::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    rgba(9, 40, 18, 0.82) 0%,
+    rgba(14, 58, 28, 0.55) 45%,
+    rgba(9, 40, 18, 0.15) 100%
+  );
+}
+.hero-caption {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+}
+.hero-caption .container {
+  position: static;
+  padding-bottom: 0;
+}
+.hero-caption h2 {
+  font-size: clamp(1.7rem, 4.2vw, 3rem);
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.3);
+}
+.hero-caption p {
+  color: rgba(255, 255, 255, 0.92);
+  font-size: clamp(0.95rem, 1.5vw, 1.1rem);
+  max-width: 620px;
+  line-height: 1.7;
+}
+.hero-caption .btn-success,
+.hero-caption .btn-outline-light {
+  border-radius: 999px;
+  font-weight: 600;
+  padding: 0.6rem 1.6rem;
+}
+.hero-carousel .carousel-indicators [data-bs-target] {
+  width: 34px;
+  height: 5px;
+  border-radius: 4px;
+  transition: width 0.25s ease;
+}
+.hero-carousel .carousel-indicators .active {
+  width: 52px;
+}
+
+/* ---------------- SECTIONS ---------------- */
+.section {
+  padding: 4.5rem 0;
+}
+.section-title {
+  color: var(--ink);
+  font-weight: 700;
+  font-size: clamp(1.5rem, 2.6vw, 2.2rem);
+}
+.section-sub {
+  color: var(--muted);
+  max-width: 640px;
+  margin: 0.4rem auto 0;
+}
+.eyebrow {
+  color: var(--brand);
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+}
+
+/* Stats */
+.stat-card {
+  background: #fff;
+  border: 1px solid rgba(20, 90, 37, 0.08);
+  border-radius: var(--radius);
+  padding: 1.6rem 1.2rem;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  height: 100%;
+}
+.stat-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-md);
+}
+.stat-card .stat-icon {
+  width: 58px;
+  height: 58px;
+  margin: 0 auto 0.8rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  background: var(--brand-light);
+  color: var(--brand);
+}
+.stat-card .stat-count {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--brand-dark);
+  line-height: 1;
+}
+.stat-card .stat-label {
+  color: var(--muted);
+  font-weight: 500;
+  margin-top: 0.35rem;
+}
+
+/* Feature cards */
+.feature-card {
+  background: #fff;
+  border: 1px solid rgba(20, 90, 37, 0.08);
+  border-radius: var(--radius);
+  padding: 2rem 1.6rem;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.feature-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--brand), var(--accent));
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.feature-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-md);
+}
+.feature-card:hover::before {
+  opacity: 1;
+}
+.feature-card .feature-icon {
+  width: 62px;
+  height: 62px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  background: var(--brand-light);
+  color: var(--brand);
+  margin-bottom: 1.1rem;
+}
+.feature-card h5 {
+  font-weight: 700;
+  color: var(--ink);
+}
+.feature-card p {
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+.feature-card a.feature-link {
+  color: var(--brand);
+  font-weight: 600;
+  text-decoration: none;
+}
+.feature-card a.feature-link:hover {
+  color: var(--brand-dark);
+}
+
+/* Steps */
+.step-card {
+  text-align: center;
+  padding: 1.4rem 1rem;
+}
+.step-badge {
+  width: 74px;
+  height: 74px;
+  margin: 0 auto 1rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.7rem;
+  color: #fff;
+  background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+  box-shadow: 0 8px 20px rgba(30, 126, 52, 0.32);
+}
+.step-card h5 {
+  font-weight: 700;
+}
+.step-card p {
+  color: var(--muted);
+}
+
+/* CTA banner */
+.cta-banner {
+  background: linear-gradient(120deg, var(--brand-dark), var(--brand));
+  border-radius: 20px;
+  padding: 2.6rem 2rem;
+  color: #fff;
+  box-shadow: 0 14px 40px rgba(20, 90, 37, 0.35);
+  text-align: center;
+}
+.cta-banner h3 {
+  font-weight: 800;
+}
+.cta-banner p {
+  color: rgba(255, 255, 255, 0.9);
+}
+.cta-banner .btn {
+  border-radius: 999px;
+  font-weight: 600;
+  padding: 0.6rem 1.7rem;
+}
+
+/* ---------------- FOOTER ---------------- */
+.site-footer {
+  background: #0e2a17;
+  color: rgba(255, 255, 255, 0.75);
+  margin-top: 4rem;
+}
+.site-footer h6 {
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+}
+.site-footer .footer-link {
+  color: rgba(255, 255, 255, 0.72);
+  text-decoration: none;
+  transition: color 0.2s ease, padding-left 0.2s ease;
+}
+.site-footer .footer-link:hover {
+  color: #fff;
+  padding-left: 5px;
+}
+.footer-social a {
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+.footer-social a:hover {
+  background: var(--brand);
+  transform: translateY(-3px);
+}
+.footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.6);
+}

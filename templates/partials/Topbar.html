@@ -1,55 +1,39 @@
 {% load static %}
-<nav class="navbar navbar-expand-lg navbar-dark bg-white shadow text-success fixed-top">
-    <div class="container-fluid text-success">
-        <!--offcanvas-trigger-->
-        <button class="navbar-toggler me-2 bg-success" type="button" data-bs-toggle="offcanvas" data-bs-target="#demo">
-            <span class="navbar-toggler-icon" data-bs-target="#demo"></span>
+<nav class="navbar account-topbar">
+    <div class="container-fluid px-3">
+        <div class="d-flex align-items-center gap-2">
+            <button class="navbar-toggler navbar-toggler-soft d-lg-none" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#demo" aria-controls="demo" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
             </button>
-        <!--offcanvas-trigger-->
-    <a class="navbar-brand fw-bold me-auto  text-success" href="#"> <span class="me-2 ">
-        
-            <img src="{% static 'Photos/tz_gov_logo.png' %}" alt="" style="width: 35px;">
-       
-    </span>Farmers Registry System</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-   
-        <div class="d-flex ms-auto">
-   
+            <a class="navbar-brand" href="{% url 'Production:dashboard' %}">
+                <img src="{% static 'Photos/tz_gov_logo.png' %}" alt="Ministry of Agriculture" class="brand-logo">
+                <span class="d-none d-sm-inline">Farmers Registry System</span>
+            </a>
         </div>
-        <div class="d-flex">
-   
-        </div>
-        
-        
-        <ul class="navbar-nav mb-2 mb-lg-0">
-            <li>
-                {% if user.is_authenticated %}
-                <div>
-                    <p class=" card-text text-muted mt-2">{{user.email}}</p>
-                    
-                </div>
-                {% endif %}
-            </li>
-        
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle text-success" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bi bi-person-fill"></i>
+        {% if user.is_authenticated %}
+        <ul class="navbar-nav">
+            <li class="nav-item dropdown auth-user-dropdown">
+                <a class="user-chip dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    {% if user.image %}
+                    <img src="{{ user.image.url }}" alt="Profile" class="user-avatar">
+                    {% else %}
+                    <img src="{% static 'Profiles/avatar.svg' %}" alt="Profile" class="user-avatar">
+                    {% endif %}
+                    <span class="d-none d-md-block text-start">
+                        <span class="d-block user-name">{{ user.username }}</span>
+                        <span class="d-block user-role">{% if user.is_superuser %}Administrator{% else %}Staff{% endif %}</span>
+                    </span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="{% url 'Production:user-profile' request.user.username %}">Profile</a></li>
-                    <li><a class="dropdown-item" href="#">Settings</a></li>
+                    <li><a class="dropdown-item" href="{% url 'Production:user-profile' request.user.username %}"><i class="bi bi-person-fill me-2"></i>Profile</a></li>
+                    <li><a class="dropdown-item" href="{% url 'Production:user-profile' request.user.username %}#security"><i class="bi bi-key-fill me-2"></i>Change Password</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="{% url 'User:logout' %}">Logout</a></li>
+                    <li><a class="dropdown-item text-danger" href="{% url 'User:logout' %}"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
                 </ul>
             </li>
-            
         </ul>
+        {% endif %}
     </div>
-    
-    </div>
-   
-   </nav>
-  
+</nav>

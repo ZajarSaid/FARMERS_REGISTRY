@@ -1,136 +1,152 @@
 {% load static %}
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registration Form</title>
-    <link rel="stylesheet" href="{% static 'css/registration.css' %}">
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register | Farmers Registry</title>
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/auth.css' %}" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
-
-<style>
-
-</style>
 <body>
 
-  <!--top bar-->
-  <nav class="navbar navbar-expand-lg navbar-light " style="background-color: rgb(143, 177, 147);">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">
-          <span class="me-1"><img src="{% static 'Photos/tz_gov_logo.png' %}" alt="" class="px-2 rounded-pill" style="width: 50px; height: 40px; background-color: rgb(190, 231, 185);"></span>Ministry of Agriculture</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'User:index' %}">Go to Website</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'User:login' %}">Login</a>
-                </li>
-              
-            </ul>
-        </div>
-    </div>
-</nav>
-
-
-  <!--top bar -->
-
-    <div class="container-fluid bg-light">
-        <div class="row ">
-            <div class="col-2 mb-3"></div>
-            <div class="container col-md-7 mt-2 bg-light">
-                <h1 class="text-success card-text text-center bg-light">Farmer Registration Form</h1>
-                <div class="card ">
-                    <div class="card-body">
-                        <form action="{% url 'User:user-register' %}" method="POST" enctype="multipart/form-data"><br>
-                          {% csrf_token %}
-                          {% include 'partials/messages.html' %}
-                              
-                        
-                      <div class="row mb-1">
-                        
-                        <div class="col-4 px-4 mt-0 mb-0" >
-                          <label for="">Username</label>
-                          <input type="text" class="form-control" value="" id="usernameField"  placeholder="Enter Username" name="username">
-                          <div class="invalid_feedback text-danger" style="display:none"></div>
-                          <p class="text-success UsernameSuccessOutput text-sm"></p>
-                        </div>
-                        
-                        
-                        <div class="col-4 px-4">
-                            <label for="">First name</label>
-                            <input type="text"  class="form-control" name="firstname">
-                        </div>
-                        
-                        <div class="col-4 px-4">
-                          <label for="">Last name</label>
-                          <input type="text" class="form-control" value="" name="lastname">
-                      </div>
-                      
-                      </div>
-                      
-                      <div class="row mb-1 my-2">
-                       
-                          <div class="col-4 px-4">
-                            <label for="">Email</label>
-                            <input type="email"  class="form-control" id="emailField" name="email">
-                            <div class="invalidEmailfeedback text-danger" style="display:none" id="invalidEmailfeedback"></div>
-                              <p class="text-success EmailSuccessOutput text-sm"></p>
-                          </div>
-
-                          <div class="col-4 px-4">
-                            <label for="">Address</label>
-                            <input type="text" class="form-control" value="" name="address">
-                          </div>
-                          
-                          <div class="col-4 px-4">
-                            <label for="">Image</label>
-                            <input type="file"  class="form-control" id="emageField" name="image">
-                          </div>
-                          
-                      </div>
-        
-                         
-        
-                          <div class="row mb-1">
-                            <div class="col-6 px-4"><label for="">Phone</label>
-                                <input type="text"  class="form-control" value="" name="phone">
-                            </div>
-                            
-                            <div class="col-6 px-4"><label for="">Password</label>
-                                <input type="password"  class="form-control" name="password">
-                            </div>
-                          </div>
-                          
-                          <div class="row">
-                              <div class="col-5"></div>
-                              <div class="col-2 ms-4"><button type="submit" class="btn btn-success mt-3">Submit</button></div>
-                              <div class="col-5"></div>
-                          </div>
-                          </form>
-                    </div>
-                </div>
-            </div>
-            <div class="col-2 mt-3"></div>
-
-
-        </div>
-    </div>
-
-    <footer class="footer mt-auto py-3 " style="background-color:  rgb(143, 177, 147);" >
-      <div class="container text-center " style="background-color: rgb(199, 224, 208);">
-          <span class="text-muted rounded-pill" style="background-color: white;">&copy; 2024 <span style="color: rgb(137, 202, 146);">Ministry of Agriculture</span>. All rights reserved.</span>
+  <nav class="navbar navbar-expand-lg auth-topbar">
+    <div class="container">
+      <a class="navbar-brand" href="{% url 'User:index' %}">
+        <img src="{% static 'Photos/tz_gov_logo.png' %}" alt="Ministry of Agriculture" class="brand-logo">
+        <span>Farmers Registry</span>
+      </a>
+      <button class="navbar-toggler navbar-toggler-soft" type="button" data-bs-toggle="collapse"
+              data-bs-target="#authNav" aria-controls="authNav" aria-expanded="false"
+              aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="authNav">
+        <ul class="navbar-nav ms-auto align-items-lg-center">
+          <li class="nav-item">
+            <a class="nav-link nav-link-soft" href="{% url 'User:index' %}"><i class="bi bi-house-door me-1"></i>Go to Website</a>
+          </li>
+          <li class="nav-item ms-lg-2">
+            <a class="btn btn-solid" href="{% url 'User:login' %}"><i class="bi bi-box-arrow-in-right me-1"></i>Login</a>
+          </li>
+        </ul>
       </div>
+    </div>
+  </nav>
+
+  <main>
+    <div class="auth-wrap">
+      <div class="auth-card">
+        <div class="row g-0">
+
+          <div class="col-lg-5">
+            <div class="auth-side h-100">
+              <h2 class="mb-3">Create Your Farmer Account</h2>
+              <p class="lead mb-4">
+                Join the national Farmers Registry System and grow with the government.
+              </p>
+              <ul class="p-0 m-0">
+                <li><i class="bi bi-check-circle-fill"></i><span>Free and mandatory registration</span></li>
+                <li><i class="bi bi-check-circle-fill"></i><span>Register your farms and crops</span></li>
+                <li><i class="bi bi-check-circle-fill"></i><span>Track outputs and national rankings</span></li>
+                <li><i class="bi bi-check-circle-fill"></i><span>Access regional market prices</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-lg-7">
+            <div class="auth-main">
+              <div class="text-center mb-4">
+                <img src="{% static 'Photos/tz_gov_logo.png' %}" alt="Farmers Registry" style="width: 64px; height: 64px; object-fit: cover; border-radius: 50%;" class="mb-2">
+                <h3 class="auth-title mb-1">Farmer Registration Form</h3>
+                <p class="auth-sub mb-0">Fill in your details to create an account</p>
+              </div>
+
+              {% include 'partials/messages.html' %}
+
+              <form action="{% url 'User:user-register' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="usernameField" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="usernameField" value="" placeholder="Enter username" name="username" required>
+                    <div class="invalid_feedback text-danger" style="display:none"></div>
+                    <p class="text-success UsernameSuccessOutput small mb-0"></p>
+                  </div>
+
+                  <div class="col-md-6 mb-3">
+                    <label for="firstname" class="form-label">First Name</label>
+                    <input type="text" class="form-control" id="firstname" placeholder="Enter first name" name="firstname" required>
+                  </div>
+
+                  <div class="col-md-6 mb-3">
+                    <label for="lastname" class="form-label">Last Name</label>
+                    <input type="text" class="form-control" id="lastname" placeholder="Enter last name" name="lastname" required>
+                  </div>
+
+                  <div class="col-md-6 mb-3">
+                    <label for="emailField" class="form-label">Email Address</label>
+                    <input type="email" class="form-control" id="emailField" name="email" placeholder="Enter email" required>
+                    <div class="invalidEmailfeedback text-danger" style="display:none" id="invalidEmailfeedback"></div>
+                    <p class="text-success EmailSuccessOutput small mb-0"></p>
+                  </div>
+
+                  <div class="col-md-6 mb-3">
+                    <label for="phone" class="form-label">Phone Number</label>
+                    <input type="text" class="form-control" id="phone" placeholder="e.g. +255..." name="phone">
+                  </div>
+
+                  <div class="col-md-6 mb-3">
+                    <label for="address" class="form-label">Address</label>
+                    <input type="text" class="form-control" id="address" value="" placeholder="Enter address" name="address">
+                  </div>
+
+                  <div class="col-md-6 mb-3">
+                    <label for="imageField" class="form-label">Profile Image</label>
+                    <input type="file" class="form-control" id="imageField" name="image">
+                  </div>
+
+                  <div class="col-md-6 mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="input-icon-group">
+                      <i class="bi bi-lock-fill input-icon"></i>
+                      <input type="password" class="form-control" id="password" placeholder="At least 6 characters" name="password" required>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="d-grid gap-2 mt-2">
+                  <button type="submit" class="btn btn-auth">
+                    <i class="bi bi-person-plus me-1"></i>Create Account
+                  </button>
+                </div>
+
+                <p class="auth-alt text-center mt-3 mb-0">
+                  Already have an account? <a href="{% url 'User:login' %}">Login here</a>
+                </p>
+              </form>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="auth-footer py-3 text-center small">
+    &copy; 2024 Ministry of Agriculture. All rights reserved.
   </footer>
 
   <script src="{% static 'js/bootstrap.bundles.js' %}"></script>
- <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
- <script src="{% static 'js/datatables.min.js' %}"></script>
- <script src="{% static 'js/emails.js' %} "></script>
- <script src="{% static 'js/username.js' %} "></script>
-   
+  <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+  <script src="{% static 'js/datatables.min.js' %}"></script>
+  <script src="{% static 'js/emails.js' %}"></script>
+  <script src="{% static 'js/username.js' %}"></script>
+
 </body>
 </html>

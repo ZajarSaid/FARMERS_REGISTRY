@@ -1,0 +1,88 @@
+========================================
+FARMERS_REGISTRY - SETUP / RUN ISSUES
+========================================
+
+This file explains why `py manage.py runserver` does not work yet,
+and what still needs to be fixed. It is written in plain language.
+
+------------------------------------------------
+FIXED SO FAR (nothing for you to do)
+------------------------------------------------
+1. Django was not installed on your computer.
+   -> Installed Django 5.2.17.
+
+------------------------------------------------
+STILL PROBLEMS - DO NOT FIX WITHOUT READING
+------------------------------------------------
+
+ISSUE 1: Missing package "python-decouple"  (BLOCKS the server)
+   - The settings file uses a line:
+       from decouple import config
+     (Farmers_registry/settings.py, line 16)
+   - But the Python package that provides "decouple" is
+     NOT installed yet.
+   - Result: the project crashes right away at startup.
+   - Fix (later):  pip install python-decouple
+   - Note: this package is used to read values from the .env file
+     (like database name, user, and password).
+
+ISSUE 2: Missing MySQL database driver  (BLOCKS the server)
+   - The settings file is set to use MySQL:
+       'ENGINE': 'django.db.backends.mysql'
+     (Farmers_registry/settings.py, line 99)
+   - Django needs a driver package to talk to MySQL.
+     The project's Pipfile mentions both "mysql" and
+     "mysql-connector-python", but neither is installed yet.
+   - Result: once Issue 1 is fixed, Django will still open with
+     an error saying no MySQL driver is installed.
+   - Fix (later):  pip install mysqlclient   (or mysql-connector-python)
+
+ISSUE 3: Missing Django app packages "rest_framework" and "django_extensions"
+   - These two apps are listed in INSTALLED_APPS
+     (Farmers_registry/settings.py, lines 53-54):
+         'rest_framework'
+         'django_extensions'
+   - Their package names are:
+         djangorestframework   (provides "rest_framework")
+         django-extensions     (provides "django_extensions")
+   - Neither is installed.
+   - Result: after Issues 1 & 2 are fixed, Django will show
+     a "No module named 'rest_framework'" error (then the same
+     for 'django_extensions').
+   - Fix (later):  pip install djangorestframework django-extensions
+
+ISSUE 4: Your MySQL database must exist and be running
+   - The .env file says the database is:
+       DB_NAME = Farmersdb
+       DB_HOST = localhost
+       DB_PORT = 3306
+   - The MySQL service on your computer must be started, and
+     a database called "Farmersdb" must already exist.
+   - If not, the server may start but fail when it tries to
+     access the database (during migrations or page loading).
+   - Check: make sure MySQL is installed/running, then run:
+       CREATE DATABASE Farmersdb;
+
+ISSUE 5: Other packages listed in the Pipfile are not installed yet
+   These are not needed just to start the server, but they WILL
+   be needed by the app when it runs (charts, images, PDFs, emails):
+       - matplotlib
+       - seaborn
+       - reportlab
+       - validate-email
+       - pillow   (already installed)
+       - pandas   (already installed)
+   - Fix (later):  pip install matplotlib seaborn reportlab validate-email
+
+------------------------------------------------
+RECOMMENDED ORDER TO FIX (when you say "go ahead")
+------------------------------------------------
+   1. pip install python-decouple
+   2. pip install mysqlclient
+   3. pip install djangorestframework django-extensions
+   4. Start MySQL and create database "Farmersdb"
+   5. pip install matplotlib seaborn reportlab validate-email
+   6. Then run:  py manage.py migrate
+   7. Then run:  py manage.py runserver
+
+After that, open: http://127.0.0.1:8000

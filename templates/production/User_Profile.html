@@ -1,65 +1,150 @@
-{% extends 'production/base.html'%}
+{% extends 'production/base.html' %}
 {% load static %}
-{% block title%}All Crops{% endblock %}
 
-{% block cumb%}User-Details{% endblock %}
+{% block title %}My Profile{% endblock %}
+{% block header %}My Profile{% endblock %}
+{% block cumb %}User Profile{% endblock %}
 
 {% block content %}
 
- <!-- User information -->
+<div class="row g-4">
+    <div class="col-lg-4">
+        <div class="account-card p-4 text-center">
+            {% if farmer.image %}
+            <img id="profile-image" src="{{ farmer.image.url }}" alt="Profile Image"
+                class="rounded-circle mb-3" style="width: 140px; height: 140px; object-fit: cover; box-shadow: 0 0 0 4px var(--brand-light);">
+            {% else %}
+            <img id="profile-image" src="{% static 'Profiles/avatar.svg' %}" alt="Default Profile Image"
+                class="rounded-circle mb-3" style="width: 140px; height: 140px; object-fit: cover; box-shadow: 0 0 0 4px var(--brand-light);">
+            {% endif %}
+            <h5 class="mb-1">{{ farmer.username }}</h5>
+            <p class="text-muted small mb-2">{{ farmer.email }}</p>
+            <span class="badge rounded-pill" style="background: var(--brand-light); color: var(--brand);">
+                {% if farmer.is_superuser %}Administrator{% else %}{{ farmer.status }}{% endif %}
+            </span>
+        </div>
+    </div>
 
-            
- <div class="row mb-3">
-       
-    <div class="row my-1 mx-1 px-4 py-2 bg-light">
+    {% if form %}
+    <div class="col-lg-8">
+        <form action="{% url 'Production:user-profile' farmer.username %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="profile">
+            <div class="account-card p-4 mb-4">
+                <h6 class="fw-semibold text-success mb-3"><i class="bi bi-person-fill me-2"></i>Update Profile</h6>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Profile Image</label>
+                        {{ form.image }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Username</label>
+                        {{ form.username }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">First Name</label>
+                        {{ form.first_name }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Last Name</label>
+                        {{ form.last_name }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Email</label>
+                        {{ form.email }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Phone</label>
+                        {{ form.phone }}
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-label">Address</label>
+                        {{ form.address }}
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-brand mt-4"><i class="bi bi-check2-circle me-2"></i>Update Profile</button>
+            </div>
+        </form>
 
-        <div class="col-md-3">
-            <div class="card shadow">
-                
-                <div class="card-header">
-                  <div class="text-center">Profile Image</div>
-                   
+        <form action="{% url 'Production:user-profile' farmer.username %}" method="POST" id="security">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="password">
+            <div class="account-card p-4">
+                <h6 class="fw-semibold text-success mb-3"><i class="bi bi-key-fill me-2"></i>Change Password</h6>
+                <div class="row g-3">
+                    <div class="col-md-12">
+                        <label class="form-label">Current Password</label>
+                        <input type="password" name="currentPassword" class="form-control" placeholder="Enter current password" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">New Password</label>
+                        <input type="password" name="newPassword" class="form-control" placeholder="At least 6 characters" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Confirm New Password</label>
+                        <input type="password" name="confirmPassword" class="form-control" placeholder="Repeat new password" required>
+                    </div>
                 </div>
-               
-                <div class=" py-2 px-2 text-center mt-2">
-                    
-                    {% if farmer.image %}
-                                <img id="profile-image" class="rounded-pill mb-2" src="{{ farmer.image.url }}" alt="Profile Image" height="100%" width="100%" />
-                            {% else %}
-                                <img id="profile-image" class="rounded-pill mb-2" src="{% static 'profiles/avatar.svg' %}" alt="Default Profile Image" height="100%" width="100%" />
-                     {% endif %}
-                    
+                <button type="submit" class="btn btn-brand mt-4"><i class="bi bi-shield-lock-fill me-2"></i>Change Password</button>
+            </div>
+        </form>
+    </div>
+{% else %}
+    <div class="col-lg-8">
+        <div class="account-card p-4">
+            <h6 class="fw-semibold text-success mb-3"><i class="bi bi-person-fill me-2"></i>Account Details</h6>
+            <div class="row g-3">
+                <div class="col-sm-6">
+                    <div class="text-muted small fw-semibold">Username</div>
+                    <div>{{ farmer.username }}</div>
                 </div>
-               
-               
+                <div class="col-sm-6">
+                    <div class="text-muted small fw-semibold">First Name</div>
+                    <div>{{ farmer.first_name }}</div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-muted small fw-semibold">Last Name</div>
+                    <div>{{ farmer.last_name }}</div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-muted small fw-semibold">Status</div>
+                    <div>{% if farmer.is_superuser %}Administrator{% else %}{{ farmer.status }}{% endif %}</div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-muted small fw-semibold">Email</div>
+                    <div>{{ farmer.email }}</div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-muted small fw-semibold">Phone</div>
+                    <div>{{ farmer.phone }}</div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="text-muted small fw-semibold">Address</div>
+                    <div>{% if farmer.address %}{{ farmer.address }}{% else %}-{% endif %}</div>
+                </div>
             </div>
         </div>
+    </div>
+{% endif %}
+</div>
 
-        <div class="col-md-9 mt-2 px-2">
-            
-        
-                <div class="card">
-                    <div class="card-header">
+{% if form %}
+<script>
+    const fileInput = document.querySelector('input[type="file"][name="image"]');
+    const preview = document.getElementById('profile-image');
+    if (fileInput && preview) {
+        fileInput.addEventListener('change', function () {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+</script>
+{% endif %}
 
-                        <div class="text-center">Account Details</div>
-                    </div>
-                    <div class=" px-3 py-2">
-                            <div class="row mb-2 ">
-                                <div class="col-6"><label for="">Username:</label><br><span class="text-success">{{farmer.username}}</span></div>
-                                <div class="col-6"><label for="">First Name:</label><br><span class="text-success">{{farmer.first_name}}</span></div>
-                            </div>
-                            <div class="row mb-2 ">
-                                <div class="col-6"><label for="">Last Name:</label><br><span class="text-success">{{farmer.last_name}}</span></div>
-                                <div class="col-6"><label for="" class="mb-1">Status:</label><br>
-                                <span class="mt-2 text-success">{{farmer.status}}</span></div>
-                            </div>
-                       
-                            <div class="row mb-2 ">
-                                <div class="col-6"><label for="">Email:</label><br><span class="text-success">{{farmer.email}}</span></div>
-                                <div class="col-6"><label for="">Phone:</label><br><span class="text-success">{{farmer.phone}}</span></div>
-                            </div>
-                    </div>
-                </div>
-
-
-{% endblock %}
+{% endblock content %}

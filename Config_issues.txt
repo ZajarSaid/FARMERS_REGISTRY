@@ -1,0 +1,16 @@
+========================================
+FARMERS_REGISTRY - CONFIG / ADMIN CREDENTIALS
+========================================
+
+ADMIN (SUPERUSER) ACCOUNT
+-------------------------
+Email    : zajarjafary@gmail.com
+Password : zaka123
+Username : ZajarJafary
+
+Admin site:  http://127.0.0.1:8000/admin/
+
+WARNING: This is a development credential.
+Change the password after first login if this system
+is ever deployed to a public environment.
+========================================
