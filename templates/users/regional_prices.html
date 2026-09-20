@@ -5,27 +5,30 @@
 {% block title %}Regional Prices {% endblock %}
 {% block cumb %}Regional Prices {% endblock %}
 {% block content %}
-<div class="container mt-4">
-    {% if regional_prices %}
-        <h2>Regional Prices for Your Crops</h2>
-    
-    <div class="row">
-        {% for price in regional_prices %}
-        <div class="col-md-4">
-            <div class="card mb-4 shadow-sm bg-success">
-                <div class="card-body">
-                    <h5 class="card-title">{{ price.crop.name }}</h5>
-                    <p class="card-textt text-light">Region: <span class="text-muted fw-bold">{{ price.region.name }}</span></p>
-                    <p class="card-textt text-light">Price: <span class="text-muted fw-bold"> Tsh{{ price.price }} 1kg</span></p>
-                   
-                    
+
+{% if regional_prices %}
+<div class="row g-3">
+    {% for price in regional_prices %}
+    <div class="col-md-6 col-xl-4">
+        <div class="account-card p-4 h-100">
+            <div class="d-flex align-items-center gap-3 mb-3">
+                <div class="stat-icon"><i class="bi bi-basket-fill"></i></div>
+                <div>
+                    <div class="fw-bold text-success">{{ price.crop.name }}</div>
+                    <div class="text-muted small">{{ price.region.name }}</div>
                 </div>
             </div>
+            <div class="fs-4 fw-bold" style="color: var(--brand-dark);">Tsh {{ price.price }}</div>
+            <div class="text-muted small">per 1kg</div>
         </div>
-        {% endfor %}
     </div>
-    {% else %}
-
-    {% endif %}
+    {% endfor %}
 </div>
+{% else %}
+<div class="account-card p-5 text-center">
+    <i class="bi bi-currency-exchange fs-1" style="color: var(--brand); background: var(--brand-light); width: 72px; height: 72px; line-height: 72px; border-radius: 16px; display: inline-block;"></i>
+    <p class="text-muted mt-4 mb-0">No regional prices are available for your registered crops yet.</p>
+</div>
+{% endif %}
+
 {% endblock %}

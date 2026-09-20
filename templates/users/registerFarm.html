@@ -1,4 +1,5 @@
 {% extends 'users/FarmerPage.html'%}
+{% load static %}
 
 {% block header %}Register Farm {% endblock %}
 {% block btn %}{% endblock %}
@@ -6,73 +7,56 @@
 {% block cumb %}Register Farm {% endblock %}
 {% block content %}
 
-                        <form action="{% url 'User:register-Farm' %}" method="post">
-                            {% csrf_token %}
-                            <div class="row mt-2 mb-2">
-                              <div class="col-3"></div>
-                              <div class="col-8">{% include 'partials/messages.html' %}</div>
-                              <div class="col-1"></div>
-                          </div>
+<div class="account-card p-4">
+    <h6 class="text-success fw-semibold mb-3"><i class="bi bi-plus-circle-fill me-2"></i>Register a New Farm</h6>
 
-                            <div class="row mb-1">
-                        
-                                <div class="col-4 px-4 mt-0 mb-0" >
-                                  <label for="">name</label>
-                                  <input type="text" class="form-control"  id="nameField"  placeholder="Enter Farm name" name="farmname">
-                                  <input type="hidden" class="form-control"  value="{{farmer}}" name="farmer" style="display: none;">
-                                  
-                                </div>
+    <form action="{% url 'User:register-Farm' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" value="{{ farmer }}" name="farmer">
 
-                                <div class="col-4 px-4">
-                                    <label for="">Size</label>
-                                    <input type="text"  class="form-control" name="size">
-                                </div>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label" for="nameField">Farm Name</label>
+                <input type="text" class="form-control" id="nameField" placeholder="Enter Farm name" name="farmname">
+            </div>
 
-                                  <div class="col-4 px-4 mt-0 mb-0" >
-                                    <label for="">crop_type</label>
+            <div class="col-md-6">
+                <label class="form-label" for="sizeField">Size</label>
+                <input type="text" class="form-control" id="sizeField" placeholder="Enter size (e.g. 2 hectares)" name="size">
+            </div>
 
-                                    <select name="crop_type" id="" class="form-control">
-                                        {% for crop_type in crop_types %}
-                                        <option value="{{crop_type.id}}" name="crop_type">{{ crop_type.name }}</option>
+            <div class="col-md-6">
+                <label class="form-label" for="cropTypeSelect">Crop Type</label>
+                <select name="crop_type" id="cropTypeSelect" class="form-select">
+                    {% for crop_type in crop_types %}
+                    <option value="{{ crop_type.id }}">{{ crop_type.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
 
-                                        {% endfor %}
-                                    </select>
-                                  
-                                    
-                                  </div>
-       
-                              </div>
+            <div class="col-md-6">
+                <label class="form-label" for="regionSelect">Region</label>
+                <select name="region" id="regionSelect" data-url="{% url 'User:load-districts' %}" class="form-select">
+                    {% for region in regions %}
+                    <option value="{{ region.id }}">{{ region.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
 
-                              <div class="row">
+            <div class="col-md-6">
+                <label class="form-label" for="districtSelect">District</label>
+                <select name="district" id="districtSelect" class="form-select">
+                    {% for district in districts %}
+                    <option value="{{ district.id }}">{{ district.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
 
-                                <div class="col-6 px-4">
-                                    <label for="">Region</label>
-                                    <select name="region" id="regionSelect" data-url="{% url 'User:load-districts' %}" class="form-control">
-                                        {% for region in regions %}
-                                        <option value="{{region.id}}" >{{ region.name }}</option>
+            <div class="col-12">
+                <button type="submit" class="btn btn-brand"><i class="bi bi-check2-circle me-1"></i>Register Farm</button>
+            </div>
+        </div>
+    </form>
+</div>
 
-                                        {% endfor %}
-                                    </select>
-                                    
-                                </div>
-
-                                  <div class="col-6 px-4 mt-0 mb-0" >
-                                    <label for="">districts</label>
-                                    <select name="district" id="districtSelect" class="form-control">
-                                        {% for district in districts %}
-                                        <option value="{{district.id}}" name="district">{{ district.name }}</option>
-
-                                        {% endfor %}
-                                    </select>
-                                  </div>
-
-                              </div>
-                              <div class="row">
-                                <div class="col-5"></div>
-                                <div class="col-2 ms-4"><button type="submit" class="btn btn-success mt-3">Submit</button></div>
-                                <div class="col-5"></div>
-                            </div>
-
-                        </form>
-                        
-                {% endblock %}
+{% endblock %}
