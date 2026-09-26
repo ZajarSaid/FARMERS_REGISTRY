@@ -2,6 +2,8 @@ import os
 from django.contrib import messages
 from pathlib import Path
 from decouple import config
+from decouple import UndefinedValueError
+from django.core.exceptions import ImproperlyConfigured
 import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -13,7 +15,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # The secret must come from the environment (e.g. Render's SECRET_KEY).
-SECRET_KEY = config("SECRET_KEY")
+# It has no default on purpose: a hardcoded fallback would silently ship a
+# known key to production.
+try:
+    SECRET_KEY = config("SECRET_KEY")
+except UndefinedValueError as exc:
+    raise ImproperlyConfigured(
+        "SECRET_KEY is not set. Define it as an environment variable on the "
+        "host. On Render: either add SECRET_KEY under the service's "
+        "Environment tab, or set 'SECRET_KEY: generateValue: true' in the "
+        "service's envVars in render.yaml and re-apply the Blueprint. "
+        "Note that .env is gitignored and is never read on Render."
+    ) from exc
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", default=True, cast=bool)
@@ -102,16 +115,28 @@ DATABASE_URL = config("DATABASE_URL", default=None)
 if DATABASE_URL:
     DATABASES = {"default": dj_database_url.parse(DATABASE_URL, conn_max_age=600)}
 else:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": config("DB_NAME"),
-            "USER": config("DB_USER"),
-            "PASSWORD": config("DB_PASSWORD"),
-            "HOST": config("DB_HOST", default="localhost"),
-            "PORT": config("DB_PORT", default="5432"),
+    # Local development only. On Render, DATABASE_URL is injected by the
+    # platform (or by render.yaml's fromDatabase block) and this branch is
+    # never reached.
+    try:
+        DATABASES = {
+            "default": {
+                "ENGINE": "django.db.backends.postgresql",
+                "NAME": config("DB_NAME"),
+                "USER": config("DB_USER"),
+                "PASSWORD": config("DB_PASSWORD"),
+                "HOST": config("DB_HOST", default="localhost"),
+                "PORT": config("DB_PORT", default="5432"),
+            }
         }
-    }
+    except UndefinedValueError as exc:
+        raise ImproperlyConfigured(
+            "No database configured. Set DATABASE_URL to a PostgreSQL "
+            "connection string on the host. On Render, attach a Postgres "
+            "instance with the 'fromDatabase' block in render.yaml, or set "
+            "DATABASE_URL manually under the service's Environment tab. "
+            f"Missing variable: {exc}"
+        ) from exc
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
@@ -146,7 +171,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 

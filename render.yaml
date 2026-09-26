@@ -15,7 +15,11 @@ services:
 
     buildCommand: bash ./build.sh
 
-    startCommand: python manage.py migrate --noinput && python manage.py create_data && gunicorn Farmers_registry.wsgi:application --bind 0.0.0.0:$PORT --workers 1 --access-logfile - --error-logfile -
+    # Migrations and seed data run BEFORE the new release goes live, so the
+    # health check never hits a database that is missing tables.
+    preDeployCommand: python manage.py migrate --noinput && python manage.py create_data
+
+    startCommand: gunicorn Farmers_registry.wsgi:application --bind 0.0.0.0:$PORT --workers 1 --access-logfile - --error-logfile -
 
     healthCheckPath: /
 
