@@ -1,6 +1,5 @@
 # Render Blueprint for FARMERS_REGISTRY
-# Docs: https://render.com/docs/blueprint-spec
-# Deploy via the Render Dashboard: "New +" > "Blueprint" and select this repo.
+# Deploy via Render Dashboard: New + > Blueprint
 
 databases:
   - name: farmers-registry-db
@@ -13,23 +12,26 @@ services:
     name: farmers-registry
     runtime: python
     plan: free
-    # bash ./build.sh (not ./build.sh) so the script runs even if the
-    # executable bit is missing on the committed file.
+
     buildCommand: bash ./build.sh
-    # Runs AFTER the build, inside Render's network, so the internal
-    # Postgres hostname is resolvable here (it is NOT during build).
-    preDeployCommand: python manage.py migrate --noinput && python manage.py create_data
-    startCommand: gunicorn Farmers_registry.wsgi:application --bind 0.0.0.0:$PORT --workers 1 --access-logfile - --error-logfile -
+
+    startCommand: python manage.py migrate --noinput && python manage.py create_data && gunicorn Farmers_registry.wsgi:application --bind 0.0.0.0:$PORT --workers 1 --access-logfile - --error-logfile -
+
     healthCheckPath: /
+
     envVars:
       - key: DEBUG
         value: "False"
+
       - key: SECRET_KEY
         generateValue: true
+
       - key: ALLOWED_HOSTS
         value: ".onrender.com"
+
       - key: CSRF_TRUSTED_ORIGINS
-        value: "https://.onrender.com"
+        value: "https://*.onrender.com"
+
       - key: DATABASE_URL
         fromDatabase:
           name: farmers-registry-db
