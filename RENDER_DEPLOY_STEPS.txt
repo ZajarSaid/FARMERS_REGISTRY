@@ -1,0 +1,463 @@
+========================================
+FARMERS_REGISTRY - RENDER DEPLOY STEPS
+========================================
+
+Written after the deploy fix. Everything in STEP 1 is already done and
+committed (commit 428f1a4). Do NOT redo it.
+
+Do the steps below in order tomorrow evening. STEP 2 is the one that
+actually unblocks the deploy -- nothing in the codebase can replace it.
+
+
+------------------------------------------------
+STEP 1 - ALREADY DONE (nothing to do)
+------------------------------------------------
+Committed as 428f1a4. Do not redo these.
+
+  [x] STATIC_URL changed from "static/" to "/static/" in
+      Farmers_registry/settings.py.
+      Why: without the leading slash, every {% static %} in the
+      templates produced a relative URL and WhiteNoise could not
+      match incoming /static/ requests. The site rendered unstyled.
+
+  [x] SECRET_KEY and DATABASE_URL now raise one short, actionable
+      error message instead of a long python-decouple traceback.
+      Both are still REQUIRED -- no insecure default was added.
+
+  [x] render.yaml: migrate + create_data moved out of startCommand
+      and back into preDeployCommand.
+      Why: commit 6384482 ("modified .yaml file") had accidentally
+      dropped preDeployCommand and folded both commands into
+      startCommand. With them in startCommand, the health check can
+      hit a database that has not been migrated yet.
+
+  [x] venv/ removed from git tracking (10,080 files, 56 MB of Windows
+      binaries that every Render build was cloning).
+      The .gitignore rule existed but had no effect because the
+      virtualenv was already committed. Your local venv/ folder on
+      disk is untouched.
+
+  [x] Added the two missing __init__.py files under
+      Production/management/ and Production/management/commands/.
+
+  [x] Verified locally: collectstatic, migrate, create_data and
+      GET / all succeed with DEBUG=False against a real Postgres,
+      and WhiteNoise serves /static/css/styles.css with 200.
+
+
+------------------------------------------------
+STEP 2 - SET THE ENV VARS ON RENDER (REQUIRED)
+------------------------------------------------
+THIS IS THE ACTUAL CAUSE OF YOUR ERROR.
+
+  Error:  decouple.UndefinedValueError: SECRET_KEY not found.
+          Declare it as envvar or define a default value.
+  At:     Farmers_registry/settings.py, line 16 (the SECRET_KEY line)
+
+Your service was created outside the Blueprint, so Render never read
+the envVars block in render.yaml. None of SECRET_KEY, DEBUG,
+ALLOWED_HOSTS, CSRF_TRUSTED_ORIGINS or DATABASE_URL were ever set.
+
+Note that .env is gitignored, so Render never sees your local .env
+file. That is why there is no fallback value.
+
+Pick ONE of these two options. Read the comparison at the end of this
+step before choosing.
+
+
+BEFORE YOU START - WHAT SECRET_KEY ACTUALLY DOES HERE
+------------------------------------------------------
+It is worth knowing what you are protecting, so you can judge how
+seriously to treat it.
+
+In THIS project, SECRET_KEY is used to sign CSRF tokens
+(CsrfViewMiddleware is enabled in settings.py). That is essentially
+all of it:
+
+  - Sessions are database-backed. There is no SESSION_ENGINE
+    override, so the cookie only holds an opaque session ID and the
+    data lives in Postgres. That means rotating SECRET_KEY later will
+    NOT log your users out. This is not true of most Django apps, so
+    it is worth knowing.
+  - There is no password-reset flow, so no password-reset tokens are
+    signed with it.
+  - No other signing or encryption in the codebase uses it.
+
+So the practical risk of the wrong SECRET_KEY is limited, but two real
+things follow:
+
+  a) Do not reuse your local development value. Your .env contains
+     SECRET_KEY=django-insecure-change-this-later, which is published
+     in this repository's history and is therefore known to anyone.
+     A known key means anyone can forge CSRF tokens against your
+     production site.
+  b) Treat it as permanent. If you ever do need to change it, change
+     it deliberately and expect currently-open forms to 403 once.
+
+Why settings.py has no default for it, on purpose: a hardcoded
+fallback would let the app boot with a key that is published in a
+public repository. Failing loudly, as it does now, is the correct
+behaviour. If you were tempted to "just add a default to make the
+error go away", do not.
+
+
+WHAT EACH VARIABLE IS FOR
+-------------------------
+Set all five. Each one causes a specific, confusing failure if wrong.
+
+  SECRET_KEY
+      Signs CSRF tokens. Missing -> the exact error you are seeing.
+      A weak or published value -> forgeable CSRF protection.
+
+  DEBUG
+      Set to False. Turns off the debug traceback page and turns on
+      SECURE_SSL_REDIRECT, SESSION_COOKIE_SECURE and
+      CSRF_COOKIE_SECURE (all three are "not DEBUG" in settings.py).
+      The value must be the exact string False. python-decouple
+      parses it with strtobool, so False / 0 / no / off all work and
+      anything else becomes True. A non-empty junk value silently
+      leaves you in debug mode in production.
+      Left unset it defaults to True, which is the wrong default for
+      a public site.
+
+  ALLOWED_HOSTS
+      .onrender.com  (note the LEADING DOT)
+      The leading dot is a wildcard, so it matches
+      farmers-registry.onrender.com and any other subdomain. Without
+      it Django rejects every request with DisallowedHost and the
+      health check at / fails, which makes the deploy fail even
+      though the build succeeded.
+      If you add a custom domain later, add it here too.
+
+  CSRF_TRUSTED_ORIGINS
+      https://*.onrender.com
+      Only needed because Render proxies over HTTPS and Django
+      otherwise treats the request as cross-origin. Without it, every
+      form POST (login, registration, farm registration) fails with
+      "CSRF verification failed" while the pages themselves load
+      fine, which makes it look like a login bug.
+
+  DATABASE_URL
+      The PostgreSQL connection string. Use the INTERNAL Database URL
+      from the database's page, not the external one. Internal stays
+      inside Render's private network, is not exposed to the internet
+      and is faster. The external URL only resolves from outside.
+
+
+OPTION A - Re-apply the Blueprint (recommended)
+----------------------------------------------
+Why this is the better option: render.yaml becomes the single source
+of truth. Anyone (including future you) can rebuild the whole stack
+from the repository, and the next deploy cannot drift from the file.
+Option B leaves the settings living only in the Render dashboard,
+where they are invisible in version control and easy to lose.
+
+  1. Open the Render Dashboard.
+  2. Go to: Blueprints  ->  New Blueprint Instance
+  3. Connect/select the repository ZajarSaid/FARMERS_REGISTRY
+  4. Click Apply.
+  5. Confirm the values Render shows you before applying:
+         Database        : farmers-registry-db
+         Web service     : farmers-registry
+         Python runtime  : 3.13   (read from .python-version)
+         Build command   : bash ./build.sh
+         Pre-deploy      : python manage.py migrate --noinput && ...
+         Start command   : gunicorn Farmers_registry.wsgi:...
+         Health check    : /
+  6. Render generates SECRET_KEY for you (generateValue: true). You
+     do not have to invent one, and you will not see its value, which
+     is fine.
+  7. If you already have a manually created web service or database
+     with the same name, delete it FIRST, otherwise Apply creates a
+     second set and you end up with two services and two databases.
+     Two web services both answering to the same hostname is the
+     usual cause of a "port is already in use" style failure.
+  8. Apply triggers a deploy on its own, so you can go straight to
+     STEP 4.
+
+
+OPTION B - Set the variables by hand
+-----------------------------------
+Use this if you would rather not recreate the resources, for example
+if the database already holds data you want to keep.
+
+  1. Open the service -> Environment tab.
+  2. Add these five variables:
+
+     SECRET_KEY
+       (generate one, do not type a value by hand)
+
+     DEBUG             False
+     ALLOWED_HOSTS     .onrender.com
+     CSRF_TRUSTED_ORIGINS   https://*.onrender.com
+     DATABASE_URL      (the internal connection string from the
+                        farmers-registry-db database's page --
+                        copy the "Internal Database URL", not the
+                        external one)
+
+  3. To generate a secret key, run this in your project folder:
+
+       venv\Scripts\python.exe -c "from django.core.management.utils import get_random_secret_key as g; print(g())"
+
+     It prints a 50-character random string. Paste that as the value.
+     Do not reuse the value from your .env, and do not write the key
+     into settings.py, render.yaml or any committed file.
+
+  4. Save. Render restarts the service automatically.
+
+  5. Option B does NOT read render.yaml, so you must also set the
+     commands by hand. Open Settings -> Build & Deploy and confirm
+     these match render.yaml exactly:
+
+      Build Command    : bash ./build.sh
+      Pre-deploy Cmd   : python manage.py migrate --noinput && python manage.py create_data
+      Start Command    : gunicorn Farmers_registry.wsgi:application --bind 0.0.0.0:$PORT --workers 1 --access-logfile - --error-logfile -
+      Health Check Path: /
+
+  6. The Pre-deploy Command field is the one people miss. If you skip
+     it, migrations never run, the tables do not exist, the health
+     check at / hits the database and gets an error, and the deploy
+     is reported as failed even though the build was perfect. If
+     your dashboard has no Pre-deploy Command field at all, put the
+     migrate command back at the front of the Start Command, which is
+     the older arrangement that also works:
+
+       python manage.py migrate --noinput && python manage.py create_data && gunicorn Farmers_registry.wsgi:application --bind 0.0.0.0:$PORT --workers 1 --access-logfile - --error-logfile -
+
+  7. Note for later: with Option B, if you ever change render.yaml,
+     nothing happens. Those values are not read again unless you
+     re-apply the Blueprint or edit the dashboard by hand.
+
+
+A VS B - QUICK COMPARISON
+-------------------------
+                   Option A (Blueprint)   Option B (manual)
+  SECRET_KEY      auto-generated         you generate and paste
+  Survives a      yes, it is in the      no, dashboard only
+  new service     repository
+  Can drift       no                     yes, easily
+  Risk of         duplicate service or   typos in the five values
+  mistake         database
+  Rebuild from    yes                    no
+  scratch
+
+Recommendation: Option A, unless you specifically need to keep the
+existing database contents. If you already have real data in the
+Render database, note that Option A's blueprint creates a NEW empty
+database, and migrate + create_data will seed the new one only.
+
+
+
+------------------------------------------------
+STEP 3 - PUSH THE COMMIT
+------------------------------------------------
+Run from the project folder:
+
+    git push origin main
+
+WHY THIS PUSH IS UNUSUALLY LARGE - AND WHY THAT IS OK
+-------------------------------------------------------
+You already removed venv/ from the working tree in commit 428f1a4.
+The repository is still 56.76 MiB, and this push will be bigger than
+your normal ones. That is expected, and here is why:
+
+  Git stores every version of every file forever. Commit 428f1a4
+  deletes venv/ from the current tree, but the ~10,080 files are still
+  present in the history of earlier commits. The only way they leave
+  the repository is by rewriting history (see the fallback below).
+
+  This first push therefore has to transfer the whole repository to
+  GitHub for the first time. Expect it to take noticeably longer than
+  a normal push. A slow or seemingly stalled push during those minutes
+  is normal. Let it run.
+
+  Nothing about this affects the running application. Render builds
+  from the tip of main, and the tip no longer contains venv/.
+
+BEFORE YOU PUSH - CONFIRM WHAT IS GOING UP
+-------------------------------------------
+    git status
+    git log --oneline -3
+
+  Expect exactly this: two modified/added source files in commit
+  428f1a4 plus the venv/ removal, and no uncommitted changes other
+  than RENDER_DEPLOY_STEPS.txt if you have not committed it yet.
+
+  Confirm venv/ really is untracked before you push:
+
+    git ls-files venv | Measure-Object
+
+  The number must be 0. If it is not, stop and do not push.
+
+  Also confirm no secrets are being committed:
+
+    git ls-files .env
+
+  Must print nothing. .env holds your database password and must never
+  be committed.
+
+
+THE FALLBACK - PURGING venv/ FROM HISTORY
+-----------------------------------------
+ONLY do this if the plain push above fails or times out. Do not start
+here.
+
+    git filter-repo --path venv --invert-paths
+    git push origin main --force
+
+Understand the trade-off before running this:
+
+  It is a HISTORY REWRITE, not a normal change. It creates entirely
+  new commit objects for every commit in the repository, and
+  git push --force then overwrites the published history on GitHub.
+
+  Consequences to consider:
+    - Anyone else who has cloned this repository, and any other
+      branch, will get divergent history and will have to reclone
+      from scratch. Their old local commits are not automatically
+      saved.
+    - If GitHub has open pull requests or branches pointing at the
+      old commits, they can break or need to be recreated.
+    - There is no undo at GitHub once the force push lands. Locally
+      you would need a reflog recovery if you change your mind.
+    - filter-repo may not be installed. Check with
+      "git filter-repo --version" first; if it is missing you need
+      "pip install git-filter-repo".
+
+  Upside: the repository drops from roughly 57 MB to a few hundred KB,
+  clones become fast, and 2.4 million deleted lines stop being part of
+  your permanent history.
+
+  Honest recommendation: try the plain push first and only reach for
+  this if it genuinely fails. The large push is a one-time cost. The
+  rewrite is permanent and affects other people.
+
+
+A NOTE ON THE PASSWORD IN Config_issues.txt
+-------------------------------------------
+That file is committed and contains a plaintext admin email, username
+and password. Consider it a published credential and change it
+before the site goes live. See WARNING 3 in the warnings section
+below.
+
+
+
+------------------------------------------------
+STEP 4 - DEPLOY AND WATCH THE LOG
+------------------------------------------------
+  1. Render will start a deploy automatically on the push.
+  2. Open the service -> Events, and watch the build log.
+
+  You should see, in this order:
+     - pip install -r requirements.txt
+     - 210 static files copied ... 186 post-processed
+     - Applying ... OK            (the pre-deploy migrate step)
+     - Region "..." populated ... (the create_data step)
+     - Booting gunicorn
+
+  Expected duration: 2 to 4 minutes. Free Postgres often takes 30 to
+  60 seconds to become reachable, and the pre-deploy step waits for it.
+
+  FAILURE MEANSING:
+     "SECRET_KEY not found"     -> STEP 2 was not done correctly
+     "No database configured"   -> DATABASE_URL missing, back to STEP 2
+     "port is already in use"   -> you have two web services, delete one
+     build times out (>10 min)  -> rare, re-run the deploy once
+
+
+------------------------------------------------
+STEP 5 - VERIFY THE LIVE SITE
+------------------------------------------------
+Once Render shows the service as "Live", check these in order:
+
+  [ ] Open https://<your-service>.onrender.com/
+      The landing page loads AND it is styled correctly.
+      If the page loads but is completely unstyled, STATIC_URL is
+      still wrong.
+
+  [ ] Right-click -> View Page Source. Confirm the stylesheet links
+      start with /static/ and NOT with a bare static/.
+      e.g.  href="/static/css/bootstrap.min.css"     <- correct
+            href="static/css/bootstrap.min.css"      <- wrong
+
+  [ ] Log in at /UserLogin/ with a superuser account.
+
+  [ ] Check the admin panel at /admin/.
+
+  [ ] Confirm the charts render. They are produced by matplotlib and
+      seaborn, and are the heaviest part of the app.
+
+  [ ] Test registering a new farmer and uploading a profile picture,
+      since file uploads are the most likely remaining runtime
+      problem (see the warnings below).
+
+
+------------------------------------------------
+STEP 6 - CREATE THE PRODUCTION ADMIN USER
+------------------------------------------------
+You will have NO admin account on the live database. The one in
+Config_issues.txt only exists in your local database. Create a new
+superuser on Render:
+
+  In the Render service -> Shell tab, run:
+
+      python manage.py createsuperuser
+
+  Note: your custom user model uses EMAIL as the username field
+  (User/models.py: USERNAME_FIELD = 'email', REQUIRED_FIELDS =
+  ['username']). So the prompts will ask for an email address, then
+  a username, then a password.
+
+
+------------------------------------------------
+KNOWN WARNINGS - NOT BLOCKERS, BUT READ THESE
+------------------------------------------------
+
+1. FREE POSTGRES EXPIRES IN 30 DAYS
+   Render deletes free Postgres databases 30 days after creation, with
+   a 14 day grace period to upgrade. When that happens the site will
+   fail with a database connection error and you will need to upgrade
+   the plan. Note the date your database was created.
+
+2. UPLOADED FILES ARE EPHEMERAL
+   Farmer profile pictures and farm output CSVs are written to the
+   container's local disk, which is wiped on every deploy and restart
+   (free services cannot have a persistent disk). Files will disappear.
+   The database rows survive; the image files do not.
+   If that matters, you need either a paid plan with a persistent disk
+   mounted at /opt/render/project/src/media, or a proper upload
+   service such as S3 or Cloudinary.
+
+3. Config_issues.txt CONTAINS A PLAINTEXT PASSWORD
+   That file is committed to the repository, so the admin email,
+   username and password are public to anyone who clones the repo.
+   That password is a development credential and should be considered
+   burned. Either delete the file from the repo or strip the password
+   out of it, and use a different password in production. This is not
+   something I changed, because removing it affects a file you may be
+   relying on.
+
+4. SECURE_HSTS_SECONDS IS NOT SET
+   "manage.py check --deploy" reports this one warning. It is only a
+   hardening recommendation. I left it off deliberately, because
+   enabling HSTS carelessly is hard to undo in browsers. Set it only
+   once the site is confirmed working over HTTPS.
+
+5. ONE WORKER ONLY
+   startCommand uses --workers 1, which is correct for a free Render
+   instance (0.5 CPU, 512 MB RAM). Do not raise it or the service will
+   be throttled or killed.
+
+
+------------------------------------------------
+QUICK REFERENCE - FILES CHANGED IN COMMIT 428f1a4
+------------------------------------------------
+  Farmers_registry/settings.py     STATIC_URL + error messages
+  render.yaml                      preDeployCommand restored
+  Production/management/__init__.py            new file
+  Production/management/commands/__init__.py   new file
+  venv/**                          removed from git (10,080 files)
+
+To review everything before you start:
+
+    git show 428f1a4 -- Farmers_registry/settings.py render.yaml
