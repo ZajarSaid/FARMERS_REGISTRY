@@ -17,6 +17,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # The secret must come from the environment (e.g. Render's SECRET_KEY).
 # It has no default on purpose: a hardcoded fallback would silently ship a
 # known key to production.
+
+ENVIRONMENT = config("ENVIRONMENT", default="production")
 try:
     SECRET_KEY = config("SECRET_KEY")
 except UndefinedValueError as exc:
@@ -29,16 +31,11 @@ except UndefinedValueError as exc:
     ) from exc
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config("DEBUG", default=True, cast=bool)
+if ENVIRONMENT == "development":
+    DEBUG = True
+else:
+    DEBUG = False
 
-EMAIL_BACKEND = config(
-    "EMAIL_BACKEND", default="django.core.mail.backends.smtp.EmailBackend"
-)
-EMAIL_HOST = config("EMAIL_HOST", default="smtp.gmail.com")
-EMAIL_HOST_USER = config("EMAIL_HOST_USER", default="")
-EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="")
-EMAIL_PORT = config("EMAIL_PORT", default=587, cast=int)
-EMAIL_USE_TLS = config("EMAIL_USE_TLS", default=True, cast=bool)
 
 ALLOWED_HOSTS = [
     host.strip()
@@ -48,7 +45,7 @@ ALLOWED_HOSTS = [
 
 CSRF_TRUSTED_ORIGINS = [
     origin.strip()
-    for origin in config("CSRF_TRUSTED_ORIGINS", default="").split(",")
+    for origin in config("TRUSTED_ORIGINS", default="").split(",")
     if origin.strip()
 ]
 
@@ -118,25 +115,16 @@ else:
     # Local development only. On Render, DATABASE_URL is injected by the
     # platform (or by render.yaml's fromDatabase block) and this branch is
     # never reached.
-    try:
-        DATABASES = {
-            "default": {
-                "ENGINE": "django.db.backends.postgresql",
-                "NAME": config("DB_NAME"),
-                "USER": config("DB_USER"),
-                "PASSWORD": config("DB_PASSWORD"),
-                "HOST": config("DB_HOST", default="localhost"),
-                "PORT": config("DB_PORT", default="5432"),
-            }
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": config("DB_NAME"),
+            "USER": config("DB_USER"),
+            "PASSWORD": config("DB_PASSWORD"),
+            "HOST": config("DB_HOST", default="localhost"),
+            "PORT": config("DB_PORT", default="5432"),
         }
-    except UndefinedValueError as exc:
-        raise ImproperlyConfigured(
-            "No database configured. Set DATABASE_URL to a PostgreSQL "
-            "connection string on the host. On Render, attach a Postgres "
-            "instance with the 'fromDatabase' block in render.yaml, or set "
-            "DATABASE_URL manually under the service's Environment tab. "
-            f"Missing variable: {exc}"
-        ) from exc
+    }
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
@@ -192,6 +180,15 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SECURE_SSL_REDIRECT = not DEBUG
 SESSION_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_SECURE = not DEBUG
+
+EMAIL_BACKEND = config(
+    "EMAIL_BACKEND", default="django.core.mail.backends.smtp.EmailBackend"
+)
+EMAIL_HOST = config("EMAIL_HOST", default="smtp.gmail.com")
+EMAIL_HOST_USER = config("EMAIL_HOST_USER", default="")
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="")
+EMAIL_PORT = config("EMAIL_PORT", default=587, cast=int)
+EMAIL_USE_TLS = config("EMAIL_USE_TLS", default=True, cast=bool)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
