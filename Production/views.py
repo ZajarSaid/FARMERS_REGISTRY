@@ -40,7 +40,11 @@ class UserProfileView(LoginRequiredMixin, View):
 
     def get(self, request, username):
         Farmer_Profile = get_object_or_404(Farmer, username=username)
-        form = FarmerProfileForm(instance=Farmer_Profile) if request.user == Farmer_Profile else None
+        form = (
+            FarmerProfileForm(instance=Farmer_Profile)
+            if request.user == Farmer_Profile
+            else None
+        )
 
         Context = {"farmer": Farmer_Profile, "form": form}
 
@@ -87,7 +91,9 @@ class UserProfileView(LoginRequiredMixin, View):
             form.save()
             messages.success(request, "Your profile has been updated successfully.")
         else:
-            messages.error(request, "Your information has not been updated successfully.")
+            messages.error(
+                request, "Your information has not been updated successfully."
+            )
 
         return redirect("Production:user-profile", username=Farmer_Profile.username)
 
@@ -384,6 +390,7 @@ class FarmerDetailsView(LoginRequiredMixin, View):
             farm_output.save()
             farmer = get_object_or_404(Farmer, pk=farmer_id)
             farmer_name = farmer.username
+            farmer_email = farmer.email
 
             message = f"{farm_name} has been filled with an output of {output}kg, Login to your account to verify the results"
             subject = f"dear {farmer_name} "
@@ -394,7 +401,7 @@ class FarmerDetailsView(LoginRequiredMixin, View):
                 subject,
                 message,
                 settings.EMAIL_HOST_USER,
-                ["zajarjafary@gmail.com"],
+                [farmer_email],
                 fail_silently=True,
             )
             print(send_mail)
@@ -492,17 +499,59 @@ def report_download(request):
 
     if report_type == "farmers":
         writer.writerow(
-            ["ID", "Username", "First Name", "Last Name", "Email", "Phone", "Address", "Status", "Date Joined"]
+            [
+                "ID",
+                "Username",
+                "First Name",
+                "Last Name",
+                "Email",
+                "Phone",
+                "Address",
+                "Status",
+                "Date Joined",
+            ]
         )
         for f in Farmer.objects.all():
             writer.writerow(
-                [f.id, f.username, f.first_name, f.last_name, f.email, f.phone, f.address, f.status, f.date_joined]
+                [
+                    f.id,
+                    f.username,
+                    f.first_name,
+                    f.last_name,
+                    f.email,
+                    f.phone,
+                    f.address,
+                    f.status,
+                    f.date_joined,
+                ]
             )
     elif report_type == "farms":
-        writer.writerow(["ID", "Name", "Size", "Crop", "Region", "District", "Owner", "Total Output", "Created"])
+        writer.writerow(
+            [
+                "ID",
+                "Name",
+                "Size",
+                "Crop",
+                "Region",
+                "District",
+                "Owner",
+                "Total Output",
+                "Created",
+            ]
+        )
         for f in Farm.objects.all():
             writer.writerow(
-                [f.id, f.name, f.size, f.crop_type.name, f.region.name, f.district.name, f.owner.username, f.total_output, f.created_at]
+                [
+                    f.id,
+                    f.name,
+                    f.size,
+                    f.crop_type.name,
+                    f.region.name,
+                    f.district.name,
+                    f.owner.username,
+                    f.total_output,
+                    f.created_at,
+                ]
             )
     elif report_type == "crops":
         writer.writerow(["ID", "Name", "Type", "Created"])
