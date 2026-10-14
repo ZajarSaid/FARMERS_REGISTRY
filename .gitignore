@@ -11,3 +11,6 @@ db.sqlite3-journal
 .env
 staticfiles/
 media/
+CONFIG_ISSUES.txt
+RENDER_DEPLOY_STEPS.txt
+SETUP_ISSUES.txt
